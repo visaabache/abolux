@@ -1,0 +1,30 @@
+// Cloudflare Worker for the store. See README.md for first-time setup.
+{
+  "name": "abolux",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    // The Worker renders the storefront pages itself and passes /assets/* and /admin/* on to the static files.
+    "run_worker_first": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "abolux",
+      // Paste the id printed by: npx wrangler d1 create abolux
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  // Free address: https://abolux.<your-subdomain>.workers.dev
+  "workers_dev": true,
+  // Photo uploads from the admin need R2, which Cloudflare only turns on once a payment card is on the account
+  // (the first 10 GB stay free). Until then, product photos can be links. To turn uploads on:
+  //   npx wrangler r2 bucket create abolux-images
+  // then add:  "r2_buckets": [{ "binding": "IMAGES", "bucket_name": "abolux-images" }],
+  // Once abolux.store is bought and added to Cloudflare, add:
+  //   "routes": [{ "pattern": "abolux.store", "custom_domain": true }, { "pattern": "www.abolux.store", "custom_domain": true }],
+  "observability": { "enabled": true }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "abolux",
+  "version": "1.0.0",
+  "description": "Multilingual (AR/FR/EN) cash-on-delivery store for Morocco on Cloudflare Workers + D1",
+  "scripts": {
+    "dev": "wrangler dev",
+    "db:migrate:local": "wrangler d1 migrations apply abolux --local",
+    "db:seed:local": "wrangler d1 execute abolux --local --file seed/sample.sql",
+    "db:migrate": "wrangler d1 migrations apply abolux --remote",
+    "db:seed": "wrangler d1 execute abolux --remote --file seed/sample.sql",
+    "deploy": "wrangler deploy",
+    "test": "node --test test/*.test.js",
+    "db:reset:local": "node -e \"require('fs').rmSync('.wrangler/state',{recursive:true,force:true})\" && npm run db:migrate:local && npm run db:seed:local"
+  },
+  "devDependencies": {
+    "wrangler": "^4.152.0"
+  },
+  "private": true,
+  "type": "module"
+}
