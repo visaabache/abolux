@@ -5,112 +5,112 @@
 export const PHOTO_CREDITS = [
   {
     "file": "hero-shopping",
-    "photographer": "freestocks",
-    "url": "https://images.unsplash.com/photo-1483985988355-763728e1935b"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1445205170230-053b83016050"
   },
   {
     "file": "hero-tech",
-    "photographer": "C D-X",
-    "url": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1484704849700-f032a568e944"
   },
   {
     "file": "hero-home",
-    "photographer": "Kam Idris",
-    "url": "https://images.unsplash.com/photo-1586208958839-06c17cacdf08"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7"
   },
   {
     "file": "cat-tech",
-    "photographer": "Kiran CK",
-    "url": "https://images.unsplash.com/photo-1583394838336-acd977736f90"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853"
   },
   {
     "file": "cat-fashion",
-    "photographer": "Irene Kredenets",
-    "url": "https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1558769132-cb1aea458c5e"
   },
   {
     "file": "cat-beauty",
-    "photographer": "Kadarius Seegars",
-    "url": "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1596462502278-27bfdc403348"
   },
   {
     "file": "cat-home",
-    "photographer": "Angela Bailey",
-    "url": "https://images.unsplash.com/photo-1572048572872-2394404cf1f3"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1578500494198-246f612d3b3d"
   },
   {
     "file": "headphones",
-    "photographer": "Sebastian Banasiewcz",
-    "url": "https://images.unsplash.com/photo-1585298723682-7115561c51b7"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1546435770-a3e426bf472b"
   },
   {
     "file": "smartwatch",
-    "photographer": "Auguras Pipiras",
-    "url": "https://images.unsplash.com/photo-1624096104992-9b4fa3a279dd"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1523275335684-37898b6baf30"
   },
   {
     "file": "speaker",
-    "photographer": "Lynda Sanchez",
-    "url": "https://images.unsplash.com/photo-1547052178-7f2c5a20c332"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1545454675-3531b543be5d"
   },
   {
     "file": "sneakers",
-    "photographer": "Paul Gaudriault",
-    "url": "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1562183241-b937e95585b6"
   },
   {
     "file": "handbag",
-    "photographer": "Arno Senoner",
-    "url": "https://images.unsplash.com/photo-1590874103328-eac38a683ce7"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1594223274512-ad4803739b7c"
   },
   {
     "file": "handbag-2",
-    "photographer": "Arno Senoner",
-    "url": "https://images.unsplash.com/photo-1584917865442-de89df76afd3"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d"
   },
   {
     "file": "sunglasses",
-    "photographer": "charlesdeluvio",
-    "url": "https://images.unsplash.com/photo-1511499767150-a48a237f0083"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1508296695146-257a814070b4"
   },
   {
     "file": "perfume",
-    "photographer": "Siora Photography",
-    "url": "https://images.unsplash.com/photo-1543422655-ac1c6ca993ed"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75"
   },
   {
     "file": "serum",
-    "photographer": "Mathilde Langevin",
-    "url": "https://images.unsplash.com/photo-1620916297397-a4a5402a3c6c"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1617897903246-719242758050"
   },
   {
     "file": "mug",
-    "photographer": "Mel Poole",
-    "url": "https://images.unsplash.com/photo-1542556398-95fb5b9f9b48"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d"
   },
   {
     "file": "vase",
-    "photographer": "Spacejoy",
-    "url": "https://images.unsplash.com/photo-1618220179428-22790b461013"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c"
   },
   {
     "file": "lamp",
-    "photographer": "Karolina Grabowska",
-    "url": "https://images.unsplash.com/photo-1667312939978-64cf31718a6e"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1507473885765-e6ed057f782c"
   },
   {
     "file": "delivery",
-    "photographer": "RoseBox رز باکس",
-    "url": "https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1512909006721-3d6018887383"
   },
   {
     "file": "kitchen",
-    "photographer": "Jason Briscoe",
-    "url": "https://images.unsplash.com/photo-1556911220-bff31c812dba"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1556912173-3bb406ef7e77"
   },
   {
     "file": "shop-bags",
-    "photographer": "Iuliia Pilipeichenko",
-    "url": "https://images.unsplash.com/photo-1760565030346-4b947220fe3a"
+    "photographer": "",
+    "url": "https://images.unsplash.com/photo-1441986300917-64674bd600d8"
   }
 ];

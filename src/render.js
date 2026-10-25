@@ -552,7 +552,7 @@ export function creditsPage(ctx) {
   const body = `<section class="wrap section narrow">
   <h1>${esc(t.credits)}</h1>
   <p>${esc(t.creditsText)}</p>
-  <ul class="credits">${PHOTO_CREDITS.map((c) => `<li><img src="/assets/photos/${esc(c.file)}-sm.webp" alt="" width="60" height="75" loading="lazy"><span>${esc(t.photoBy)}${ctx.lang === 'fr' ? '\u202f' : ''}: <strong>${esc(c.photographer)}</strong> · <a href="${esc(c.url)}" rel="noopener">Unsplash</a></span></li>`).join('')}</ul>
+  <ul class="credits">${PHOTO_CREDITS.map((c) => `<li><img src="/assets/photos/${esc(c.file)}-sm.webp" alt="" width="60" height="75" loading="lazy"><span>${esc(t.photoBy)}${ctx.lang === 'fr' ? '\u202f' : ''}: ${c.photographer ? `<strong>${esc(c.photographer)}</strong> · ` : ''}<a href="${esc(c.url)}" rel="noopener">Unsplash</a></span></li>`).join('')}</ul>
   <p><a href="https://unsplash.com/license" rel="noopener">Unsplash License</a></p>
 </section>`;
   return layout(ctx, { title: t.credits, path: '/credits', body });
