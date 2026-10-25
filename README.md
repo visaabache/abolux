@@ -8,7 +8,7 @@ A fast, mobile-first general store (electronics, fashion, beauty, home) for Moro
 - **Shipping by city**: a default fee, per-city rates (for example Casablanca 20 DH) and free delivery above an amount you choose.
 - **Catalogue**: categories, search, product photos (swipeable on mobile), options such as sizes, sale prices, stock with "only 3 left", and featured products.
 - **Admin at `/admin/`** (in French): orders with status (new → confirmed → shipped → delivered / cancelled / returned), a one-tap WhatsApp confirmation message in the customer's language, call buttons, internal notes, CSV export for delivery companies, products, categories, photo upload and settings.
-- **Design**: a full-screen photo slideshow, category cards, story and banner sections, a soft dot pattern, product galleries with thumbnails, quick add to cart, a sticky "order now" bar and a bottom tab bar on phones, a free-delivery progress bar in the cart, and subtle scroll animations (turned off for visitors who ask their device for less motion). Typefaces: Outfit and Manrope for French and English, Alexandria and IBM Plex Sans Arabic for Arabic.
+- **Design**: an international sportswear-store look (black and white, condensed uppercase headlines, full-bleed photos, grey product tiles, pill buttons), a full-screen photo slideshow, category tiles, story and banner sections, product galleries with thumbnails, quick add to cart, a sticky "order now" bar and a bottom tab bar on phones, a free-delivery progress bar in the cart, and subtle scroll animations (turned off for visitors who ask their device for less motion). Typefaces: Anton and Inter for French and English, Cairo and IBM Plex Sans Arabic for Arabic.
 - **Photos** from Unsplash, free for commercial use (see `CREDITS.md`, and the `/fr/credits` page).
 - Built for search engines: pages are rendered on the server, with hreflang links between languages, product structured data (`Product` with the `MAD` price), a sitemap and robots.txt.
 
@@ -109,4 +109,4 @@ Events sent, with amounts in MAD: PageView, ViewContent (product page), AddToCar
 
 **Logo:** the store currently shows a placeholder (a sparkle and the store name). The placeholder images live in `public/assets/favicon.svg`, `public/favicon.ico`, `public/assets/brand/` (app icons, email logo, share image) and `public/admin/logo*.svg`; replace them and `brandLogo()` in `src/render.js` once the real logo is ready.
 
-To change the colours, edit `--brand` (blue) and `--accent` (orange) at the top of `public/assets/style.css`. To change storefront wording, edit `src/i18n.js`.
+To change the colours, edit `--ink` (black) and `--accent` (sale red) at the top of `public/assets/style.css`. To change storefront wording, edit `src/i18n.js`.

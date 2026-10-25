@@ -72,7 +72,7 @@ const S = {
 };
 
 // Brand colours, matching the storefront.
-const C = { ink: '#111827', brand: '#2b50ee', accent: '#ff6a3d', sand: '#eef0f5', cream: '#f5f6fa', muted: '#6b7280', line: '#e5e7eb', mint: '#16a34a' };
+const C = { ink: '#111827', brand: '#111111', accent: '#707072', sand: '#eef0f5', cream: '#f5f6fa', muted: '#6b7280', line: '#e5e7eb', mint: '#16a34a' };
 const FONT = "-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
 
 export function emailConfig(env, settings) {

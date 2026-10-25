@@ -135,8 +135,8 @@ export function layout(ctx, { title, description = '', path, body, noindex = fal
   const ogImage = og.startsWith('http') ? og : `${origin}${og}`;
   const fonts =
     lang === 'ar'
-      ? 'family=Alexandria:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700'
-      : 'family=Outfit:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800';
+      ? 'family=Anton&family=Cairo:wght@700;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700'
+      : 'family=Anton&family=Inter:wght@400;500;600;700';
   const tickerItems = [announcement, t.cod, t.delivery, t.confirm].filter(Boolean);
   const ticker = tickerItems.map((s) => `<span>${star('tick-star')}${esc(s)}</span>`).join('');
   return `<!doctype html>
@@ -152,15 +152,15 @@ ${noindex ? '<meta name="robots" content="noindex">' : `<link rel="canonical" hr
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="${esc(store)}">
 <meta property="og:image" content="${esc(ogImage)}"><meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#2b50ee">
+<meta name="theme-color" content="#ffffff">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
-<link rel="icon" href="/assets/favicon.svg?v=4" type="image/svg+xml">
+<link rel="icon" href="/assets/favicon.svg?v=5" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?${fonts}&display=swap">
-<link rel="stylesheet" href="/assets/style.css?v=8">
+<link rel="stylesheet" href="/assets/style.css?v=9">
 <script src="/assets/js-on.js"></script>
 ${pixels ? `<script type="application/json" id="pixels">${JSON.stringify({ ...px, page: track }).replace(/</g, '\\u003c')}</script>
 <script src="/assets/pixels.js?v=1" defer></script>` : ''}
