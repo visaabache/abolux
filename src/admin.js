@@ -1,6 +1,7 @@
 // Admin API (/api/admin/*), used by public/admin/. Protected by the ADMIN_PASSWORD secret:
 // logging in sets a signed, HttpOnly session cookie that lasts 7 days.
 
+import { sanitizeRich, isRich } from './rich.js';
 import { sendEmail, sendStatusEmail, emailConfig, confirmationEmail, validEmail, STATUS_EMAILS } from './email.js';
 import { json, getSettings, slugify, STATUSES, RESTOCK_STATUSES, randomToken, parseJSON, displayPhone, visitorId, recentHits, addHit, sameOrigin, looksLikeImage, looksLikeVideo } from './lib.js';
 
@@ -358,7 +359,10 @@ async function saveProduct(db, id, b) {
   const stock = int(b.stock);
   const values = [
     slug, int(b.category_id), names.ar, names.fr, names.en,
-    String(b.desc_ar || ''), String(b.desc_fr || ''), String(b.desc_en || ''),
+    ...['ar', 'fr', 'en'].map((l) => {
+      const d = String(b[`desc_${l}`] || '');
+      return isRich(d) ? sanitizeRich(d) : d.slice(0, 20000);
+    }),
     price, int(b.compare_price), stock == null ? null : Math.max(0, stock),
     String(b.options || '').split(',').map((s) => s.trim()).filter(Boolean).join(', '),
     JSON.stringify(images), b.featured ? 1 : 0, b.active === false || b.active === 0 ? 0 : 1, int(b.sort, 0),

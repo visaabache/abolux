@@ -107,10 +107,18 @@
       uploadFailed: (n) => `تعذّر رفع ${n}`, notImage: (n) => `${n} ليس صورة مدعومة`, waitUploads: 'انتظر حتى ينتهي رفع الصور.',
       photoLinks: 'روابط الصور (رابط في كل سطر)', remove: 'حذف',
       description: 'الوصف', display: 'العرض',
-      descMedia: 'صور وفيديوهات الوصف', addMedia: 'إضافة صور أو فيديو',
-      descMediaHint: 'تظهر تحت نص الوصف في صفحة المنتج. الصور حتى 1 ميغا (تُصغَّر تلقائيًا)، والفيديو MP4 أو WebM أو MOV حتى 5 ميغا.',
       videoTooBig: (n) => `الفيديو ${n} أكبر من 5 ميغا. صغّره ثم أعد المحاولة.`, photoTooBig: (n) => `الصورة ${n} أكبر من 1 ميغا.`,
       notMedia: (n) => `${n} ليس صورة أو فيديو مدعوم`,
+      gifTooBig: (n, mb) => `صورة GIF ${n} أكبر من ${mb} ميغا.`,
+      rte: {
+        hint: 'اكتب كما في Word. أضف الصور وصور GIF والفيديو بالأزرار، أو اسحبها أو الصقها داخل النص. اضغط على صورة أو فيديو لتغيير الحجم أو المحاذاة أو حذفه.',
+        placeholder: 'اكتب وصف المنتج هنا…', undo: 'تراجع', redo: 'إعادة', p: 'نص عادي', h2: 'عنوان كبير', h3: 'عنوان صغير', quote: 'اقتباس',
+        bold: 'عريض', italic: 'مائل', underline: 'تسطير', strike: 'شطب', color: 'لون النص', highlight: 'تظليل',
+        ul: 'قائمة نقطية', ol: 'قائمة مرقمة', left: 'محاذاة لليسار', center: 'توسيط', right: 'محاذاة لليمين',
+        link: 'إضافة رابط', unlink: 'إزالة الرابط', photo: 'صورة أو GIF', video: 'فيديو (MP4، MOV، WebM)', embed: 'من رابط: يوتيوب أو Vimeo أو صورة أو فيديو',
+        hr: 'خط فاصل', clear: 'مسح التنسيق', linkPrompt: 'الصق الرابط (https://…)', embedPrompt: 'الصق رابط يوتيوب أو Vimeo أو رابط صورة أو فيديو (https://…)',
+        badLink: 'رابط غير صالح. يجب أن يبدأ بـ https://', size: 'الحجم', alignL: 'يسار', alignC: 'وسط', alignR: 'يمين', del: 'حذف',
+      },
       slug: 'رابط الصفحة (slug)', auto: 'تلقائي', sort: 'ترتيب العرض',
       featured: 'إبرازه في الصفحة الرئيسية', active: 'معروض (ظاهر في المتجر)',
       cancel: 'إلغاء', view: 'عرض', del: 'حذف', save: 'حفظ',
@@ -265,10 +273,18 @@
       uploadFailed: (n) => `Échec de l’envoi de ${n}`, notImage: (n) => `${n} n’est pas une image prise en charge`, waitUploads: 'Attendez la fin de l’envoi des photos.',
       photoLinks: 'Liens des photos (un par ligne)', remove: 'Retirer',
       description: 'Description', display: 'Affichage',
-      descMedia: 'Photos et vidéos de la description', addMedia: 'Ajouter photos ou vidéo',
-      descMediaHint: 'Affichées sous le texte de la description sur la page produit. Photos jusqu’à 1 Mo (réduites automatiquement), vidéos MP4, WebM ou MOV jusqu’à 5 Mo.',
       videoTooBig: (n) => `La vidéo ${n} dépasse 5 Mo. Réduisez-la puis réessayez.`, photoTooBig: (n) => `La photo ${n} dépasse 1 Mo.`,
       notMedia: (n) => `${n} n’est pas une photo ou une vidéo prise en charge`,
+      gifTooBig: (n, mb) => `Le GIF ${n} dépasse ${mb} Mo.`,
+      rte: {
+        hint: 'Écrivez comme dans Word. Ajoutez photos, GIF et vidéos avec les boutons, ou glissez-les / collez-les dans le texte. Cliquez sur une photo ou une vidéo pour changer sa taille, son alignement ou la supprimer.',
+        placeholder: 'Écrivez la description du produit…', undo: 'Annuler', redo: 'Rétablir', p: 'Texte normal', h2: 'Grand titre', h3: 'Petit titre', quote: 'Citation',
+        bold: 'Gras', italic: 'Italique', underline: 'Souligné', strike: 'Barré', color: 'Couleur du texte', highlight: 'Surligner',
+        ul: 'Liste à puces', ol: 'Liste numérotée', left: 'Aligner à gauche', center: 'Centrer', right: 'Aligner à droite',
+        link: 'Ajouter un lien', unlink: 'Retirer le lien', photo: 'Photo ou GIF', video: 'Vidéo (MP4, MOV, WebM)', embed: 'Depuis un lien : YouTube, Vimeo, image ou vidéo',
+        hr: 'Ligne de séparation', clear: 'Effacer la mise en forme', linkPrompt: 'Collez le lien (https://…)', embedPrompt: 'Collez un lien YouTube, Vimeo, ou le lien d’une image ou d’une vidéo (https://…)',
+        badLink: 'Lien invalide. Il doit commencer par https://', size: 'Taille', alignL: 'Gauche', alignC: 'Centre', alignR: 'Droite', del: 'Supprimer',
+      },
       slug: 'Adresse de la page (slug)', auto: 'automatique', sort: 'Ordre d’affichage',
       featured: 'Mettre en avant sur l’accueil', active: 'En ligne (visible dans la boutique)',
       cancel: 'Annuler', view: 'Voir', del: 'Supprimer', save: 'Enregistrer',
@@ -489,6 +505,7 @@
     try {
       const me = await api('/me');
       state.images = me.images;
+      state.r2 = me.r2;
       state.emails = me.emails;
       state.settings = (await api('/settings')).settings;
       state.categories = (await api('/categories')).categories;
@@ -771,10 +788,292 @@
     );
   }
 
+  // Rich description editor. Uses the browser's own editing commands; the server cleans the HTML on save.
+  const RTE_ICONS = {
+    undo: '<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
+    redo: '<path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/>',
+    ul: '<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/>',
+    ol: '<path d="M10 6h10M10 12h10M10 18h10"/><path d="M4 4.5h1.5V9M4 9h3M4 14.5a1.5 1.5 0 0 1 3 0c0 1.5-3 2-3 3.5h3"/>',
+    left: '<path d="M4 6h16M4 10h10M4 14h16M4 18h10"/>',
+    center: '<path d="M4 6h16M7 10h10M4 14h16M7 18h10"/>',
+    right: '<path d="M4 6h16M10 10h10M4 14h16M10 18h10"/>',
+    quote: '<path d="M7 7h4v4c0 3-1.5 5-4 6M15 7h4v4c0 3-1.5 5-4 6"/>',
+    link: '<path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/>',
+    unlink: '<path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/><path d="m3 3 18 18"/>',
+    photo: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="m21 16-5-5-9 9"/>',
+    video: '<rect x="2.5" y="5" width="14" height="14" rx="2"/><path d="m16.5 10 5-3v10l-5-3"/>',
+    embed: '<path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4a2.5 2.5 0 0 0-1.8 1.8C2 8.8 2 12 2 12s0 3.2.4 4.8a2.5 2.5 0 0 0 1.8 1.8c1.6.4 7.8.4 7.8.4s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8c.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8Z"/><path d="m10 15 5-3-5-3z"/>',
+    hr: '<path d="M3 12h18"/>',
+    clear: '<path d="M4 7V5h12v2M10 5l-3 14M14 19H6"/><path d="m15 13 6 6M21 13l-6 6"/>',
+  };
+  const rteIcon = (n) => `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${RTE_ICONS[n]}</svg>`;
+  function richEditor(l) {
+    const R = L.rte;
+    const b = (attrs, label, inner) => `<button type="button" ${attrs} title="${label}" aria-label="${label}">${inner}</button>`;
+    return `<div class="rte" data-rte="${l}">
+      <div class="rte-label">${LANG_LABEL[l]}</div>
+      <div class="rte-bar" role="toolbar" aria-label="${L.description} ${LANG_LABEL[l]}">
+        <span class="rte-group">${b('data-cmd="undo"', R.undo, rteIcon('undo'))}${b('data-cmd="redo"', R.redo, rteIcon('redo'))}</span>
+        <span class="rte-group"><select data-block aria-label="${R.p}"><option value="p">${R.p}</option><option value="h2">${R.h2}</option><option value="h3">${R.h3}</option></select></span>
+        <span class="rte-group">${b('data-cmd="bold"', R.bold, '<b>B</b>')}${b('data-cmd="italic"', R.italic, '<i>I</i>')}${b('data-cmd="underline"', R.underline, '<u>U</u>')}${b('data-cmd="strikeThrough"', R.strike, '<s>S</s>')}
+          <label class="rte-color" title="${R.color}"><span>A</span><input type="color" value="#d43f21" data-color aria-label="${R.color}"></label></span>
+        <span class="rte-group">${b('data-cmd="insertUnorderedList"', R.ul, rteIcon('ul'))}${b('data-cmd="insertOrderedList"', R.ol, rteIcon('ol'))}${b('data-quote', R.quote, rteIcon('quote'))}</span>
+        <span class="rte-group">${b('data-cmd="justifyLeft"', R.left, rteIcon('left'))}${b('data-cmd="justifyCenter"', R.center, rteIcon('center'))}${b('data-cmd="justifyRight"', R.right, rteIcon('right'))}</span>
+        <span class="rte-group">${b('data-link', R.link, rteIcon('link'))}${b('data-cmd="unlink"', R.unlink, rteIcon('unlink'))}</span>
+        <span class="rte-group rte-media">
+          <label title="${R.photo}" aria-label="${R.photo}">${rteIcon('photo')}<input type="file" accept="image/*" multiple hidden data-rte-file></label>
+          <label title="${R.video}" aria-label="${R.video}">${rteIcon('video')}<input type="file" accept="video/mp4,video/webm,video/quicktime" multiple hidden data-rte-file></label>
+          ${b('data-embed', R.embed, rteIcon('embed'))}</span>
+        <span class="rte-group">${b('data-cmd="insertHorizontalRule"', R.hr, rteIcon('hr'))}${b('data-cmd="removeFormat"', R.clear, rteIcon('clear'))}</span>
+      </div>
+      <div class="rte-media-bar" hidden>
+        <span>${R.size}</span>${['25', '50', '75', '100'].map((w) => `<button type="button" data-w="w-${w}">${w}%</button>`).join('')}
+        <span class="sep"></span>${[['left', R.alignL], ['center', R.alignC], ['right', R.alignR]].map(([a, t]) => `<button type="button" data-al="al-${a}" title="${t}" aria-label="${t}">${rteIcon(a)}</button>`).join('')}
+        <span class="sep"></span><button type="button" class="danger" data-media-del>${icon('trash', 16)}<span>${R.del}</span></button>
+      </div>
+      <div class="rte-area rich" contenteditable="true" ${dirOf(l)} data-placeholder="${esc(R.placeholder)}"></div>
+      <input type="hidden" name="desc_${l}">
+    </div>`;
+  }
+
+  function initEditors(f, p, shrink) {
+    const R = L.rte;
+    let busy = 0;
+    const isRich = (s) => /<\/?(p|br|div|h[2-4]|ul|ol|li|strong|em|b|i|u|s|img|video|figure|iframe|blockquote|span|a|table)\b/i.test(s || '');
+    const plainToHtml = (s) => String(s || '').trim().split(/\n\s*\n/).filter(Boolean).map((x) => `<p>${esc(x).replace(/\n/g, '<br>')}</p>`).join('');
+    const mediaHtml = (m) =>
+      m.type === 'embed' ? `<iframe src="${esc(m.url)}" allowfullscreen></iframe>`
+      : m.type === 'video' ? `<video src="${esc(m.url)}" controls playsinline preload="metadata"></video>`
+      : `<img src="${esc(m.url)}" alt="">`;
+    const figureHtml = (m, cls = 'w-100 al-center') => `<figure class="${cls}" contenteditable="false">${mediaHtml(m)}</figure>`;
+    let legacy = [];
+    try {
+      legacy = JSON.parse(p.desc_media || '[]').filter((m) => m && m.url);
+    } catch {}
+    // YouTube / Vimeo page links become embed links; other https links are treated as an image or a video.
+    function fromLink(raw) {
+      const u = String(raw || '').trim();
+      if (!/^https:\/\//i.test(u)) return null;
+      const yt = u.match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([\w-]{6,})/i);
+      if (yt) return { type: 'embed', url: `https://www.youtube-nocookie.com/embed/${yt[1]}` };
+      const vm = u.match(/vimeo\.com\/(?:video\/)?(\d+)/i);
+      if (vm) return { type: 'embed', url: `https://player.vimeo.com/video/${vm[1]}` };
+      if (/\.(mp4|webm|mov)(\?|#|$)/i.test(u)) return { type: 'video', url: u };
+      return { type: 'image', url: u };
+    }
+    async function uploadOne(file) {
+      const name = file.name || 'media';
+      if (['video/mp4', 'video/webm', 'video/quicktime'].includes(file.type)) {
+        if (file.size > 5 * 1024 * 1024) throw new Error(L.videoTooBig(name));
+        return { type: 'video', url: (await api('/images', { method: 'POST', raw: file })).url };
+      }
+      if (file.type === 'image/gif') {
+        // GIFs are sent as they are so they stay animated.
+        const mb = state.r2 ? 5 : 1.8;
+        if (file.size > mb * 1024 * 1024) throw new Error(L.gifTooBig(name, mb));
+        return { type: 'image', url: (await api('/images', { method: 'POST', raw: file })).url };
+      }
+      if (!file.type.startsWith('image/') && !/\.(heic|heif)$/i.test(name)) throw new Error(L.notMedia(name));
+      let blob;
+      try {
+        blob = await shrink(file);
+      } catch {
+        throw new Error(L.notMedia(name));
+      }
+      if (blob.size > 1024 * 1024) throw new Error(L.photoTooBig(name));
+      return { type: 'image', url: (await api('/images', { method: 'POST', raw: blob })).url };
+    }
+
+    const list = [...f.querySelectorAll('.rte')].map((root) => {
+      const l = root.dataset.rte;
+      const area = root.querySelector('.rte-area');
+      const input = root.querySelector('input[type=hidden]');
+      const mediaBar = root.querySelector('.rte-media-bar');
+      const blockSel = root.querySelector('[data-block]');
+      let saved = null;
+      let selected = null;
+      const raw = p[`desc_${l}`] || '';
+      area.innerHTML = (isRich(raw) ? raw : plainToHtml(raw)) + legacy.map((m) => figureHtml(m)).join('');
+      // Media sits in its own block that the caret can't enter; wrap any loose media the same way.
+      area.querySelectorAll('img, video, iframe').forEach((el) => {
+        let fig = el.closest('figure');
+        if (!fig) {
+          fig = document.createElement('figure');
+          fig.className = 'w-100 al-center';
+          el.replaceWith(fig);
+          fig.append(el);
+        }
+        fig.contentEditable = 'false';
+        if (el.tagName === 'VIDEO') el.controls = true;
+      });
+
+      const restore = () => {
+        area.focus();
+        const sel = getSelection();
+        sel.removeAllRanges();
+        if (saved && area.contains(saved.commonAncestorContainer)) sel.addRange(saved);
+        else {
+          const r = document.createRange();
+          r.selectNodeContents(area);
+          r.collapse(false);
+          sel.addRange(r);
+        }
+      };
+      const exec = (cmd, value = null) => {
+        restore();
+        document.execCommand('styleWithCSS', false, cmd === 'foreColor');
+        document.execCommand(cmd, false, value);
+        saved = getSelection().rangeCount ? getSelection().getRangeAt(0).cloneRange() : null;
+      };
+      const insertHtml = (html) => {
+        restore();
+        document.execCommand('insertHTML', false, html);
+        saved = getSelection().rangeCount ? getSelection().getRangeAt(0).cloneRange() : null;
+      };
+      const select = (fig) => {
+        area.querySelectorAll('figure.sel').forEach((x) => x.classList.remove('sel'));
+        selected = fig;
+        mediaBar.hidden = !fig;
+        if (!fig) return;
+        fig.classList.add('sel');
+        mediaBar.querySelectorAll('[data-w]').forEach((x) => x.classList.toggle('on', fig.classList.contains(x.dataset.w)));
+        mediaBar.querySelectorAll('[data-al]').forEach((x) => x.classList.toggle('on', fig.classList.contains(x.dataset.al)));
+      };
+      async function addFiles(files) {
+        for (const file of files) {
+          const id = `up${Math.random().toString(36).slice(2)}`;
+          busy++;
+          insertHtml(`<figure class="w-100 al-center uploading" contenteditable="false" data-up="${id}"><span class="spinner"></span></figure><p><br></p>`);
+          const holder = () => area.querySelector(`[data-up="${id}"]`);
+          try {
+            const m = await uploadOne(file);
+            const h = holder();
+            if (h) {
+              h.classList.remove('uploading');
+              h.removeAttribute('data-up');
+              h.innerHTML = mediaHtml(m);
+            }
+          } catch (err) {
+            holder()?.remove();
+            toast(err.message || L.uploadFailed(file.name || ''), true);
+          }
+          busy--;
+        }
+      }
+
+      document.addEventListener('selectionchange', () => {
+        const sel = getSelection();
+        if (!sel.rangeCount || !area.contains(sel.anchorNode)) return;
+        saved = sel.getRangeAt(0).cloneRange();
+        const block = sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentElement;
+        const h = block?.closest('h2, h3');
+        blockSel.value = h && area.contains(h) ? h.tagName.toLowerCase() : 'p';
+      });
+      // Toolbar buttons must not take the focus away from the text.
+      root.querySelector('.rte-bar').addEventListener('mousedown', (e) => {
+        if (e.target.closest('button')) e.preventDefault();
+      });
+      root.querySelector('.rte-bar').addEventListener('click', (e) => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        if (btn.dataset.cmd) exec(btn.dataset.cmd);
+        else if (btn.hasAttribute('data-quote')) {
+          const q = getSelection().anchorNode?.parentElement?.closest('blockquote');
+          exec('formatBlock', q && area.contains(q) ? 'p' : 'blockquote');
+        }
+        else if (btn.hasAttribute('data-link')) {
+          const keep = saved;
+          const url = prompt(R.linkPrompt, 'https://');
+          saved = keep;
+          if (!url || url === 'https://') return;
+          if (!/^(https?:\/\/|mailto:|tel:)/i.test(url.trim())) return toast(R.badLink, true);
+          exec('createLink', url.trim());
+        } else if (btn.hasAttribute('data-embed')) {
+          const keep = saved;
+          const m = fromLink(prompt(R.embedPrompt, 'https://'));
+          saved = keep;
+          if (!m) return toast(R.badLink, true);
+          insertHtml(figureHtml(m) + '<p><br></p>');
+        }
+      });
+      blockSel.addEventListener('change', () => exec('formatBlock', blockSel.value));
+      const color = root.querySelector('[data-color]');
+      color.addEventListener('input', () => exec('foreColor', color.value));
+      root.querySelectorAll('[data-rte-file]').forEach((inp) =>
+        inp.addEventListener('change', () => {
+          const files = [...inp.files];
+          inp.value = '';
+          addFiles(files);
+        }),
+      );
+      // Click a photo or video to size, align or delete it.
+      area.addEventListener('click', (e) => select(e.target.closest('figure')));
+      area.addEventListener('keydown', (e) => {
+        if (selected && (e.key === 'Delete' || e.key === 'Backspace')) {
+          e.preventDefault();
+          selected.remove();
+          select(null);
+        }
+      });
+      mediaBar.addEventListener('mousedown', (e) => e.preventDefault());
+      mediaBar.addEventListener('click', (e) => {
+        const btn = e.target.closest('button');
+        if (!btn || !selected) return;
+        if (btn.dataset.w) {
+          selected.classList.remove('w-25', 'w-50', 'w-75', 'w-100');
+          selected.classList.add(btn.dataset.w);
+        } else if (btn.dataset.al) {
+          selected.classList.remove('al-left', 'al-center', 'al-right');
+          selected.classList.add(btn.dataset.al);
+        } else if (btn.hasAttribute('data-media-del')) {
+          selected.remove();
+          return select(null);
+        }
+        select(selected);
+      });
+      document.addEventListener('click', (e) => {
+        if (selected && !root.contains(e.target)) select(null);
+      });
+      // Drop or paste files straight into the text.
+      area.addEventListener('dragover', (e) => {
+        if ([...e.dataTransfer.types].includes('Files')) e.preventDefault();
+      });
+      area.addEventListener('drop', (e) => {
+        if (!e.dataTransfer.files.length) return;
+        e.preventDefault();
+        const pos = document.caretRangeFromPoint?.(e.clientX, e.clientY);
+        const cp = !pos && document.caretPositionFromPoint?.(e.clientX, e.clientY);
+        if (pos) saved = pos;
+        else if (cp) {
+          saved = document.createRange();
+          saved.setStart(cp.offsetNode, cp.offset);
+        }
+        addFiles([...e.dataTransfer.files]);
+      });
+      area.addEventListener('paste', (e) => {
+        const files = [...(e.clipboardData?.files || [])];
+        if (!files.length) return;
+        e.preventDefault();
+        addFiles(files);
+      });
+
+      const value = () => {
+        const clone = area.cloneNode(true);
+        clone.querySelectorAll('.uploading').forEach((x) => x.remove());
+        clone.querySelectorAll('[contenteditable]').forEach((x) => x.removeAttribute('contenteditable'));
+        clone.querySelectorAll('.sel').forEach((x) => x.classList.remove('sel'));
+        const empty = !clone.textContent.trim() && !clone.querySelector('img, video, iframe, hr, table');
+        return empty ? '' : clone.innerHTML;
+      };
+      return { sync: () => (input.value = value()) };
+    });
+    document.execCommand('defaultParagraphSeparator', false, 'p');
+    return { busy: () => busy > 0, sync: () => list.forEach((x) => x.sync()) };
+  }
+
   function productForm(p) {
     const images = JSON.parse(p.images || '[]');
     const field = (name, label, attrs = '') => `<label>${label}<input name="${name}" value="${esc(p[name] ?? '')}" ${attrs}></label>`;
-    const area = (name, label, attrs = '') => `<label>${label}<textarea name="${name}" rows="3" ${attrs}>${esc(p[name] ?? '')}</textarea></label>`;
     shell(
       p.id ? L.editProduct : L.newProduct,
       `<form class="form" id="pform">
@@ -800,13 +1099,9 @@
         <details${images.some((u) => /^https?:/.test(u)) ? ' open' : ''}><summary class="muted small">${L.pasteLinks}</summary>
         <label>${L.photoLinks}<textarea name="images" rows="2" dir="ltr">${esc(images.join('\n'))}</textarea></label></details>
       </div>
-      <div class="card"><h2>${L.description}</h2>
-        ${contentLangs().map((l) => area(`desc_${l}`, LANG_LABEL[l], dirOf(l))).join('')}
-        <div class="desc-media-admin"><h3>${L.descMedia}</h3><p class="muted small">${L.descMediaHint}</p>
-          <div class="photos" id="dmedia"></div>
-          <label class="btn ghost">${icon('plus', 18)}<span>${L.addMedia}</span><input type="file" accept="image/*,video/mp4,video/webm,video/quicktime" multiple hidden data-pick-media></label>
-          <input type="hidden" name="desc_media" value="${esc(p.desc_media || '[]')}">
-        </div>
+      <div class="card"><h2>${L.description}</h2><p class="muted small">${L.rte.hint}</p>
+        ${contentLangs().map((l) => richEditor(l)).join('')}
+        <input type="hidden" name="desc_media" value="[]">
       </div>
       <div class="card"><h2>${L.display}</h2><div class="cols">
         ${field('slug', L.slug, `placeholder="${L.auto}" dir="ltr"`)}
@@ -946,79 +1241,12 @@
       e.preventDefault();
       upload(e.dataTransfer.files);
     });
-    // Description photos and videos: photos are shrunk like the main ones and must end up under 1 MB,
-    // videos are sent as they are (5 MB max) and stored in pieces by the server.
-    const mediaList = () => {
-      try {
-        return JSON.parse(f.desc_media.value || '[]');
-      } catch {
-        return [];
-      }
-    };
-    let mediaPending = [];
-    const drawMedia = () => {
-      const items = mediaList();
-      document.getElementById('dmedia').innerHTML =
-        items
-          .map(
-            (m, i) => `<figure>${m.type === 'video' ? `<video src="${esc(m.url)}#t=0.1" muted playsinline preload="metadata"></video><span class="main-badge">▶</span>` : `<img src="${esc(m.url)}" alt="" loading="lazy">`}
-            <div class="tile-actions">${i > 0 ? `<button type="button" data-mmove="${i}" data-by="-1" aria-label="${L.moveBefore}">${icon('chevron', 16)}</button>` : '<span></span>'}<button type="button" data-mrm="${i}" aria-label="${L.remove}">✕</button>${i < items.length - 1 ? `<button type="button" data-mmove="${i}" data-by="1" class="flip" aria-label="${L.moveAfter}">${icon('chevron', 16)}</button>` : '<span></span>'}</div></figure>`,
-          )
-          .join('') + mediaPending.map(() => `<figure class="uploading"><span class="spinner"></span></figure>`).join('');
-    };
-    const setMedia = (arr) => {
-      f.desc_media.value = JSON.stringify(arr);
-      drawMedia();
-    };
-    drawMedia();
-    document.getElementById('dmedia').addEventListener('click', (e) => {
-      const rm = e.target.closest('[data-mrm]');
-      const mv = e.target.closest('[data-mmove]');
-      const arr = mediaList();
-      if (rm) arr.splice(Number(rm.dataset.mrm), 1);
-      else if (mv) {
-        const i = Number(mv.dataset.mmove);
-        const j = i + Number(mv.dataset.by);
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      } else return;
-      setMedia(arr);
-    });
-    f.querySelector('[data-pick-media]').addEventListener('change', async (e) => {
-      const files = [...e.target.files];
-      e.target.value = '';
-      for (const file of files) {
-        const id = Math.random();
-        mediaPending.push(id);
-        drawMedia();
-        try {
-          const name = file.name || 'media';
-          let blob;
-          let type;
-          if (['video/mp4', 'video/webm', 'video/quicktime'].includes(file.type)) {
-            if (file.size > 5 * 1024 * 1024) throw new Error(L.videoTooBig(name));
-            blob = file;
-            type = 'video';
-          } else if (file.type.startsWith('image/') || /\.(heic|heif)$/i.test(name)) {
-            try {
-              blob = await shrink(file);
-            } catch {
-              throw new Error(L.notMedia(name));
-            }
-            if (blob.size > 1024 * 1024) throw new Error(L.photoTooBig(name));
-            type = 'image';
-          } else throw new Error(L.notMedia(name));
-          const { url } = await api('/images', { method: 'POST', raw: blob });
-          setMedia([...mediaList(), { type, url }]);
-        } catch (err) {
-          toast(err.message || L.uploadFailed(file.name || ''), true);
-        }
-        mediaPending = mediaPending.filter((x) => x !== id);
-        drawMedia();
-      }
-    });
+    // Description editors (one per language): Word-like text with photos, GIFs, videos and embeds.
+    const editors = initEditors(f, p, shrink);
     f.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (pending.length || mediaPending.length) return toast(L.waitUploads, true);
+      if (pending.length || editors.busy()) return toast(L.waitUploads, true);
+      editors.sync();
       const data = Object.fromEntries(new FormData(f));
       data.featured = f.featured.checked;
       data.active = f.active.checked;
