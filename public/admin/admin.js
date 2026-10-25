@@ -427,7 +427,7 @@
   function login() {
     document.body.className = 'is-login';
     app.innerHTML = `<form class="login" id="login">
-      <div class="login-top"><img src="/admin/logo.svg" alt="Abolux" class="login-logo">${langButton()}</div>
+      <div class="login-top"><img src="/admin/logo.png" alt="Abolux" class="login-logo">${langButton()}</div>
       <h1>${L.sellerSpace}</h1>
       <p class="muted">${L.loginHint}</p>
       <label>${L.password}<input type="password" name="password" autocomplete="current-password" required autofocus dir="ltr"></label>
@@ -455,7 +455,7 @@
         `<a href="#${k}" class="nav-item${state.page === k ? ' on' : ''}">${icon(k)}<span class="long">${L.nav[k]}</span><span class="short">${L.navShort[k] || L.nav[k]}</span>${k === 'orders' && state.pending ? `<b class="nav-badge">${state.pending}</b>` : ''}</a>`,
     ).join('');
     app.innerHTML = `<aside class="side">
-        <a href="#dashboard" class="side-logo"><img src="/admin/logo-dark.svg" alt="${esc(state.settings.store_name || 'Abolux')}"></a>
+        <a href="#dashboard" class="side-logo"><img src="/admin/logo.png" alt="${esc(state.settings.store_name || 'Abolux')}"></a>
         <nav class="side-nav">${nav}</nav>
         <div class="side-foot">
           <button class="nav-item" data-lang="${other()}" lang="${other()}">${icon('globe')}<span>${L.switchTo}</span></button>

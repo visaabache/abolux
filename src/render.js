@@ -10,9 +10,12 @@ import { CITIES, LANGS, esc, money, productName, productDesc, productImages, pro
 const PLACEHOLDER = '/assets/placeholder.svg';
 const BRAND_OG = '/assets/brand/og-image-v2.jpg';
 
-// Placeholder logo until the Abolux artwork arrives: a sparkle and the store name from admin.
-function brandLogo(store) {
-  return `${star('logo-star')}<span>${esc(store)}</span>`;
+// The Aboluxe logo (crowned A + wordmark, gold). Side by side in the header, stacked in the footer.
+// The link around it carries the store name for screen readers.
+function brandLogo(stacked = false) {
+  return stacked
+    ? '<img class="logo-img logo-stacked" src="/assets/brand/logo-stacked-gold.png" alt="" width="401" height="360">'
+    : '<img class="logo-img" src="/assets/brand/logo-horizontal-gold.png" alt="" width="461" height="150">';
 }
 
 // Line icons (24×24, stroke = currentColor).
@@ -154,13 +157,13 @@ ${noindex ? '<meta name="robots" content="noindex">' : `<link rel="canonical" hr
 <meta property="og:image" content="${esc(ogImage)}"><meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#ffffff">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
-<link rel="icon" href="/assets/favicon.svg?v=5" type="image/svg+xml">
+<link rel="icon" href="/assets/favicon.png?v=6" type="image/png">
 <link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?${fonts}&display=swap">
-<link rel="stylesheet" href="/assets/style.css?v=9">
+<link rel="stylesheet" href="/assets/style.css?v=10">
 <script src="/assets/js-on.js"></script>
 ${pixels ? `<script type="application/json" id="pixels">${JSON.stringify({ ...px, page: track }).replace(/</g, '\\u003c')}</script>
 <script src="/assets/pixels.js?v=1" defer></script>` : ''}
@@ -171,7 +174,7 @@ ${pixels ? `<script type="application/json" id="pixels">${JSON.stringify({ ...px
 <div class="ticker" aria-label="${esc(announcement || t.cod)}"><div class="ticker-track">${ticker}${ticker}</div></div>
 <header class="top">
   <div class="wrap top-row">
-    <a class="logo" href="/${lang}/" aria-label="${esc(store)}">${brandLogo(store)}</a>
+    <a class="logo" href="/${lang}/" aria-label="${esc(store)}">${brandLogo()}</a>
     <nav class="main-nav" aria-label="${esc(t.categories)}"><a href="/${lang}/shop">${esc(t.shop)}</a>${navCats}</nav>
     <div class="top-actions">
       <form class="top-search" action="/${lang}/shop" method="get" role="search"><input type="search" name="q" placeholder="${esc(t.search)}" aria-label="${esc(t.search)}"><button aria-label="${esc(t.search)}">${icon('search', 20)}</button></form>
@@ -188,7 +191,7 @@ ${body}
   <div class="foot-band" aria-hidden="true"></div>
   <div class="wrap foot-grid">
     <div class="foot-brand">
-      <a class="logo logo-light" href="/${lang}/" aria-label="${esc(store)}">${brandLogo(store)}</a>
+      <a class="logo logo-light" href="/${lang}/" aria-label="${esc(store)}">${brandLogo(true)}</a>
       <p>${esc(t.tagline)}</p>
       ${socialLinks(settings)}
     </div>

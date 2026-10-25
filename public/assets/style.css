@@ -88,12 +88,11 @@ h3 { font-size: 1.05rem; }
 
 /* Header */
 .top { position: sticky; top: 0; z-index: 30; background: #fff; transition: transform 0.3s var(--ease); }
-.top-row { display: flex; align-items: center; gap: 20px; min-height: 64px; }
-.logo { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-family: var(--font-display); font-weight: 400; font-size: 1.7rem; text-transform: uppercase; color: var(--ink); line-height: 1; }
-:lang(ar) .logo { font-family: 'Anton', Impact, sans-serif; }
-.logo-star { width: 24px; height: 24px; color: currentColor; transition: transform 0.8s var(--ease); }
-.logo:hover .logo-star { transform: rotate(90deg); }
-.logo-light { color: var(--ink); }
+.top-row { display: flex; align-items: center; gap: 20px; min-height: 76px; }
+.logo { display: inline-flex; align-items: center; text-decoration: none; flex: none; }
+.logo-img { display: block; height: 58px; width: auto; }
+.logo-img.logo-stacked { height: 120px; }
+@media (max-width: 600px) { .top .logo-img { height: 46px; } }
 .main-nav { display: none; gap: 4px; margin-inline: auto; }
 .main-nav a { text-decoration: none; font-weight: 500; padding: 8px 12px; position: relative; }
 .main-nav a::after { content: ''; position: absolute; inset-inline: 12px; bottom: 2px; height: 2px; background: var(--ink); transform: scaleX(0); transition: transform 0.25s var(--ease); }

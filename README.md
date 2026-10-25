@@ -107,6 +107,6 @@ Events sent, with amounts in MAD: PageView, ViewContent (product page), AddToCar
 | `seed/sample.sql` | Sample products |
 | `test/` | `npm test` |
 
-**Logo:** the store currently shows a placeholder (a sparkle and the store name). The placeholder images live in `public/assets/favicon.svg`, `public/favicon.ico`, `public/assets/brand/` (app icons, email logo, share image) and `public/admin/logo*.svg`; replace them and `brandLogo()` in `src/render.js` once the real logo is ready.
+**Logo:** the Aboluxe logo files are in `brand/` (originals in `brand/source/`, transparent PNGs in `brand/png/`). The site uses the gold version: side by side in the header, stacked in the footer (`public/assets/brand/`), with the crowned A on black for the browser tab and phone icons. `brandLogo()` in `src/render.js` picks which file is shown.
 
 To change the colours, edit `--ink` (black) and `--accent` (sale red) at the top of `public/assets/style.css`. To change storefront wording, edit `src/i18n.js`.
