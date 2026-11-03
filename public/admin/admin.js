@@ -111,13 +111,13 @@
       notMedia: (n) => `${n} ليس صورة أو فيديو مدعوم`,
       gifTooBig: (n, mb) => `صورة GIF ${n} أكبر من ${mb} ميغا.`,
       rte: {
-        hint: 'اكتب كما في Word. أضف الصور وصور GIF والفيديو بالأزرار، أو اسحبها أو الصقها داخل النص. اضغط على صورة أو فيديو لتغيير الحجم أو المحاذاة أو حذفه.',
+        hint: 'اكتب كما في Word. أضف الصور وصور GIF والفيديو بالأزرار، أو اسحبها أو الصقها داخل النص. اضغط على صورة أو فيديو لتغيير الحجم أو المحاذاة أو حذفه، أو اسحب أحد جوانبه أو زواياه.',
         placeholder: 'اكتب وصف المنتج هنا…', undo: 'تراجع', redo: 'إعادة', p: 'نص عادي', h2: 'عنوان كبير', h3: 'عنوان صغير', quote: 'اقتباس',
         bold: 'عريض', italic: 'مائل', underline: 'تسطير', strike: 'شطب', color: 'لون النص', highlight: 'تظليل',
         ul: 'قائمة نقطية', ol: 'قائمة مرقمة', left: 'محاذاة لليسار', center: 'توسيط', right: 'محاذاة لليمين',
         link: 'إضافة رابط', unlink: 'إزالة الرابط', photo: 'صورة أو GIF', video: 'فيديو (MP4، MOV، WebM)', embed: 'من رابط: يوتيوب أو Vimeo أو صورة أو فيديو',
         hr: 'خط فاصل', clear: 'مسح التنسيق', linkPrompt: 'الصق الرابط (https://…)', embedPrompt: 'الصق رابط يوتيوب أو Vimeo أو رابط صورة أو فيديو (https://…)',
-        badLink: 'رابط غير صالح. يجب أن يبدأ بـ https://', size: 'الحجم', alignL: 'يسار', alignC: 'وسط', alignR: 'يمين', del: 'حذف',
+        badLink: 'رابط غير صالح. يجب أن يبدأ بـ https://', size: 'الحجم', smaller: 'أصغر', bigger: 'أكبر', dragSize: 'اسحب لتغيير الحجم أو الشكل', resetShape: 'الحجم والشكل الأصليان', alignL: 'يسار', alignC: 'وسط', alignR: 'يمين', del: 'حذف',
       },
       slug: 'رابط الصفحة (slug)', auto: 'تلقائي', sort: 'ترتيب العرض',
       featured: 'إبرازه في الصفحة الرئيسية', active: 'معروض (ظاهر في المتجر)',
@@ -164,7 +164,7 @@
         'على حاسوبك، في مجلد المتجر، شغّل <code>npx wrangler secret put BREVO_API_KEY</code> والصق المفتاح عندما يُطلب منك.',
         'أدخل العنوان المؤكد أسفله، احفظ، ثم اضغط «إرسال رسالة تجريبية».',
       ],
-      shipping: 'التوصيل', shippingFee: 'ثمن التوصيل الافتراضي (درهم)', freeOver: 'توصيل مجاني ابتداءً من (درهم، 0 = أبدًا)',
+      shipping: 'التوصيل', shippingIncluded: 'التوصيل مجاني لجميع المدن: ثمنه داخل في ثمن المنتجات، والزبون يدفع ثمن المنتج فقط عند الاستلام.', shippingFee: 'ثمن التوصيل الافتراضي (درهم)', freeOver: 'توصيل مجاني ابتداءً من (درهم، 0 = أبدًا)',
       rates: 'أثمنة حسب المدينة (سطر لكل مدينة: المدينة = الثمن)',
       banner: 'شريط الإعلان', bannerHint: 'الرسالة التي تمر أعلى كل صفحة.',
       homePage: 'الصفحة الرئيسية', homeHint: 'اتركه فارغًا للاحتفاظ بالنص الافتراضي.',
@@ -279,13 +279,13 @@
       notMedia: (n) => `${n} n’est pas une photo ou une vidéo prise en charge`,
       gifTooBig: (n, mb) => `Le GIF ${n} dépasse ${mb} Mo.`,
       rte: {
-        hint: 'Écrivez comme dans Word. Ajoutez photos, GIF et vidéos avec les boutons, ou glissez-les / collez-les dans le texte. Cliquez sur une photo ou une vidéo pour changer sa taille, son alignement ou la supprimer.',
+        hint: 'Écrivez comme dans Word. Ajoutez photos, GIF et vidéos avec les boutons, ou glissez-les / collez-les dans le texte. Cliquez sur une photo ou une vidéo pour changer sa taille, son alignement ou la supprimer, ou tirez un de ses côtés ou coins.',
         placeholder: 'Écrivez la description du produit…', undo: 'Annuler', redo: 'Rétablir', p: 'Texte normal', h2: 'Grand titre', h3: 'Petit titre', quote: 'Citation',
         bold: 'Gras', italic: 'Italique', underline: 'Souligné', strike: 'Barré', color: 'Couleur du texte', highlight: 'Surligner',
         ul: 'Liste à puces', ol: 'Liste numérotée', left: 'Aligner à gauche', center: 'Centrer', right: 'Aligner à droite',
         link: 'Ajouter un lien', unlink: 'Retirer le lien', photo: 'Photo ou GIF', video: 'Vidéo (MP4, MOV, WebM)', embed: 'Depuis un lien : YouTube, Vimeo, image ou vidéo',
         hr: 'Ligne de séparation', clear: 'Effacer la mise en forme', linkPrompt: 'Collez le lien (https://…)', embedPrompt: 'Collez un lien YouTube, Vimeo, ou le lien d’une image ou d’une vidéo (https://…)',
-        badLink: 'Lien invalide. Il doit commencer par https://', size: 'Taille', alignL: 'Gauche', alignC: 'Centre', alignR: 'Droite', del: 'Supprimer',
+        badLink: 'Lien invalide. Il doit commencer par https://', size: 'Taille', smaller: 'Plus petit', bigger: 'Plus grand', dragSize: 'Glissez pour changer la taille ou la forme', resetShape: 'Taille et forme d’origine', alignL: 'Gauche', alignC: 'Centre', alignR: 'Droite', del: 'Supprimer',
       },
       slug: 'Adresse de la page (slug)', auto: 'automatique', sort: 'Ordre d’affichage',
       featured: 'Mettre en avant sur l’accueil', active: 'En ligne (visible dans la boutique)',
@@ -332,7 +332,7 @@
         'Sur votre PC, dans le dossier de la boutique, lancez <code>npx wrangler secret put BREVO_API_KEY</code> et collez la clé quand on vous la demande.',
         'Indiquez ci-dessous l’adresse vérifiée, enregistrez, puis cliquez sur « Envoyer un test ».',
       ],
-      shipping: 'Livraison', shippingFee: 'Frais de livraison par défaut (DH)', freeOver: 'Livraison gratuite à partir de (DH, 0 = jamais)',
+      shipping: 'Livraison', shippingIncluded: 'Livraison gratuite dans toutes les villes : elle est comprise dans le prix des produits, le client paie seulement le prix affiché à la livraison.', shippingFee: 'Frais de livraison par défaut (DH)', freeOver: 'Livraison gratuite à partir de (DH, 0 = jamais)',
       rates: 'Tarifs par ville (une ligne par ville : Ville = prix)',
       banner: 'Bandeau d’annonce', bannerHint: 'Le message qui défile en haut de chaque page.',
       homePage: 'Accueil', homeHint: 'Laissez vide pour garder le texte par défaut.',
@@ -831,7 +831,7 @@
         <span class="rte-group">${b('data-cmd="insertHorizontalRule"', R.hr, rteIcon('hr'))}${b('data-cmd="removeFormat"', R.clear, rteIcon('clear'))}</span>
       </div>
       <div class="rte-media-bar" hidden>
-        <span>${R.size}</span>${['25', '50', '75', '100'].map((w) => `<button type="button" data-w="w-${w}">${w}%</button>`).join('')}
+        <span>${R.size}</span><button type="button" data-step="-10" title="${R.smaller}" aria-label="${R.smaller}">−</button>${['25', '50', '75', '100'].map((w) => `<button type="button" data-w="w-${w}">${w}%</button>`).join('')}<button type="button" data-step="10" title="${R.bigger}" aria-label="${R.bigger}">+</button><button type="button" data-reset title="${R.resetShape}" aria-label="${R.resetShape}">↺</button>
         <span class="sep"></span>${[['left', R.alignL], ['center', R.alignC], ['right', R.alignR]].map(([a, t]) => `<button type="button" data-al="al-${a}" title="${t}" aria-label="${t}">${rteIcon(a)}</button>`).join('')}
         <span class="sep"></span><button type="button" class="danger" data-media-del>${icon('trash', 16)}<span>${R.del}</span></button>
       </div>
@@ -934,15 +934,93 @@
         document.execCommand('insertHTML', false, html);
         saved = getSelection().rangeCount ? getSelection().getRangeAt(0).cloneRange() : null;
       };
+      // Handles around the selected photo or video: sides change the width, top and bottom the height,
+      // corners both. Width is kept in percent on the figure, the shape as an aspect ratio on the media.
+      const sizer = document.createElement('div');
+      sizer.className = 'rte-sizer';
+      sizer.hidden = true;
+      sizer.innerHTML = ['n', 's', 'e', 'w', 'ne', 'nw', 'se', 'sw'].map((h) => `<span class="rte-size-handle h-${h}" data-h="${h}" title="${R.dragSize}"></span>`).join('');
+      root.append(sizer);
+      const inner = () => {
+        const cs = getComputedStyle(area);
+        return area.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      };
+      const mediaOf = (fig) => fig.querySelector('img, video, iframe');
+      const widthOf = (fig) => Math.round((fig.getBoundingClientRect().width / inner()) * 100);
+      const SIZES = ['w-25', 'w-50', 'w-75', 'w-100'];
+      const setWidth = (fig, w) => {
+        w = Math.max(10, Math.min(100, Math.round(w)));
+        fig.classList.remove(...SIZES);
+        if (w >= 100) {
+          fig.classList.add('w-100');
+          fig.style.width = '';
+        } else fig.style.width = `${w}%`;
+        if (!fig.getAttribute('style')) fig.removeAttribute('style');
+      };
+      const place = () => {
+        if (!selected || !selected.isConnected) return (sizer.hidden = true);
+        const m = mediaOf(selected) || selected;
+        const box = root.getBoundingClientRect();
+        const r = m.getBoundingClientRect();
+        const a = area.getBoundingClientRect();
+        const top = Math.max(r.top, a.top);
+        const bottom = Math.min(r.bottom, a.bottom);
+        sizer.hidden = false;
+        sizer.style.visibility = bottom > top ? '' : 'hidden';
+        Object.assign(sizer.style, { top: `${r.top - box.top}px`, left: `${r.left - box.left}px`, width: `${r.width}px`, height: `${r.height}px` });
+        sizer.querySelectorAll('.h-n, .h-ne, .h-nw').forEach((x) => (x.style.visibility = r.top >= a.top ? '' : 'hidden'));
+        sizer.querySelectorAll('.h-s, .h-se, .h-sw').forEach((x) => (x.style.visibility = r.bottom <= a.bottom ? '' : 'hidden'));
+      };
       const select = (fig) => {
         area.querySelectorAll('figure.sel').forEach((x) => x.classList.remove('sel'));
         selected = fig;
         mediaBar.hidden = !fig;
-        if (!fig) return;
+        if (!fig) return (sizer.hidden = true);
         fig.classList.add('sel');
-        mediaBar.querySelectorAll('[data-w]').forEach((x) => x.classList.toggle('on', fig.classList.contains(x.dataset.w)));
+        const custom = Boolean(fig.style.width);
+        mediaBar.querySelectorAll('[data-w]').forEach((x) => x.classList.toggle('on', !custom && fig.classList.contains(x.dataset.w)));
         mediaBar.querySelectorAll('[data-al]').forEach((x) => x.classList.toggle('on', fig.classList.contains(x.dataset.al)));
+        requestAnimationFrame(place);
       };
+      area.addEventListener('scroll', place);
+      area.addEventListener('input', place);
+      addEventListener('resize', place);
+      sizer.querySelectorAll('[data-h]').forEach((handle) =>
+        handle.addEventListener('pointerdown', (e) => {
+          if (!selected) return;
+          e.preventDefault();
+          handle.setPointerCapture(e.pointerId);
+          const dir = handle.dataset.h;
+          const fig = selected;
+          const media = mediaOf(fig);
+          const start = (media || fig).getBoundingClientRect();
+          // A centred photo grows on both sides, a photo floated left or right on one.
+          const k = fig.classList.contains('al-left') || fig.classList.contains('al-right') ? 1 : 2;
+          const x0 = e.clientX;
+          const y0 = e.clientY;
+          const move = (ev) => {
+            let w = start.width;
+            let h = start.height;
+            if (dir.includes('e')) w += (ev.clientX - x0) * k;
+            if (dir.includes('w')) w -= (ev.clientX - x0) * k;
+            if (dir.includes('s')) h += ev.clientY - y0;
+            if (dir.includes('n')) h -= ev.clientY - y0;
+            w = Math.max(40, Math.min(inner(), w));
+            h = Math.max(40, h);
+            setWidth(fig, (w / inner()) * 100);
+            if (media) media.style.aspectRatio = Math.max(0.2, Math.min(5, w / h)).toFixed(3);
+            select(fig);
+          };
+          const up = () => {
+            handle.removeEventListener('pointermove', move);
+            handle.removeEventListener('pointerup', up);
+            handle.removeEventListener('pointercancel', up);
+          };
+          handle.addEventListener('pointermove', move);
+          handle.addEventListener('pointerup', up);
+          handle.addEventListener('pointercancel', up);
+        }),
+      );
       async function addFiles(files) {
         for (const file of files) {
           const id = `up${Math.random().toString(36).slice(2)}`;
@@ -1024,8 +1102,19 @@
         const btn = e.target.closest('button');
         if (!btn || !selected) return;
         if (btn.dataset.w) {
-          selected.classList.remove('w-25', 'w-50', 'w-75', 'w-100');
+          selected.classList.remove(...SIZES);
           selected.classList.add(btn.dataset.w);
+          selected.style.width = '';
+          if (!selected.getAttribute('style')) selected.removeAttribute('style');
+        } else if (btn.dataset.step) {
+          setWidth(selected, widthOf(selected) + Number(btn.dataset.step));
+        } else if (btn.hasAttribute('data-reset')) {
+          const m = mediaOf(selected);
+          if (m) {
+            m.style.aspectRatio = '';
+            if (!m.getAttribute('style')) m.removeAttribute('style');
+          }
+          setWidth(selected, 100);
         } else if (btn.dataset.al) {
           selected.classList.remove('al-left', 'al-center', 'al-right');
           selected.classList.add(btn.dataset.al);
@@ -1306,10 +1395,6 @@
   function settings() {
     const s = state.settings;
     const field = (k, label, attrs = '') => `<label>${label}<input name="${k}" value="${esc(s[k] ?? '')}" ${attrs}></label>`;
-    let rates = {};
-    try {
-      rates = JSON.parse(s.shipping_rates || '{}');
-    } catch {}
     const steps = `<ol class="howto">${L.steps.map((x) => `<li>${x}</li>`).join('')}</ol>`;
     shell(
       L.nav.settings,
@@ -1348,13 +1433,7 @@
         ${field('legal_address', L.legalAddress)}
         <p class="muted small">${L.viewPages} <a href="/${lang}/privacy" target="_blank" rel="noopener">${L.legalPrivacy}</a> · <a href="/${lang}/terms" target="_blank" rel="noopener">${L.legalTerms}</a></p>
       </div>
-      <div class="card"><h2>${L.shipping}</h2>
-        <div class="cols">
-          ${field('shipping_fee', L.shippingFee, 'type="number" min="0"')}
-          ${field('free_shipping_over', L.freeOver, 'type="number" min="0"')}
-        </div>
-        <label>${L.rates}<textarea name="rates" rows="4" dir="ltr" placeholder="Casablanca = 20">${esc(Object.entries(rates).map(([c, v]) => `${c} = ${v}`).join('\n'))}</textarea></label>
-      </div>
+      <div class="card"><h2>${L.shipping}</h2><p class="muted small">${L.shippingIncluded}</p></div>
       <div class="card"><h2>${L.currency}</h2><p class="muted small">${L.currencyHint}</p>
         <label class="switch"><input type="checkbox" name="auto_currency"${s.auto_currency !== '0' ? ' checked' : ''}><span></span> ${L.autoCurrency}</label>
       </div>
@@ -1370,13 +1449,6 @@
     const f = document.getElementById('sform');
     const save = async () => {
       const data = Object.fromEntries(new FormData(f));
-      const map = {};
-      for (const line of data.rates.split('\n')) {
-        const [city, price] = line.split('=').map((x) => x?.trim());
-        if (city && price !== undefined && price !== '' && !Number.isNaN(Number(price))) map[city] = Number(price);
-      }
-      delete data.rates;
-      data.shipping_rates = JSON.stringify(map);
       data.whatsapp = data.whatsapp.replace(/\D/g, '').replace(/^0(?=[5-7])/, '212');
       data.email_status_updates = f.email_status_updates.checked ? '1' : '0';
       data.auto_currency = f.auto_currency.checked ? '1' : '0';

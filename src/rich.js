@@ -11,10 +11,10 @@ const TAGS = {
   h2: ['style'], h3: ['style'], h4: ['style'], blockquote: ['style'],
   ul: [], ol: [], li: ['style'],
   table: [], thead: [], tbody: [], tr: [], th: ['colspan', 'rowspan', 'style'], td: ['colspan', 'rowspan', 'style'],
-  a: ['href'], figure: ['class'], figcaption: ['style'],
-  img: ['src', 'alt', 'class', 'width', 'height'],
-  video: ['src', 'poster', 'class', 'autoplay', 'muted', 'loop'],
-  iframe: ['src', 'class'],
+  a: ['href'], figure: ['class', 'style'], figcaption: ['style'],
+  img: ['src', 'alt', 'class', 'width', 'height', 'style'],
+  video: ['src', 'poster', 'class', 'autoplay', 'muted', 'loop', 'style'],
+  iframe: ['src', 'class', 'style'],
 };
 const VOID = new Set(['br', 'hr', 'img']);
 // Media is written as one complete element; anything inside it (fallback text, <source>) is dropped.
@@ -66,6 +66,20 @@ function cleanStyle(value) {
     .join('; ');
 }
 
+// Size the admin dragged a photo or video to: the frame's width in percent (10 to 99) and the media's
+// shape as width / height (0.2 to 5), so it scales the same way on a phone.
+function mediaStyle(tag, value) {
+  const v = decode(value);
+  if (tag === 'figure') {
+    const m = /(?:^|;)\s*width\s*:\s*(\d{1,3})(?:\.\d+)?%/i.exec(v);
+    const n = m ? Number(m[1]) : 0;
+    return n >= 10 && n < 100 ? `width: ${n}%` : '';
+  }
+  const r = /(?:^|;)\s*aspect-ratio\s*:\s*(\d{1,4}(?:\.\d{1,4})?)(?:\s*\/\s*(\d{1,4}(?:\.\d{1,4})?))?\s*(?:;|$)/i.exec(v);
+  const ratio = r ? Number(r[1]) / (r[2] ? Number(r[2]) : 1) : 0;
+  return ratio >= 0.2 && ratio <= 5 ? `aspect-ratio: ${Number(ratio.toFixed(3))}` : '';
+}
+
 function attrs(tag, raw) {
   const out = [];
   const seen = new Set();
@@ -80,7 +94,7 @@ function attrs(tag, raw) {
     if (name === 'href') v = safeUrl(value, 'href');
     else if (name === 'src') v = safeUrl(value, tag === 'iframe' ? 'embed' : 'src');
     else if (name === 'poster') v = safeUrl(value, 'src');
-    else if (name === 'style') v = cleanStyle(value);
+    else if (name === 'style') v = ['figure', 'img', 'video', 'iframe'].includes(tag) ? mediaStyle(tag, value) : cleanStyle(value);
     else if (name === 'class') v = decode(value).split(/\s+/).filter((c) => CLASSES.has(c)).join(' ');
     else if (name === 'width' || name === 'height' || name === 'colspan' || name === 'rowspan') v = /^\d{1,4}$/.test(value) ? value : '';
     else if (name === 'autoplay' || name === 'muted' || name === 'loop') {

@@ -38,6 +38,8 @@ const ICONS = {
   clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
   link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
   share: '<circle cx="18" cy="5.5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="18.5" r="2.5"/><path d="m8.2 10.8 7.6-4M8.2 13.2l7.6 4"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/>',
+  pin: '<path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z"/><circle cx="12" cy="10" r="2.3"/>',
   box: '<path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/>',
 };
 const WA_PATH =
@@ -180,11 +182,11 @@ ${noindex ? '<meta name="robots" content="noindex">' : `<link rel="canonical" hr
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?${fonts}&display=swap">
-<link rel="stylesheet" href="/assets/style.css?v=12">
+<link rel="stylesheet" href="/assets/style.css?v=13">
 <script src="/assets/js-on.js"></script>
 ${pixels ? `<script type="application/json" id="pixels">${JSON.stringify({ ...px, page: track }).replace(/</g, '\\u003c')}</script>
 <script src="/assets/pixels.js?v=1" defer></script>` : ''}
-<script src="/assets/store.js?v=8" defer></script>
+<script src="/assets/store.js?v=9" defer></script>
 </head>
 <body data-lang="${lang}" class="page-${page || 'default'}">
 <a class="skip" href="#main">${esc(t.allProducts)}</a>
@@ -415,6 +417,7 @@ export function productPage(ctx, p, category, related) {
   const options = productOptions(p);
   const soldOut = p.stock != null && p.stock <= 0;
   const onSale = p.compare_price && p.compare_price > p.price;
+  const freeShip = true; // delivery is included in every price
   const ld = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -443,6 +446,7 @@ export function productPage(ctx, p, category, related) {
     <h1>${esc(name)}</h1>
     <p class="price big">${esc(price(ctx, p.price))}${onSale ? ` <s>${esc(price(ctx, p.compare_price))}</s> <span class="save">−${Math.round((1 - p.price / p.compare_price) * 100)}%</span>` : ''}</p>
     ${ctx.cur && ctx.cur !== 'MAD' ? `<p class="price-mad">${esc(t.paidInMad(money(p.price, lang)))}</p>` : ''}
+    ${freeShip && !soldOut ? `<p class="free-ship">${icon('truck', 20)}<span>${esc(t.finalPrice)}</span></p>` : ''}
     ${onSale ? `<p class="you-save">${esc(t.youSave(price(ctx, p.compare_price - p.price)))}</p>` : ''}
     ${stockLine}
     ${soldOut ? '' : `<div class="eta">${icon('truck', 22)}<div><strong>${esc(t.deliveryLong)}</strong><span data-eta hidden></span></div></div>`}
@@ -452,8 +456,28 @@ export function productPage(ctx, p, category, related) {
         <label for="qty">${esc(t.quantity)}</label>
         <div class="qty"><button type="button" data-step="-1" aria-label="−">−</button><input id="qty" name="qty" type="number" inputmode="numeric" min="1" max="${p.stock != null ? Math.max(1, Math.min(20, p.stock)) : 20}" value="1"><button type="button" data-step="1" aria-label="+">+</button></div>
       </div>
-      ${soldOut ? `<button class="btn btn-block" type="button" disabled>${esc(t.outOfStock)}</button>` : `<div class="buy-buttons"><button class="btn btn-block btn-accent" type="submit" name="go" value="checkout">${esc(t.buyNow)}</button>
-      <button class="btn btn-block btn-outline" type="submit" name="go" value="cart">${icon('cart', 20)} ${esc(t.addToCart)}</button></div>`}
+      ${soldOut ? `<button class="btn btn-block" type="button" disabled>${esc(t.outOfStock)}</button>` : `<div class="quick" id="order">
+        <p class="quick-lead">${esc(t.quickText)}<span class="finger" aria-hidden="true">👇</span></p>
+        <div class="quick-fields">
+          <label class="qf">${icon('user', 20)}<input name="name" autocomplete="name" required maxlength="80" placeholder="${esc(t.fullName)}" aria-label="${esc(t.fullName)}"></label>
+          <label class="qf">${icon('pin', 20)}<select name="city" required aria-label="${esc(t.city)}"><option value="">${esc(t.chooseCity)}</option>${CITIES.map((c) => `<option>${esc(c)}</option>`).join('')}<option value="__other">${esc(t.otherCity)}</option></select></label>
+          <label class="qf other-city" hidden>${icon('pin', 20)}<input name="city_other" maxlength="60" placeholder="${esc(t.otherCity)}" aria-label="${esc(t.otherCity)}"></label>
+          <label class="qf">${icon('home', 20)}<input name="address" required maxlength="300" autocomplete="street-address" placeholder="${esc(t.address)}" aria-label="${esc(t.address)}"></label>
+          <label class="qf">${icon('phone', 20)}<input name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="20" dir="ltr" placeholder="${esc(t.phone)} · ${esc(t.phoneHint)}" aria-label="${esc(t.phone)}"></label>
+          <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        </div>
+        <ul class="quick-sum" data-quick-sum>
+          <li><span>${esc(t.quickItems)}</span><span data-q-sub>${esc(price(ctx, p.price))}</span></li>
+          <li><span>${esc(t.quickShipping)}</span><span data-q-ship${freeShip ? ' class="free"' : ''}>${esc(freeShip ? t.freeDelivery : t.quickShipAfter)}</span></li>
+          <li class="total"><span>${esc(t.quickTotal)}</span><span data-q-total>${esc(price(ctx, p.price))}</span></li>
+          ${ctx.cur && ctx.cur !== 'MAD' ? `<li class="pay-mad"><span>${esc(t.js.payMad)}</span><span data-q-mad>${esc(money(p.price, lang))}</span></li>` : ''}
+        </ul>
+        <button class="btn btn-block btn-accent btn-lg quick-go" type="submit" name="go" value="order">${icon('check', 22)}<span>${esc(t.buyNow)}</span></button>
+        <p class="form-error" role="alert" hidden></p>
+        <p class="quick-note">${icon('lock', 16)} ${esc(t.payOnDelivery)}</p>
+        <p class="consent">${t.consent(`/${lang}/terms`, `/${lang}/privacy`)}</p>
+      </div>
+      <button class="btn btn-block btn-outline" type="submit" name="go" value="cart">${icon('cart', 20)} ${esc(t.addToCart)}</button>`}
     </form>
     <ul class="perks">
       <li>${icon('cash', 22)}<span><strong>${esc(t.cod)}</strong>${esc(t.codText)}</span></li>
@@ -475,7 +499,7 @@ export function productPage(ctx, p, category, related) {
     </div>
   </div>
 </section>
-${soldOut ? '' : `<div class="buy-bar" aria-hidden="true"><div><strong>${esc(price(ctx, p.price))}</strong><small>${esc(t.cod)}</small></div><button class="btn btn-accent" type="button" data-buy-now>${esc(t.buyNow)}</button></div>`}
+${soldOut ? '' : `<div class="buy-bar" aria-hidden="true"><div><strong>${esc(price(ctx, p.price))}</strong><small>${esc(freeShip ? t.freeDelivery : t.cod)}</small></div><a class="btn btn-accent" href="#order" data-buy-now>${esc(t.buyNow)}</a></div>`}
 ${related.length ? `<section class="section wrap">${sectionHead(t.alsoLike, category ? catName(category, lang) : t.shop, category ? `/${lang}/c/${category.slug}` : `/${lang}/shop`, t.viewAll)}${grid(related, ctx, '')}</section>` : ''}
 <script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>`;
   return layout(ctx, { title: name, description: desc.slice(0, 160), path: `/p/${p.slug}`, body, image: images[0], page: 'product', product: { name, price: money(p.price, lang), slug: p.slug }, track: { event: 'ViewContent', value: p.price, items: [{ id: p.id, name, price: p.price, qty: 1 }] } });
@@ -509,12 +533,10 @@ export function checkoutPage(ctx) {
     <div class="form card-box">
       <h2>${esc(t.yourDetails)}</h2>
       <label>${esc(t.fullName)}<input name="name" autocomplete="name" required maxlength="80"></label>
-      <label>${esc(t.phone)}<input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="${esc(t.phoneHint)}" required maxlength="20" dir="ltr"></label>
-      <label>${esc(t.email)}<input name="email" type="email" inputmode="email" autocomplete="email" placeholder="${esc(t.emailHint)}" maxlength="254" dir="ltr"></label>
       <label>${esc(t.city)}<select name="city" required><option value="">${esc(t.chooseCity)}</option>${cities}<option value="__other">${esc(t.otherCity)}</option></select></label>
       <label class="other-city" hidden>${esc(t.otherCity)}<input name="city_other" maxlength="60"></label>
       <label>${esc(t.address)}<textarea name="address" rows="2" placeholder="${esc(t.addressHint)}" required maxlength="300"></textarea></label>
-      <label>${esc(t.note)}<textarea name="note" rows="2" maxlength="500"></textarea></label>
+      <label>${esc(t.phone)}<input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="${esc(t.phoneHint)}" required maxlength="20" dir="ltr"></label>
       <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
     </div>
     <aside class="summary card-box">

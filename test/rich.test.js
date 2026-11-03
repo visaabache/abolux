@@ -69,3 +69,13 @@ test('plain-text descriptions from before the editor still display', () => {
   assert.equal(richHtml('Ligne <1>\nLigne 2\n\nPara 2'), '<p>Ligne &lt;1&gt;<br>Ligne 2</p><p>Para 2</p>');
   assert.equal(richText('<h2>Titre</h2><p>Un&nbsp;<b>deux</b></p><figure><img src="/img/a.png"></figure>'), 'Titre Un deux'.replace(' ', ' '));
 });
+
+test('photos and videos keep the size and shape the admin dragged them to', () => {
+  const out = sanitizeRich('<figure class="al-center" style="width: 60%; float: left"><img src="/img/p/a.webp" style="aspect-ratio: 1.5; height: 9999px"></figure>'
+    + '<figure style="width:5%"><video src="/img/v/b.mp4" style="aspect-ratio: 16 / 9"></video></figure>'
+    + '<figure style="width:100%"><img src="/img/p/c.webp" style="aspect-ratio:50; position:fixed"></figure>');
+  assert.match(out, /<figure class="al-center" style="width: 60%"><img src="\/img\/p\/a.webp" style="aspect-ratio: 1.5" loading="lazy"><\/figure>/);
+  assert.match(out, /<figure><video src="\/img\/v\/b.mp4" style="aspect-ratio: 1.778" controls/);
+  assert.match(out, /<figure><img src="\/img\/p\/c.webp" loading="lazy"><\/figure>/);
+  assert.equal(sanitizeRich(out), out);
+});

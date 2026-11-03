@@ -344,3 +344,18 @@ details summary { cursor: pointer; }
 .rte-area .al-left { float: left; margin: 4px 16px 10px 0; }
 .rte-area .al-right { float: right; margin: 4px 0 10px 16px; }
 #dmedia video { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; background: #000; }
+
+/* Resizing photos and videos in the description: eight handles around the selected one */
+.rte { position: relative; }
+.rte-sizer { position: absolute; z-index: 4; pointer-events: none; outline: 2px solid var(--majorelle); border-radius: 8px; }
+.rte-sizer[hidden] { display: none; }
+.rte-size-handle { position: absolute; width: 16px; height: 16px; margin: -8px; border-radius: 50%; background: var(--majorelle); border: 3px solid #fff; box-shadow: 0 1px 4px rgb(0 0 0 / 0.3); pointer-events: auto; touch-action: none; }
+.rte-size-handle.h-n, .rte-size-handle.h-s { left: 50%; cursor: ns-resize; width: 28px; height: 12px; margin: -6px -14px; border-radius: 6px; }
+.rte-size-handle.h-e, .rte-size-handle.h-w { top: 50%; cursor: ew-resize; width: 12px; height: 28px; margin: -14px -6px; border-radius: 6px; }
+.rte-size-handle.h-n, .rte-size-handle.h-ne, .rte-size-handle.h-nw { top: 0; }
+.rte-size-handle.h-s, .rte-size-handle.h-se, .rte-size-handle.h-sw { top: 100%; }
+.rte-size-handle.h-w, .rte-size-handle.h-nw, .rte-size-handle.h-sw { left: 0; }
+.rte-size-handle.h-e, .rte-size-handle.h-ne, .rte-size-handle.h-se { left: 100%; }
+.rte-size-handle.h-nw, .rte-size-handle.h-se { cursor: nwse-resize; }
+.rte-size-handle.h-ne, .rte-size-handle.h-sw { cursor: nesw-resize; }
+.rte-area figure img, .rte-area figure video { object-fit: cover; }
