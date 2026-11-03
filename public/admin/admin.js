@@ -8,8 +8,18 @@
     ar: {
       locale: 'ar-MA',
       status: { new: 'جديد', confirmed: 'مؤكد', shipped: 'تم الشحن', delivered: 'تم التوصيل', cancelled: 'ملغى', returned: 'مرتجع' },
-      nav: { dashboard: 'لوحة التحكم', orders: 'الطلبات', products: 'المنتجات', categories: 'الأصناف', settings: 'الإعدادات' },
+      nav: { dashboard: 'لوحة التحكم', orders: 'الطلبات', products: 'المنتجات', categories: 'الأصناف', blog: 'المدونة', settings: 'الإعدادات' },
       navShort: { dashboard: 'الرئيسية' },
+      blog: {
+        postTitle: 'العنوان', date: 'التاريخ', newPost: 'مقال جديد', editPost: 'تعديل المقال',
+        count: (n) => (n === 1 ? 'مقال واحد' : `${n} مقالات`),
+        noPosts: 'لا توجد مقالات بعد. اكتب أول مقال لجلب زوار من Google.',
+        excerpt: 'ملخص قصير', excerptHint: 'جملة أو جملتان تظهران في Google وفي قائمة المقالات (حتى 300 حرف). ضع فيهما الكلمات التي يبحث عنها زبناؤك.',
+        cover: 'صورة الغلاف', coverHint: 'تظهر في أعلى المقال وعند مشاركته على واتساب وفيسبوك.', uploadCover: 'رفع صورة', coverLink: 'أو رابط صورة',
+        body: 'نص المقال', published: 'منشور في الموقع', saved: 'تم حفظ المقال', deleted: 'تم حذف المقال', confirmDelete: 'حذف هذا المقال؟',
+      },
+      seo: 'Google (الظهور في البحث)', seoHint: 'خريطة الموقع تُنشر تلقائيًا على /sitemap.xml وتتضمن المنتجات والأصناف والمقالات الحالية. لربط المتجر بـ Google Search Console، الصق رمز التحقق هنا.',
+      googleVerify: 'رمز التحقق من Google Search Console', googleHow: 'في Search Console اختر «بادئة عنوان URL» ثم طريقة «علامة HTML»، وانسخ الوسم كاملًا أو قيمة content فقط.',
       viewStore: 'عرض المتجر',
       logout: 'تسجيل الخروج',
       sellerSpace: 'فضاء البائع',
@@ -23,6 +33,7 @@
         bad_origin: 'طلب مرفوض.',
         slug_taken: 'هذا الرابط (slug) مستعمل من قبل.',
         name_required: 'أضف اسمًا واحدًا على الأقل.',
+        title_required: 'أضف عنوانًا واحدًا على الأقل.',
         price_required: 'حدّد الثمن.',
         not_enough_stock: 'المخزون غير كافٍ لإعادة فتح هذا الطلب.',
         bad_shipping_rates: 'أثمنة التوصيل حسب المدينة: صيغة غير صحيحة.',
@@ -176,8 +187,18 @@
     fr: {
       locale: 'fr-MA',
       status: { new: 'Nouvelle', confirmed: 'Confirmée', shipped: 'Expédiée', delivered: 'Livrée', cancelled: 'Annulée', returned: 'Retournée' },
-      nav: { dashboard: 'Tableau de bord', orders: 'Commandes', products: 'Produits', categories: 'Catégories', settings: 'Réglages' },
+      nav: { dashboard: 'Tableau de bord', orders: 'Commandes', products: 'Produits', categories: 'Catégories', blog: 'Blog', settings: 'Réglages' },
       navShort: { dashboard: 'Accueil' },
+      blog: {
+        postTitle: 'Titre', date: 'Date', newPost: 'Nouvel article', editPost: 'Modifier l’article',
+        count: (n) => (n === 1 ? '1 article' : `${n} articles`),
+        noPosts: 'Aucun article pour le moment. Écrivez le premier pour attirer des visiteurs depuis Google.',
+        excerpt: 'Résumé court', excerptHint: 'Une ou deux phrases affichées dans Google et dans la liste des articles (300 caractères max). Mettez-y les mots que vos clients recherchent.',
+        cover: 'Photo de couverture', coverHint: 'Affichée en haut de l’article et quand on le partage sur WhatsApp ou Facebook.', uploadCover: 'Envoyer une photo', coverLink: 'Ou lien d’une image',
+        body: 'Texte de l’article', published: 'Publié sur le site', saved: 'Article enregistré', deleted: 'Article supprimé', confirmDelete: 'Supprimer cet article ?',
+      },
+      seo: 'Google (référencement)', seoHint: 'Le plan du site est publié automatiquement sur /sitemap.xml, avec les produits, catégories et articles du moment. Pour relier la boutique à Google Search Console, collez ici le code de vérification.',
+      googleVerify: 'Code de vérification Google Search Console', googleHow: 'Dans Search Console, choisissez « Préfixe de l’URL » puis la méthode « Balise HTML », et copiez la balise entière ou seulement la valeur content.',
       viewStore: 'Voir la boutique',
       logout: 'Déconnexion',
       sellerSpace: 'Espace vendeur',
@@ -191,6 +212,7 @@
         bad_origin: 'Requête refusée.',
         slug_taken: 'Cette adresse (slug) est déjà utilisée.',
         name_required: 'Ajoutez au moins un nom.',
+        title_required: 'Ajoutez au moins un titre.',
         price_required: 'Indiquez un prix.',
         not_enough_stock: 'Stock insuffisant pour rouvrir cette commande.',
         bad_shipping_rates: 'Tarifs par ville : format invalide.',
@@ -377,7 +399,7 @@
     return L.ago.day(Math.round(min / 1440));
   };
   const STATUS_KEYS = ['new', 'confirmed', 'shipped', 'delivered', 'cancelled', 'returned'];
-  const PAGES = ['dashboard', 'orders', 'products', 'categories', 'settings'];
+  const PAGES = ['dashboard', 'orders', 'products', 'categories', 'blog', 'settings'];
   const LANG_LABEL = { ar: 'العربية', fr: 'Français', en: 'English' };
   const dirOf = (l) => (l === 'ar' ? 'dir="rtl" lang="ar"' : `dir="ltr" lang="${l}"`);
   // Translations are entered with the admin's own language first.
@@ -389,6 +411,7 @@
     dashboard: '<rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/>',
     orders: '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>',
     products: '<path d="m21 8-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/>',
+    blog: '<path d="M5 3h10l4 4v14H5z"/><path d="M14 3v5h5"/><path d="M8 12h8M8 16h8M8 8h3"/>',
     categories: '<path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/>',
     settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
     external: '<path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
@@ -531,7 +554,7 @@
       return;
     }
     state.page = PAGES.includes(h) ? h : 'dashboard';
-    ({ dashboard, orders, products, categories, settings })[state.page]();
+    ({ dashboard, orders, products, categories, blog, settings })[state.page]();
     window.scrollTo(0, 0);
   }
 
@@ -811,7 +834,7 @@
     clear: '<path d="M4 7V5h12v2M10 5l-3 14M14 19H6"/><path d="m15 13 6 6M21 13l-6 6"/>',
   };
   const rteIcon = (n) => `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${RTE_ICONS[n]}</svg>`;
-  function richEditor(l) {
+  function richEditor(l, field = 'desc') {
     const R = L.rte;
     const b = (attrs, label, inner) => `<button type="button" ${attrs} title="${label}" aria-label="${label}">${inner}</button>`;
     return `<div class="rte" data-rte="${l}">
@@ -836,11 +859,11 @@
         <span class="sep"></span><button type="button" class="danger" data-media-del>${icon('trash', 16)}<span>${R.del}</span></button>
       </div>
       <div class="rte-area rich" contenteditable="true" ${dirOf(l)} data-placeholder="${esc(R.placeholder)}"></div>
-      <input type="hidden" name="desc_${l}">
+      <input type="hidden" name="${field}_${l}">
     </div>`;
   }
 
-  function initEditors(f, p, shrink) {
+  function initEditors(f, p, shrink, field = 'desc') {
     const R = L.rte;
     let busy = 0;
     const isRich = (s) => /<\/?(p|br|div|h[2-4]|ul|ol|li|strong|em|b|i|u|s|img|video|figure|iframe|blockquote|span|a|table)\b/i.test(s || '');
@@ -852,7 +875,7 @@
     const figureHtml = (m, cls = 'w-100 al-center') => `<figure class="${cls}" contenteditable="false">${mediaHtml(m)}</figure>`;
     let legacy = [];
     try {
-      legacy = JSON.parse(p.desc_media || '[]').filter((m) => m && m.url);
+      if (field === 'desc') legacy = JSON.parse(p.desc_media || '[]').filter((m) => m && m.url);
     } catch {}
     // YouTube / Vimeo page links become embed links; other https links are treated as an image or a video.
     function fromLink(raw) {
@@ -896,7 +919,7 @@
       const blockSel = root.querySelector('[data-block]');
       let saved = null;
       let selected = null;
-      const raw = p[`desc_${l}`] || '';
+      const raw = p[`${field}_${l}`] || '';
       area.innerHTML = (isRich(raw) ? raw : plainToHtml(raw)) + legacy.map((m) => figureHtml(m)).join('');
       // Media sits in its own block that the caret can't enter; wrap any loose media the same way.
       area.querySelectorAll('img, video, iframe').forEach((el) => {
@@ -1164,6 +1187,22 @@
     return { busy: () => busy > 0, sync: () => list.forEach((x) => x.sync()) };
   }
 
+  // Uploads: each photo is shrunk in the browser (longest side 1600 px, WebP or JPEG) and sent as it is.
+  async function shrink(file) {
+    const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
+    const scale = Math.min(1, 1600 / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(bitmap.width * scale);
+    canvas.height = Math.round(bitmap.height * scale);
+    canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    bitmap.close?.();
+    const encode = (type, q) => new Promise((r) => canvas.toBlob(r, type, q));
+    let blob = await encode('image/webp', 0.84);
+    if (!blob || blob.type !== 'image/webp') blob = await encode('image/jpeg', 0.85); // Safari without WebP encoding
+    for (let q = 0.75; blob.size > 0.95 * 1024 * 1024 && q > 0.4; q -= 0.15) blob = await encode(blob.type, q);
+    return blob;
+  }
+
   function productForm(p) {
     const images = JSON.parse(p.images || '[]');
     const field = (name, label, attrs = '') => `<label>${label}<input name="${name}" value="${esc(p[name] ?? '')}" ${attrs}></label>`;
@@ -1272,21 +1311,6 @@
     });
     grid.addEventListener('dragend', () => (dragFrom = null));
 
-    // Uploads: each photo is shrunk in the browser (longest side 1600 px, WebP or JPEG) and sent as it is.
-    async function shrink(file) {
-      const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
-      const scale = Math.min(1, 1600 / Math.max(bitmap.width, bitmap.height));
-      const canvas = document.createElement('canvas');
-      canvas.width = Math.round(bitmap.width * scale);
-      canvas.height = Math.round(bitmap.height * scale);
-      canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-      bitmap.close?.();
-      const encode = (type, q) => new Promise((r) => canvas.toBlob(r, type, q));
-      let blob = await encode('image/webp', 0.84);
-      if (!blob || blob.type !== 'image/webp') blob = await encode('image/jpeg', 0.85); // Safari without WebP encoding
-      for (let q = 0.75; blob.size > 0.95 * 1024 * 1024 && q > 0.4; q -= 0.15) blob = await encode(blob.type, q);
-      return blob;
-    }
     async function upload(files) {
       const jobs = [...files].map((file) => ({ file, id: Math.random(), name: file.name || 'photo', preview: URL.createObjectURL(file) }));
       pending.push(...jobs);
@@ -1354,6 +1378,107 @@
   }
 
   // Categories
+  // Blog: articles bring visitors from Google whatever products are in the shop.
+  const postTitle = (x) => (lang === 'ar' ? x.title_ar || x.title_fr || x.title_en : x.title_fr || x.title_ar || x.title_en) || '—';
+  async function blog() {
+    loading(L.nav.blog);
+    const B = L.blog;
+    const { posts: list } = await api('/posts');
+    shell(
+      L.nav.blog,
+      list.length
+        ? `<div class="card flush"><table class="table"><thead><tr><th></th><th>${B.postTitle}</th><th class="hide-sm">${B.date}</th><th class="hide-sm">${L.thState}</th><th></th></tr></thead><tbody>
+      ${list.map((x) => `<tr data-post="${x.id}"><td class="tight"><img class="thumb" src="${esc(x.cover || '/assets/placeholder.svg')}" alt=""></td><td><strong>${esc(postTitle(x))}</strong><small dir="ltr">/blog/${esc(x.slug)}</small></td><td class="hide-sm nowrap">${esc(String(x.created_at).slice(0, 10))}</td><td class="hide-sm">${x.published ? `<span class="chip chip-ok">${L.online}</span>` : `<span class="chip">${L.hidden}</span>`}</td><td class="tight"><button type="button" class="icon-btn danger" data-del-post="${x.id}" title="${L.del}" aria-label="${L.del}">${icon('trash', 18)}</button></td></tr>`).join('')}
+      </tbody></table></div>`
+        : `<div class="card empty">${icon('blog', 36)}<p>${B.noPosts}</p></div>`,
+      { sub: B.count(list.length), actions: `<button class="btn" data-new>${icon('plus', 18)}<span>${B.newPost}</span></button>` },
+    );
+    app.querySelector('[data-new]').addEventListener('click', () => postForm({ published: 1 }));
+    app.querySelectorAll('[data-post]').forEach((tr) => tr.addEventListener('click', () => postForm(list.find((x) => x.id === Number(tr.dataset.post)))));
+    app.querySelectorAll('[data-del-post]').forEach((btn) =>
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if (!confirm(B.confirmDelete)) return;
+        try {
+          await api(`/posts/${btn.dataset.delPost}`, { method: 'DELETE' });
+          toast(B.deleted);
+          blog();
+        } catch (err) {
+          toast(err.message, true);
+        }
+      }),
+    );
+  }
+
+  function postForm(p) {
+    const B = L.blog;
+    const field = (name, label, attrs = '') => `<label>${label}<input name="${name}" value="${esc(p[name] ?? '')}" ${attrs}></label>`;
+    const area = (name, label, attrs = '') => `<label>${label}<textarea name="${name}" rows="2" maxlength="300" ${attrs}>${esc(p[name] ?? '')}</textarea></label>`;
+    shell(
+      p.id ? B.editPost : B.newPost,
+      `<form class="form" id="postform">
+      <div class="card"><h2>${B.postTitle}</h2><div class="cols3">${contentLangs().map((l) => field(`title_${l}`, LANG_LABEL[l], `${dirOf(l)} maxlength="200"`)).join('')}</div></div>
+      <div class="card"><h2>${B.excerpt}</h2><p class="muted small">${B.excerptHint}</p>${contentLangs().map((l) => area(`excerpt_${l}`, LANG_LABEL[l], dirOf(l))).join('')}</div>
+      <div class="card"><h2>${B.cover}</h2><p class="muted small">${B.coverHint}</p>
+        <div class="cover-row"><img class="cover-preview" src="${esc(p.cover || '/assets/placeholder.svg')}" alt="">
+          <label class="btn ghost">${icon('camera', 18)}<span>${B.uploadCover}</span><input type="file" accept="image/*" hidden data-cover></label></div>
+        ${field('cover', B.coverLink, 'dir="ltr" placeholder="https://…"')}
+      </div>
+      <div class="card"><h2>${B.body}</h2><p class="muted small">${L.rte.hint}</p>${contentLangs().map((l) => richEditor(l, 'body')).join('')}</div>
+      <div class="card"><h2>${L.display}</h2>${field('slug', L.slug, `placeholder="${L.auto}" dir="ltr"`)}
+        <label class="switch"><input type="checkbox" name="published"${p.published ? ' checked' : ''}><span></span> ${B.published}</label></div>
+      <div class="sticky-actions"><button type="button" class="btn ghost" data-back>${L.cancel}</button>${p.id ? `<a class="btn ghost hide-sm" href="/${lang}/blog/${esc(p.slug)}" target="_blank" rel="noopener">${L.view}</a><button type="button" class="btn danger" data-delete>${L.del}</button>` : ''}<button class="btn">${L.save}</button></div>
+    </form>`,
+    );
+    const f = document.getElementById('postform');
+    const editors = initEditors(f, p, shrink, 'body');
+    const preview = f.querySelector('.cover-preview');
+    f.cover.addEventListener('input', () => (preview.src = f.cover.value.trim() || '/assets/placeholder.svg'));
+    let coverBusy = false;
+    f.querySelector('[data-cover]').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      e.target.value = '';
+      if (!file) return;
+      coverBusy = true;
+      preview.style.opacity = 0.4;
+      try {
+        const { url } = await api('/images', { method: 'POST', raw: await shrink(file) });
+        f.cover.value = url;
+        preview.src = url;
+      } catch (err) {
+        toast(err.message || L.uploadFailed(file.name || ''), true);
+      }
+      coverBusy = false;
+      preview.style.opacity = 1;
+    });
+    f.addEventListener('click', async (e) => {
+      if (e.target.closest('[data-back]')) blog();
+      if (e.target.closest('[data-delete]') && confirm(B.confirmDelete)) {
+        try {
+          await api(`/posts/${p.id}`, { method: 'DELETE' });
+          toast(B.deleted);
+          blog();
+        } catch (err) {
+          toast(err.message, true);
+        }
+      }
+    });
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (coverBusy || editors.busy()) return toast(L.waitUploads, true);
+      editors.sync();
+      const data = Object.fromEntries(new FormData(f));
+      data.published = f.published.checked;
+      try {
+        await api(p.id ? `/posts/${p.id}` : '/posts', { method: p.id ? 'PUT' : 'POST', body: data });
+        toast(B.saved);
+        blog();
+      } catch (err) {
+        toast(err.message, true);
+      }
+    });
+  }
+
   async function categories() {
     state.categories = (await api('/categories')).categories;
     const cols = contentLangs();
@@ -1420,6 +1545,9 @@
         ${field('facebook', 'Facebook', 'dir="ltr" placeholder="https://facebook.com/…"')}
         ${field('tiktok', 'TikTok', 'dir="ltr" placeholder="@…"')}
       </div></div>
+      <div class="card"><h2>${L.seo}</h2><p class="muted small">${L.seoHint}</p>
+        ${field('google_verify', L.googleVerify, 'dir="ltr" placeholder="&lt;meta name=&quot;google-site-verification&quot; content=&quot;…&quot;&gt;"')}<p class="muted small">${L.googleHow}</p>
+      </div>
       <div class="card"><h2>${L.pixels}</h2><p class="muted small">${L.pixelsHint}</p><div class="cols">
         <div>${field('meta_pixel_id', L.metaPixel, 'dir="ltr" inputmode="numeric" pattern="[0-9]{8,20}" placeholder="123456789012345"')}<p class="muted small">${L.metaHow}</p></div>
         <div>${field('tiktok_pixel_id', L.tiktokPixel, 'dir="ltr" pattern="[A-Za-z0-9]{10,30}" placeholder="C4ABCDEFGHIJ1234567"')}<p class="muted small">${L.tiktokHow}</p></div>
