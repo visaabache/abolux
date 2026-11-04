@@ -49,7 +49,9 @@ In the admin, go to **Réglages** and set the store name, your WhatsApp number, 
 
 **Photo uploads:** in the product form, pick photos from your phone, tablet or computer, take one with the camera, or drag them in. Each photo is shrunk in the browser (longest side 1600 px) and stored in D1, so no extra service or payment card is needed; D1's free 5 GB holds thousands of photos. If you turn on R2 later (see the comment in `wrangler.jsonc`), new uploads go there instead and the old ones keep working.
 
-**Your own domain (later):** once abolux.store is bought, add it to Cloudflare (point its nameservers to Cloudflare at the registrar), add the `routes` line shown in `wrangler.jsonc`, and run `npm run deploy` again.
+**Domain:** abolux.store is set in `wrangler.jsonc` (`routes` and `SITE_URL`). It must be added to the same Cloudflare account, with its nameservers pointed to Cloudflare at the registrar.
+
+**Automatic deploys:** the Worker is connected to this GitHub repository (Cloudflare dashboard → Workers & Pages → abolux → Settings → Build), so every push to `main` deploys by itself, no computer needed. The deploy command applies new database migrations first: `npx wrangler d1 migrations apply abolux --remote && npx wrangler deploy`. Build logs are under the Worker's Deployments tab.
 
 When you change the database later, add a new file to `migrations/` (for example `0003_….sql`) and run `npm run db:migrate`.
 
