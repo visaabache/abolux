@@ -8,7 +8,8 @@ const product = { id: 42, slug: 'h69-plus', name_ar: 'طقم H69 Plus', price: 3
 test('H69 Plus landing: Darija copy, price and saving from the product, order form wired to it', () => {
   const html = landingPage(ctx, LANDINGS['h69-plus'], product);
   assert.match(html, /<html lang="ar" dir="rtl">/);
-  assert.match(html, /طقم H69 Plus الملكي/);
+  assert.match(html, /هدية كتخليها/);
+  assert.match(html, /<ul class="lp-pieces">/);
   assert.match(html, /399.درهم/);
   assert.match(html, /−43%/);
   assert.match(html, /باقي غير 8 فالستوك/);

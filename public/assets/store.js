@@ -228,7 +228,7 @@
         if (n !== seq || !res.ok || !q.lines.length) return;
         const known = Boolean(cityOf());
         const ship = $('[data-q-ship]', quick);
-        ship.textContent = !q.shipping ? i18n.free : known ? money(q.shipping) : i18n.quickShipAfter;
+        ship.textContent = !q.shipping ? ship.dataset.free || i18n.free : known ? money(q.shipping) : i18n.quickShipAfter;
         ship.classList.toggle('free', !q.shipping);
         setTotal(known || !q.shipping ? q.total : q.subtotal, true);
       } catch {}

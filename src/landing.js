@@ -15,133 +15,122 @@ function h69Plus(ctx, p) {
   const IMG = '/assets/lp/h69-plus';
   const box = productImages(p)[0] || `${IMG}/box.webp`;
 
-  const contents = [
-    ['⌚', 'الساعة الذكية (Smart Watch)', 'شاشة AMOLED كبيرة 2.02 بوصة، تصميم ذهبي أنيق وحزام مريح.'],
-    ['💎', 'ساعة بيجو كلاسيكية', 'مرصعة بالأحجار اللامعة مع ميناء أخضر ملكي، مثالية للمناسبات.'],
-    ['💚', 'عقد (سلسلة)', 'بقلادة على شكل قلب بلون أخضر زمردي كيجبد العين.'],
-    ['✨', 'سوار (Gourmette)', 'مرصع بأحجار خضراء متناسقة مع العقد.'],
-    ['💍', 'خاتم أنيق', 'قابل للتعديل، كيجي على قد صبعك، بنفس الحجرة الخضراء.'],
-    ['🌟', 'حلق (Double Earrings)', 'كيكمّل الأناقة ديال وجهك.'],
-    ['🎀', 'إكسسوار ديال الزينة', 'قطعة ذهبية مرصعة كتزيد اللمسة الملكية.'],
-    ['🔗', 'سلسلة إضافية', 'باش تبدلي الطول ولا الستايل كيف بغيتي.'],
-    ['🩷', 'حزام إضافي للساعة الذكية', 'بدلي اللون ديال الساعة حسب اللبسة ديالك.'],
-    ['🔌', 'كابل الشحن + بانس صغيرة', 'كلشي اللي محتاجة باش تبداي من النهار الأول.'],
-  ];
-  const watch = [
-    ['📞', 'كتجاوبي على المكالمات', 'من الساعة نيشان، بلا ما تخرجي التيليفون.'],
-    ['💬', 'كتوصلك الإشعارات', 'الرسائل وواتساب والتطبيقات، كلشي قدامك.'],
-    ['❤️', 'كتتبع صحتك', 'نبضات القلب، النعاس، والخطوات ديال كل نهار.'],
-    ['🌈', 'شاشة AMOLED', 'واضحة بزاف وبألوان زاهية، حتى فالشمس.'],
-  ];
-  const why = [
-    ['💎', 'تناسق كامل', 'كاع القطع ذهبيين بالحجر الأخضر (Emerald Green): لوك ملكي موحد من راسك حتى ليديك.'],
-    ['🎁', 'هدية واجدة', 'علبة وردية فاخرة، ما محتاجاش تغلفيها. غير عطيها وشوفي الفرحة.'],
-    ['💰', 'ثمن واحد لـ10 قطع', 'بلاصة ما تشري كل قطعة بوحدها وتخسري بزاف، كلشي فطقم واحد.'],
-    ['👑', 'لكل مناسبة', 'العرس، الخطوبة، عيد الميلاد، عيد الأم… ولا غير باش تدللي راسك.'],
+  // The page reads like a set of posters: big photos, a few strong words, the order button always in reach.
+  const pieces = [
+    ['smart-watch', 'ساعة ذكية'],
+    ['bijou-watch', 'ساعة بيجو'],
+    ['necklace', 'عقد القلب'],
+    ['bracelet', 'سوار'],
+    ['ring-earrings', 'خاتم + حلق'],
+    ['ornament', 'إكسسوار'],
+    ['chain', 'سلسلة زايدة'],
+    ['strap', 'حزام زايد'],
+    ['tweezers', 'بانس'],
+    ['charger', 'شارجور'],
   ];
   const faq = [
-    ['واش التوصيل فابور؟', 'إيه، التوصيل فابور لجميع المدن ديال المغرب. الثمن اللي كتشوفي هو اللي غادي تخلصي.'],
-    ['إمتى غادي يوصلني الطقم؟', 'من 24 حتى 72 ساعة فالمدن الكبار، ومن 2 حتى 5 أيام فالمدن لخرين، من بعد ما نأكدو معاك.'],
-    ['كيفاش غادي نخلص؟', 'كتخلصي كاش للموزع ملي يوصلك الطقم. ما كاين لا كارط بنكية لا خلاص فالأنترنيت.'],
-    ['واش الساعة الذكية كتخدم مع التيليفون ديالي؟', 'كتخدم مع أغلب التيليفونات أندرويد وآيفون بالبلوتوث. إلا عندك شي شك، سولينا فالواتساب.'],
-    ['واش الخاتم غادي يجي على قدي؟', 'إيه، الخاتم قابل للتعديل، كيتسع ولا كيضيق على حساب صبعك.'],
-    ['وإلا ما عجبنيش؟', 'عندك 7 أيام من نهار التوصل باش ترجعيه. تواصلي معانا فالواتساب ونتفاهمو.'],
+    ['إمتى غادي يوصلني؟', 'من 24 حتى 72 ساعة فالمدن الكبار، و2 حتى 5 أيام فالمدن لخرين.'],
+    ['واش الساعة كتخدم مع التيليفون ديالي؟', 'كتخدم مع أغلب التيليفونات أندرويد وآيفون بالبلوتوث.'],
+    ['واش الخاتم غادي يجي على قدي؟', 'إيه، الخاتم قابل للتعديل.'],
   ];
-  const cards = (list, cls) => `<ul class="${cls}">${list.map(([e, h, t]) => `<li><span class="lp-emo" aria-hidden="true">${e}</span><div><strong>${esc(h)}</strong><p>${esc(t)}</p></div></li>`).join('')}</ul>`;
-  const cta = (txt = 'اطلبي دابا') => `<a class="btn btn-lg lp-cta" href="#order">${esc(txt)} <span aria-hidden="true">👇</span></a>`;
-  const priceBlock = `<div class="lp-price"><strong>${price}</strong>${save ? `<s>${esc(money(p.compare_price, lang))}</s><span class="lp-off">−${pct}%</span>` : ''}</div>
-    ${save ? `<p class="lp-save">${esc('وفري')} ${esc(money(save, lang))} ${esc('اليوم')} 🔥</p>` : ''}`;
+  const cta = (txt) => `<a class="lp-btn" href="#order">${esc(txt)}</a>`;
+  const priceBand = `<div class="lp-band-price">
+    <div class="lp-band-ship">${icon('truck', 34)}<span>التوصيل<br>فابور</span></div>
+    <div class="lp-band-tag">${save ? `<s>${esc(money(p.compare_price, lang))}</s>` : ''}<strong>${esc(String(p.price))}</strong><span>درهم</span></div>
+    ${save ? `<span class="lp-sticker">−${pct}%</span>` : ''}
+  </div>`;
 
-  const body = `<section class="lp-hero">
-  <div class="wrap lp-hero-grid">
-    <div class="lp-hero-img"><img src="${esc(box)}" alt="${esc('طقم H69 Plus: ساعة ذكية، ساعة بيجو، عقد، سوار، خاتم وحلق')}" width="896" height="1262" fetchpriority="high"></div>
-    <div class="lp-hero-text">
-      <p class="lp-kicker">🎁 ${esc('طقم هدايا فاخر · 10 قطع فعلبة وحدة')}</p>
-      <h1>${esc('طقم H69 Plus الملكي')} 👑</h1>
-      <p class="lp-sub">${esc('ساعة ذكية + ساعة بيجو + عقد + سوار + خاتم + حلق… كلشي ذهبي بالحجر الأخضر الزمردي، فعلبة وردية فاخرة.')}</p>
-      ${priceBlock}
-      ${fewLeft ? `<p class="lp-stock">⚡ ${esc('باقي غير')} ${p.stock} ${esc('فالستوك')}</p>` : ''}
-      ${soldOut ? `<p class="lp-stock">${esc('سالا الستوك دابا، رجعي قريب إن شاء الله')}</p>` : cta()}
-      <ul class="lp-trust">
-        <li>🚚 ${esc('التوصيل فابور لجميع المدن')}</li>
-        <li>💵 ${esc('الخلاص ملي توصلك')}</li>
-        <li>📞 ${esc('كنعيطو ليك نأكدو قبل الإرسال')}</li>
-        <li>↩️ ${esc('7 أيام باش ترجعي')}</li>
+  const body = `<section class="lp-poster lp-p1">
+  <div class="lp-wrap">
+    <h1 class="lp-title"><span>هدية كتخليها</span><em>تحس براسها ملكة 👑</em></h1>
+    <p class="lp-pill">🎁 10 قطع فعلبة وحدة</p>
+    <img class="lp-hero-photo" src="${esc(box)}" alt="طقم H69 Plus: ساعة ذكية، ساعة بيجو، عقد، سوار، خاتم وحلق" width="896" height="1262" fetchpriority="high">
+    ${priceBand}
+    ${fewLeft ? `<p class="lp-hurry">⚡ باقي غير ${p.stock} فالستوك</p>` : ''}
+    ${soldOut ? '<p class="lp-hurry">سالا الستوك دابا، رجعي قريب إن شاء الله</p>' : cta('بغيتها دابا 😍')}
+  </div>
+</section>
+
+<section class="lp-poster lp-p2">
+  <div class="lp-wrap">
+    <h2 class="lp-title lp-title-sm"><span>شوفي شنو</span><em>كاين فالعلبة 😍</em></h2>
+    <ul class="lp-pieces">${pieces.map(([f, label], i) => `<li><span class="lp-circle"><img src="${IMG}/${f}.webp" alt="${esc(label)}" width="360" height="360" loading="lazy"></span><b class="c${i % 3}">${esc(label)}</b></li>`).join('')}</ul>
+  </div>
+</section>
+
+<section class="lp-poster lp-p3">
+  <img src="${IMG}/box-sm.webp" alt="" width="480" height="676" loading="lazy">
+  <div class="lp-p3-text">
+    <h2 class="lp-title lp-title-light"><span>فرّحيها…</span><em>ولا دلّلي راسك 💝</em></h2>
+    <p class="lp-chips"><span>لمراتك</span><span>ليماك</span><span>لختك</span><span>لراسك</span></p>
+  </div>
+</section>
+
+<section class="lp-poster lp-p4">
+  <div class="lp-wrap">
+    <h2 class="lp-title lp-title-sm"><span>ساعة ذكية…</span><em>وأنيقة بحال البيجو ⌚</em></h2>
+    <div class="lp-watch">
+      <span class="lp-circle lp-circle-xl"><img src="${IMG}/smart-watch.webp" alt="الساعة الذكية H69 Plus" width="360" height="360" loading="lazy"></span>
+      <ul class="lp-feats">
+        <li><i>📞</i>كتجاوبي على المكالمات</li>
+        <li><i>💬</i>كتوصلك الميساجات</li>
+        <li><i>❤️</i>كتتبع صحتك</li>
+        <li><i>✨</i>شاشة AMOLED كبيرة</li>
       </ul>
     </div>
   </div>
 </section>
 
-<section class="wrap lp-section">
-  <h2 class="lp-h2">${esc('شنو كاين فالعلبة؟')} 🎁</h2>
-  <p class="lp-lead">${esc('10 قطع متناسقين، كلهم فطقم واحد:')}</p>
-  <img class="lp-wide" src="${IMG}/contents.webp" alt="${esc('محتويات طقم H69 Plus')}" width="1021" height="682" loading="lazy">
-  ${cards(contents, 'lp-list')}
-</section>
-
-<section class="lp-band">
-  <div class="wrap lp-section">
-    <h2 class="lp-h2">${esc('ساعة ذكية كتعاونك فكل نهار')} 📱</h2>
-    ${cards(watch, 'lp-grid')}
+<section class="lp-poster lp-p5">
+  <div class="lp-wrap">
+    <ul class="lp-trust3">
+      <li><i>🚚</i><b>التوصيل فابور</b><span>لجميع المدن</span></li>
+      <li><i>💵</i><b>خلصي ملي توصلك</b><span>بلا كارط بنكية</span></li>
+      <li><i>↩️</i><b>7 أيام</b><span>باش ترجعي</span></li>
+    </ul>
+    <h2 class="lp-title lp-title-sm"><span>الطلب ساهل</span><em>فـ3 خطوات</em></h2>
+    <ol class="lp-steps3">
+      <li><b>1</b>عمّري الخانات</li>
+      <li><b>2</b>كنعيطو ليك نأكدو</li>
+      <li><b>3</b>كيوصلك وكتخلصي</li>
+    </ol>
   </div>
 </section>
 
-<section class="wrap lp-section">
-  <h2 class="lp-h2">${esc('علاش هاد الطقم غادي يعجبك؟')} 😍</h2>
-  ${cards(why, 'lp-grid')}
-  <div class="lp-center">${soldOut ? '' : cta('بغيت الطقم ديالي')}</div>
-</section>
-
-<section class="lp-gift">
-  <div class="wrap lp-gift-grid">
-    <img src="${IMG}/box-sm.webp" alt="" width="480" height="676" loading="lazy">
-    <div>
-      <h2 class="lp-h2">${esc('أحسن هدية ليها… ولا ليك')} 💝</h2>
-      <p>${esc('لمراتك، لختك، ليماك، لصاحبتك… ولا غير لراسك. العلبة جاية مصاوبة وفاخرة، كتفرّح من أول نظرة.')}</p>
-      <p class="lp-steps-title">${esc('الطلب ساهل فـ3 خطوات:')}</p>
-      <ol class="lp-steps">
-        <li>${esc('عمّري المعلومات ديالك تحت')}</li>
-        <li>${esc('كنعيطو ليك باش نأكدو الطلب')}</li>
-        <li>${esc('كيوصلك الطقم وكتخلصي ملي تشوفيه')}</li>
-      </ol>
-    </div>
-  </div>
-</section>
-
-<section class="wrap lp-section lp-order-wrap">
-  <h2 class="lp-h2 lp-center-text">${esc('اطلبي الطقم ديالك دابا')} 👇</h2>
-  ${priceBlock.replace('class="lp-price"', 'class="lp-price lp-price-center"')}
-  ${soldOut ? `<p class="lp-stock lp-center-text">${esc('سالا الستوك دابا، رجعي قريب إن شاء الله')}</p>` : `<form class="buy lp-form" id="order" novalidate data-product="${p.id}" data-name="${esc(p.name_ar || p.name_fr)}" data-price="${p.price}" data-image="${esc(box)}" data-slug="${esc(p.slug)}">
-    <div class="qty-row">
-      <label for="qty">${esc('الكمية')}</label>
-      <div class="qty"><button type="button" data-step="-1" aria-label="−">−</button><input id="qty" name="qty" type="number" inputmode="numeric" min="1" max="${p.stock != null ? Math.max(1, Math.min(20, p.stock)) : 20}" value="1"><button type="button" data-step="1" aria-label="+">+</button></div>
-    </div>
-    <div class="quick">
-      <p class="quick-lead">${esc('عمّري المعلومات ديالك فالخانات اللي تحت')}<span class="finger" aria-hidden="true">👇</span></p>
-      <div class="quick-fields">
-        <label class="qf">${icon('user', 20)}<input name="name" autocomplete="name" required maxlength="80" placeholder="${esc('الإسم الكامل')}" aria-label="${esc('الإسم الكامل')}"></label>
-        <label class="qf">${icon('pin', 20)}<select name="city" required aria-label="${esc('المدينة')}"><option value="">${esc('اختاري المدينة ديالك')}</option>${CITIES.map((c) => `<option>${esc(c)}</option>`).join('')}<option value="__other">${esc('مدينة أخرى')}</option></select></label>
-        <label class="qf other-city" hidden>${icon('pin', 20)}<input name="city_other" maxlength="60" placeholder="${esc('كتبي المدينة ديالك')}" aria-label="${esc('مدينة أخرى')}"></label>
-        <label class="qf">${icon('home', 20)}<input name="address" required maxlength="300" autocomplete="street-address" placeholder="${esc('العنوان (الحي، الزنقة، الرقم)')}" aria-label="${esc('العنوان')}"></label>
-        <label class="qf">${icon('phone', 20)}<input name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="20" dir="ltr" placeholder="${esc('رقم الهاتف · مثال: 06 12 34 56 78')}" aria-label="${esc('رقم الهاتف')}"></label>
-        <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+<section class="lp-poster lp-order">
+  <div class="lp-wrap">
+    <h2 class="lp-title lp-title-sm"><span>اطلبي الطقم ديالك</span><em>دابا 👇</em></h2>
+    <p class="lp-order-price"><strong>${price}</strong>${save ? ` <s>${esc(money(p.compare_price, lang))}</s>` : ''}</p>
+    ${fewLeft ? `<p class="lp-hurry">⚡ باقي غير ${p.stock} فالستوك</p>` : ''}
+    ${soldOut ? '<p class="lp-hurry">سالا الستوك دابا، رجعي قريب إن شاء الله</p>' : `<form class="buy lp-form" id="order" novalidate data-product="${p.id}" data-name="${esc(p.name_ar || p.name_fr)}" data-price="${p.price}" data-image="${esc(box)}" data-slug="${esc(p.slug)}">
+      <div class="quick">
+        <div class="quick-fields">
+          <label class="qf">${icon('user', 20)}<input name="name" autocomplete="name" required maxlength="80" placeholder="الإسم الكامل" aria-label="الإسم الكامل"></label>
+          <label class="qf">${icon('pin', 20)}<select name="city" required aria-label="المدينة"><option value="">المدينة</option>${CITIES.map((c) => `<option>${esc(c)}</option>`).join('')}<option value="__other">مدينة أخرى</option></select></label>
+          <label class="qf other-city" hidden>${icon('pin', 20)}<input name="city_other" maxlength="60" placeholder="كتبي المدينة ديالك" aria-label="مدينة أخرى"></label>
+          <label class="qf">${icon('home', 20)}<input name="address" required maxlength="300" autocomplete="street-address" placeholder="العنوان" aria-label="العنوان"></label>
+          <label class="qf">${icon('phone', 20)}<input name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="20" dir="ltr" placeholder="رقم الهاتف" aria-label="رقم الهاتف"></label>
+          <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        </div>
+        <ul class="quick-sum">
+          <li><span>الطقم</span><span data-q-sub>${price}</span></li>
+          <li><span>التوصيل</span><span data-q-ship class="free" data-free="فابور">فابور</span></li>
+          <li class="total"><span>المجموع</span><span data-q-total>${price}</span></li>
+        </ul>
+        <div class="lp-go">
+          <div class="qty"><button type="button" data-step="-1" aria-label="−">−</button><input id="qty" name="qty" type="number" inputmode="numeric" min="1" max="${p.stock != null ? Math.max(1, Math.min(20, p.stock)) : 20}" value="1" aria-label="الكمية"><button type="button" data-step="1" aria-label="+">+</button></div>
+          <button class="btn quick-go" type="submit" name="go" value="order">${icon('cart', 22)}<span>اطلبي دابا</span></button>
+        </div>
+        <p class="form-error" role="alert" hidden></p>
       </div>
-      <ul class="quick-sum">
-        <li><span>${esc('الطقم')}</span><span data-q-sub>${price}</span></li>
-        <li><span>${esc('التوصيل')}</span><span data-q-ship class="free">${esc('فابور')}</span></li>
-        <li class="total"><span>${esc('المجموع عند الاستلام')}</span><span data-q-total>${price}</span></li>
-      </ul>
-      <button class="btn btn-block btn-accent btn-lg quick-go" type="submit" name="go" value="order">${icon('check', 22)}<span>${esc('أكدي الطلب ديالي')}</span></button>
-      <p class="form-error" role="alert" hidden></p>
-    </div>
-  </form>`}
+    </form>`}
+  </div>
 </section>
 
-<section class="wrap lp-section lp-faq">
-  <h2 class="lp-h2">${esc('أسئلة كتطرحوها علينا')} 🤔</h2>
+<section class="lp-wrap lp-faq">
   <div class="accordion">${faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><div>${esc(a)}</div></details>`).join('')}</div>
 </section>
-${soldOut ? '' : `<div class="buy-bar" aria-hidden="true"><div><strong>${price}</strong><small>${esc('التوصيل فابور · الخلاص عند الاستلام')}</small></div><a class="btn btn-accent" href="#order" data-buy-now>${esc('اطلبي دابا')}</a></div>`}`;
+${soldOut ? '' : '<div class="buy-bar" aria-hidden="true"><a class="lp-btn" href="#order" data-buy-now>🛍️ اطلبي دابا</a></div>'}`;
 
   return layout(ctx, {
     title: 'طقم H69 Plus الملكي',
