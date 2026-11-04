@@ -774,7 +774,14 @@ body.bare { --tabbar: 0px; }
 .lp-go .qty { border-radius: 14px; }
 .lp-go .qty button { width: 40px; }
 .lp-go .qty input { width: 38px; }
-.lp-go .quick-go { min-height: 58px; white-space: nowrap; padding-inline: 14px; border-radius: 14px; background: var(--lp-green); border-color: var(--lp-green); font-size: 1.2rem; font-weight: 900; animation: none; }
+.lp-go .quick-go { min-height: 58px; white-space: nowrap; padding-inline: 14px; border-radius: 14px; background: var(--lp-green); border-color: var(--lp-green); font-size: 1.2rem; font-weight: 900; animation: lp-pop 1.6s ease-in-out infinite; }
+/* The order button pops: it grows a little and sends out a glow ring, so the eye goes straight to it. */
+@keyframes lp-pop {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgb(18 128 79 / 0.55); }
+  45% { transform: scale(1.07); box-shadow: 0 0 0 12px rgb(18 128 79 / 0); }
+  60% { transform: scale(0.98); }
+}
+.lp-go .quick-go:hover, .lp-go .quick-go:focus-visible, .lp-go .quick-go:disabled { animation: none; }
 .lp-go .quick-go:hover { background: var(--lp-green-dark); border-color: var(--lp-green-dark); }
 .lp-faq { padding-block: 10px 30px; }
 .lp-faq summary { font-family: 'Cairo', var(--font-body); font-weight: 800; }
@@ -792,7 +799,7 @@ body.bare { --tabbar: 0px; }
   .page-landing .buy-bar { display: flex; }
   .lp-wrap { max-width: 640px; }
 }
-@media (prefers-reduced-motion: reduce) { .lp-btn { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .lp-btn, .lp-go .quick-go { animation: none; } }
 
 /* Simple two-colour landing (green for action, orange for value), e.g. /ar/lp/qatta3a */
 .lpx { --x1: #12804f; --x1-dark: #0d6640; --x2: #f07c1e; font-family: 'Cairo', var(--font-body); }
