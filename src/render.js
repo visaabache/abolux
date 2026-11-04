@@ -215,7 +215,7 @@ ${verify ? `<meta name="google-site-verification" content="${esc(verify)}">` : '
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?${fonts}&display=swap">
-<link rel="stylesheet" href="/assets/style.css?v=14">
+<link rel="stylesheet" href="/assets/style.css?v=15">
 <script src="/assets/js-on.js"></script>
 ${pixels ? `<script type="application/json" id="pixels">${JSON.stringify({ ...px, page: track }).replace(/</g, '\\u003c')}</script>
 <script src="/assets/pixels.js?v=1" defer></script>` : ''}
@@ -536,8 +536,6 @@ export function productPage(ctx, p, category, related) {
         </ul>
         <button class="btn btn-block btn-accent btn-lg quick-go" type="submit" name="go" value="order">${icon('check', 22)}<span>${esc(t.buyNow)}</span></button>
         <p class="form-error" role="alert" hidden></p>
-        <p class="quick-note">${icon('lock', 16)} ${esc(t.payOnDelivery)}</p>
-        <p class="consent">${t.consent(`/${lang}/terms`, `/${lang}/privacy`)}</p>
       </div>
       <button class="btn btn-block btn-outline" type="submit" name="go" value="cart">${icon('cart', 20)} ${esc(t.addToCart)}</button>`}
     </form>
