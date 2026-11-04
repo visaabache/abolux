@@ -30,3 +30,16 @@ test('sold out: no order form, a message instead', () => {
   assert.doesNotMatch(html, /id="order"/);
   assert.match(html, /سالا الستوك/);
 });
+
+test('vegetable cutter landing: calls to action that carry a value, reviews only when real ones are added', () => {
+  const cutter = { id: 7, slug: 'produit-mw2ix4i4', name_ar: 'قطاعة الخضراوات', price: 220, stock: null, images: '["/img/p/a.webp","/img/p/b.webp"]' };
+  const html = landingPage(ctx, LANDINGS.qatta3a, cutter);
+  assert.match(html, /وصباعك سالمين/);
+  assert.match(html, /<a class="lpx-cta" href="#order"><b>إيه، بغيت نربح الوقت فالكوزينة 👈<\/b><span>220.درهم · التوصيل فابور<\/span><\/a>/);
+  assert.ok((html.match(/class="lpx-cta"/g) || []).length >= 4);
+  assert.doesNotMatch(html, /lpx-reviews/);
+  assert.match(html, /src="\/img\/p\/a.webp"/);
+  assert.match(html, /<span>المنتج<\/span><span data-q-sub>/);
+  const withReviews = landingPage(ctx, { ...LANDINGS.qatta3a, reviews: [{ name: 'Fatima', city: 'Rabat', text: 'Top', stars: 5 }] }, cutter);
+  assert.match(withReviews, /class="lpx-reviews"/);
+});

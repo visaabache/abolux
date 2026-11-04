@@ -169,7 +169,13 @@ async function storefront(request, env, url, lang, rest, exec) {
     const landing = LANDINGS[slug];
     if (!landing) return html(notFoundPage(ctx), 404);
     if (landing.lang !== lang) return Response.redirect(`${url.origin}/${landing.lang}/lp/${slug}${url.search}`, 302);
-    const p = await db.prepare('SELECT * FROM products WHERE active = 1 AND slug = ?').bind(landing.product).first();
+    const find = (s) => db.prepare('SELECT * FROM products WHERE active = 1 AND slug = ?').bind(s).first();
+    let p = await find(landing.product);
+    if (!p) {
+      // The product's address was changed in the admin: follow it, so the ad link keeps working.
+      const moved = await db.prepare('SELECT target FROM redirects WHERE path = ?').bind(`/p/${landing.product}`).first();
+      if (moved?.target.startsWith('/p/')) p = await find(moved.target.slice(3));
+    }
     if (!p) return html(notFoundPage(ctx), 404);
     res = html(landingPage({ ...ctx, cur: 'MAD', rates: null }, landing, p));
   } else if (rest === '/blog') {
