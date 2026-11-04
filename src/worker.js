@@ -8,6 +8,7 @@ import { homePage, listingPage, productPage, cartPage, checkoutPage, orderPage, 
 const ORDER_BY = { price_asc: 'price ASC, id DESC', price_desc: 'price DESC, id DESC' };
 import { handleAdmin, CHUNK as VIDEO_CHUNK } from './admin.js';
 import { pixelCsp } from './pixels.js';
+import { LANDINGS, landingPage } from './landing.js';
 import { CURRENCIES, currencyFor, ratesFrom } from './currency.js';
 import { sendOrderEmails, validEmail } from './email.js';
 
@@ -56,6 +57,8 @@ export default {
       if (path === '/admin') return Response.redirect(`${url.origin}/admin/`, 301);
       if (path === '/sitemap.xml') return await sitemap(env, site);
       if (path === '/currency') return setCurrency(url);
+      const lp = path.match(/^\/lp\/([a-z0-9-]+)\/?$/);
+      if (lp && LANDINGS[lp[1]]) return Response.redirect(`${url.origin}/${LANDINGS[lp[1]].lang}/lp/${lp[1]}${url.search}`, 302);
       if (path === '/robots.txt') {
         return new Response(`User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /api/\nDisallow: /*/cart\nDisallow: /*/checkout\nDisallow: /*/order/\nDisallow: /currency\nSitemap: ${site}/sitemap.xml\n`, { headers: { 'content-type': 'text/plain' } });
       }
@@ -160,6 +163,15 @@ async function storefront(request, env, url, lang, rest, exec) {
       .bind(p.id, p.category_id)
       .all();
     res = html(productPage(ctx, p, categories.find((c) => c.id === p.category_id), related.results));
+  } else if (rest.startsWith('/lp/')) {
+    // Landing page for ads: one product, prices in dirhams for a Moroccan audience.
+    const slug = rest.slice(4).replace(/\/$/, '');
+    const landing = LANDINGS[slug];
+    if (!landing) return html(notFoundPage(ctx), 404);
+    if (landing.lang !== lang) return Response.redirect(`${url.origin}/${landing.lang}/lp/${slug}${url.search}`, 302);
+    const p = await db.prepare('SELECT * FROM products WHERE active = 1 AND slug = ?').bind(landing.product).first();
+    if (!p) return html(notFoundPage(ctx), 404);
+    res = html(landingPage({ ...ctx, cur: 'MAD', rates: null }, landing, p));
   } else if (rest === '/blog') {
     const posts = await db.prepare('SELECT * FROM posts WHERE published = 1 ORDER BY created_at DESC, id DESC LIMIT 60').all();
     res = html(blogIndexPage(ctx, posts.results));

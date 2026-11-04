@@ -125,7 +125,7 @@ function waWidget(ctx, product) {
 </div>`;
 }
 
-function icon(name, size = 24) {
+export function icon(name, size = 24) {
   return `<svg class="icon" viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
 }
 const waIcon = (size = 24) => `<svg class="icon" viewBox="0 0 32 32" width="${size}" height="${size}" aria-hidden="true"><path fill="currentColor" d="${WA_PATH}"/></svg>`;
@@ -165,7 +165,8 @@ function srcset(url) {
   return s !== url ? ` srcset="${esc(s)} 480w, ${esc(url)} 1000w"` : '';
 }
 
-export function layout(ctx, { title, seoTitle = '', description = '', path, body, noindex = false, image = '', page = '', product = null, track = null, ld = [], ogType = 'website' }) {
+// bare: a landing page for ads — logo only at the top, no menus, search or tab bar, a short footer.
+export function layout(ctx, { title, seoTitle = '', description = '', path, body, noindex = false, image = '', page = '', product = null, track = null, ld = [], ogType = 'website', bare = false, strip = null }) {
   const { lang, settings, origin, categories = [] } = ctx;
   const t = T[lang];
   const px = pixelConfig(settings);
@@ -190,7 +191,8 @@ export function layout(ctx, { title, seoTitle = '', description = '', path, body
     lang === 'ar'
       ? 'family=Anton&family=Cairo:wght@700;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700'
       : 'family=Anton&family=Inter:wght@400;500;600;700';
-  const tickerItems = [announcement, t.cod, t.delivery, t.confirm].filter(Boolean);
+  // strip: a landing page's own messages for the scrolling bar at the top, instead of the store announcement.
+  const tickerItems = strip || [announcement, t.cod, t.delivery, t.confirm].filter(Boolean);
   const ticker = tickerItems.map((s) => `<span>${star('tick-star')}${esc(s)}</span>`).join('');
   return `<!doctype html>
 <html lang="${lang}" dir="${t.dir}">
@@ -199,7 +201,7 @@ export function layout(ctx, { title, seoTitle = '', description = '', path, body
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(metaDesc)}">
-${noindex ? '<meta name="robots" content="noindex">' : `<link rel="canonical" href="${esc(origin)}/${lang}${esc(path)}">${alternates}<link rel="alternate" hreflang="x-default" href="${esc(origin)}/fr${esc(path)}">`}
+${noindex ? '<meta name="robots" content="noindex">' : `<link rel="canonical" href="${esc(origin)}/${lang}${esc(path)}">${bare ? '' : `${alternates}<link rel="alternate" hreflang="x-default" href="${esc(origin)}/fr${esc(path)}">`}`}
 <meta property="og:title" content="${esc(fullTitle)}">
 <meta property="og:description" content="${esc(metaDesc)}">
 <meta property="og:type" content="${ogType}">
@@ -215,33 +217,33 @@ ${verify ? `<meta name="google-site-verification" content="${esc(verify)}">` : '
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?${fonts}&display=swap">
-<link rel="stylesheet" href="/assets/style.css?v=14">
+<link rel="stylesheet" href="/assets/style.css?v=17">
 <script src="/assets/js-on.js"></script>
 ${pixels ? `<script type="application/json" id="pixels">${JSON.stringify({ ...px, page: track }).replace(/</g, '\\u003c')}</script>
 <script src="/assets/pixels.js?v=1" defer></script>` : ''}
 <script src="/assets/store.js?v=9" defer></script>
 </head>
-<body data-lang="${lang}" class="page-${page || 'default'}">
+<body data-lang="${lang}" class="page-${page || 'default'}${bare ? ' bare' : ''}">
 <a class="skip" href="#main">${esc(t.allProducts)}</a>
-<div class="ticker" aria-label="${esc(announcement || t.cod)}"><div class="ticker-track">${ticker}${ticker}</div></div>
+<div class="ticker" aria-label="${esc(tickerItems[0] || t.cod)}"><div class="ticker-track">${ticker}${ticker}</div></div>
 <header class="top">
   <div class="wrap top-row">
     <a class="logo" href="/${lang}/" aria-label="${esc(store)}">${brandLogo()}</a>
-    <nav class="main-nav" aria-label="${esc(t.categories)}"><a href="/${lang}/shop">${esc(t.shop)}</a>${navCats}<a href="/${lang}/blog">${esc(t.blog)}</a></nav>
+    ${bare ? '' : `<nav class="main-nav" aria-label="${esc(t.categories)}"><a href="/${lang}/shop">${esc(t.shop)}</a>${navCats}<a href="/${lang}/blog">${esc(t.blog)}</a></nav>
     <div class="top-actions">
       <form class="top-search" action="/${lang}/shop" method="get" role="search"><input type="search" name="q" placeholder="${esc(t.search)}" aria-label="${esc(t.search)}"><button aria-label="${esc(t.search)}">${icon('search', 20)}</button></form>
       <span class="langs">${langLinks}</span>
       <a class="cart-link" href="/${lang}/cart" aria-label="${esc(t.cart)}">${icon('cart')}<span class="cart-count" hidden>0</span></a>
-    </div>
+    </div>`}
   </div>
-  ${categories.length ? `<nav class="chips" aria-label="${esc(t.categories)}"><a class="chip" href="/${lang}/shop">${esc(t.allProducts)}</a>${categories.map((c) => `<a class="chip" href="/${lang}/c/${esc(c.slug)}">${esc(catName(c, lang))}</a>`).join('')}</nav>` : ''}
+  ${!bare && categories.length ? `<nav class="chips" aria-label="${esc(t.categories)}"><a class="chip" href="/${lang}/shop">${esc(t.allProducts)}</a>${categories.map((c) => `<a class="chip" href="/${lang}/c/${esc(c.slug)}">${esc(catName(c, lang))}</a>`).join('')}</nav>` : ''}
 </header>
 <main id="main">
 ${body}
 </main>
 <footer class="foot">
   <div class="foot-band" aria-hidden="true"></div>
-  <div class="wrap foot-grid">
+  ${bare ? '' : `<div class="wrap foot-grid">
     <div class="foot-brand">
       <a class="logo logo-light" href="/${lang}/" aria-label="${esc(store)}">${brandLogo(true)}</a>
       <p>${esc(t.tagline)}</p>
@@ -265,21 +267,21 @@ ${body}
         <li><a href="/${lang}/credits">${esc(t.credits)}</a></li>
       </ul>
     </div>
-  </div>
+  </div>`}
   <div class="wrap foot-pay" aria-label="${esc(t.weAccept)}">
     <span class="pay-badge">${icon('cash', 18)} ${esc(t.cod)}</span>
     <span class="pay-badge">${icon('truck', 18)} ${esc(t.delivery)}</span>
     <span class="pay-badge">${icon('undo', 18)} ${esc(t.returns)}</span>
     <span class="pay-badge">${icon('lock', 18)} ${esc(t.secure)}</span>
   </div>
-  <div class="wrap foot-bottom"><span>© ${new Date().getUTCFullYear()} ${esc(store)}. ${esc(t.rights)}</span>${pixels ? `<button type="button" class="link-btn" data-consent-open>${esc(t.cookieSettings)}</button>` : ''}${currencyPicker(ctx, path)}<span class="langs">${langLinks}</span></div>
+  <div class="wrap foot-bottom"><span>© ${new Date().getUTCFullYear()} ${esc(store)}. ${esc(t.rights)}</span>${pixels ? `<button type="button" class="link-btn" data-consent-open>${esc(t.cookieSettings)}</button>` : ''}${bare ? `<span class="foot-links"><a href="/${lang}/terms">${esc(t.terms)}</a> · <a href="/${lang}/privacy">${esc(t.privacy)}</a></span>` : `${currencyPicker(ctx, path)}<span class="langs">${langLinks}</span>`}</div>
 </footer>
-<nav class="tabbar" aria-label="${esc(t.shop)}">
+${bare ? '' : `<nav class="tabbar" aria-label="${esc(t.shop)}">
   <a href="/${lang}/"${page === 'home' ? ' aria-current="page"' : ''}>${icon('home')}<span>${esc(t.home)}</span></a>
   <a href="/${lang}/shop"${page === 'shop' ? ' aria-current="page"' : ''}>${icon('grid')}<span>${esc(t.shop)}</span></a>
   <a href="/${lang}/cart"${page === 'cart' ? ' aria-current="page"' : ''} class="tab-cart">${icon('cart')}<span>${esc(t.cart)}</span><span class="cart-count" hidden>0</span></a>
   <a href="/${lang}/shop#q"${page === 'search' ? ' aria-current="page"' : ''} data-search-tab>${icon('search')}<span>${esc(t.searchTab)}</span></a>
-</nav>
+</nav>`}
 ${waWidget(ctx, product)}
 <div class="toast" role="status" aria-live="polite" hidden></div>
 ${pixels ? `<div class="consent-bar" id="consent" role="dialog" aria-label="${esc(t.cookieSettings)}" hidden><p>${esc(t.consentAds)} <a href="/${lang}/privacy#s7">${esc(t.privacy)}</a></p><div><button type="button" class="btn btn-outline" data-consent="no">${esc(t.refuse)}</button><button type="button" class="btn" data-consent="yes">${esc(t.accept)}</button></div></div>` : ''}
@@ -536,8 +538,6 @@ export function productPage(ctx, p, category, related) {
         </ul>
         <button class="btn btn-block btn-accent btn-lg quick-go" type="submit" name="go" value="order">${icon('check', 22)}<span>${esc(t.buyNow)}</span></button>
         <p class="form-error" role="alert" hidden></p>
-        <p class="quick-note">${icon('lock', 16)} ${esc(t.payOnDelivery)}</p>
-        <p class="consent">${t.consent(`/${lang}/terms`, `/${lang}/privacy`)}</p>
       </div>
       <button class="btn btn-block btn-outline" type="submit" name="go" value="cart">${icon('cart', 20)} ${esc(t.addToCart)}</button>`}
     </form>
