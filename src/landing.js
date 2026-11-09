@@ -2,15 +2,16 @@
 // product by its slug, so the price, the old price, the stock and the order all come from the admin.
 // The page lives at /<lang>/lp/<slug> (and /lp/<slug> as a short link).
 
-import { layout, icon } from './render.js';
-import { CITIES, esc, money, productImages } from './lib.js';
+import { layout, icon, optionFieldset } from './render.js';
+import { CITIES, esc, money, productImages, productOptions } from './lib.js';
 
 const PLACEHOLDER = '/assets/placeholder.svg';
 
 // The order form shared by every landing page: name, city, address, phone, live total, quantity and button.
 // store.js wires it (quickOrder) and sends the order for this one product.
-function orderForm(p, price, image, button, item = 'المنتج') {
+function orderForm(ctx, p, price, image, button, item = 'المنتج') {
   return `<form class="buy lp-form" id="order" novalidate data-product="${p.id}" data-name="${esc(p.name_ar || p.name_fr)}" data-price="${p.price}" data-image="${esc(image)}" data-slug="${esc(p.slug)}">
+      ${productOptions(p).map((g, gi) => optionFieldset(ctx, g, gi)).join('')}
       <div class="quick">
         <div class="quick-fields">
           <label class="qf">${icon('user', 20)}<input name="name" autocomplete="name" required maxlength="80" placeholder="الإسم الكامل" aria-label="الإسم الكامل"></label>
@@ -131,7 +132,7 @@ function h69Plus(ctx, p) {
     <h2 class="lp-title lp-title-sm"><span>اطلبي الطقم ديالك</span><em>دابا 👇</em></h2>
     <p class="lp-order-price"><strong>${price}</strong>${save ? ` <s>${esc(money(p.compare_price, lang))}</s>` : ''}</p>
     ${fewLeft ? `<p class="lp-hurry">⚡ باقي غير ${p.stock} فالستوك</p>` : ''}
-    ${soldOut ? '<p class="lp-hurry">سالا الستوك دابا، رجعي قريب إن شاء الله</p>' : orderForm(p, price, box, 'اطلبي دابا', 'الطقم')}
+    ${soldOut ? '<p class="lp-hurry">سالا الستوك دابا، رجعي قريب إن شاء الله</p>' : orderForm(ctx, p, price, box, 'اطلبي دابا', 'الطقم')}
   </div>
 </section>
 
@@ -245,7 +246,7 @@ function qatta3a(ctx, p, landing) {
   <div class="lp-wrap">
     <h2>عمّري المعلومات ديالك <mark>وتوصلك لدارك</mark> 👇</h2>
     ${fewLeft ? `<p class="lpx-hurry">⚡ باقي غير ${p.stock} فالستوك</p>` : ''}
-    ${soldOut ? '<p class="lpx-hurry">سالا الستوك دابا، رجعي قريب إن شاء الله</p>' : orderForm(p, price, pic(0), 'أكدي الطلب')}
+    ${soldOut ? '<p class="lpx-hurry">سالا الستوك دابا، رجعي قريب إن شاء الله</p>' : orderForm(ctx, p, price, pic(0), 'أكدي الطلب')}
   </div>
 </section>
 
