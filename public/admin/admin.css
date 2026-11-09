@@ -442,3 +442,11 @@ details summary { cursor: pointer; }
   .is-login .login { transform: none; }
   .is-login .login h1 { color: #fff; background: none; }
 }
+
+/* Sign-out button in the page header on phones (the sidebar that holds it is hidden there) */
+.head-logout { display: inline-grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid var(--line); background: #fff; color: var(--muted); cursor: pointer; transition: color 0.15s, border-color 0.15s, background 0.15s; }
+.head-logout:hover, .head-logout:focus-visible { color: var(--danger); border-color: #f2c4bd; background: #fff5f3; }
+@media (min-width: 900px) { .head-logout.mobile-only { display: none; } }
+/* On phones the header language button shows a short label (FR / ع) so it fits beside the other buttons */
+.lang-switch .ls-short { display: none; font-weight: 800; }
+@media (max-width: 599px) { .head-actions .lang-switch { padding: 0 12px; } .head-actions .lang-switch .ls-long { display: none; } .head-actions .lang-switch .ls-short { display: inline; } }

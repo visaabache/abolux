@@ -22,6 +22,7 @@
       googleVerify: 'رمز التحقق من Google Search Console', googleHow: 'في Search Console اختر «بادئة عنوان URL» ثم طريقة «علامة HTML»، وانسخ الوسم كاملًا أو قيمة content فقط.',
       viewStore: 'عرض المتجر',
       logout: 'تسجيل الخروج',
+      logoutAsk: 'تسجيل الخروج من فضاء البائع؟',
       sellerSpace: 'فضاء البائع',
       loginHint: 'سجّل الدخول لإدارة طلباتك.',
       password: 'كلمة السر',
@@ -209,6 +210,7 @@
       googleVerify: 'Code de vérification Google Search Console', googleHow: 'Dans Search Console, choisissez « Préfixe de l’URL » puis la méthode « Balise HTML », et copiez la balise entière ou seulement la valeur content.',
       viewStore: 'Voir la boutique',
       logout: 'Déconnexion',
+      logoutAsk: 'Se déconnecter de l’espace vendeur ?',
       sellerSpace: 'Espace vendeur',
       loginHint: 'Connectez-vous pour gérer vos commandes.',
       password: 'Mot de passe',
@@ -480,7 +482,7 @@
   }
 
   const other = () => (lang === 'ar' ? 'fr' : 'ar');
-  const langButton = (cls = '') => `<button type="button" class="lang-switch ${cls}" data-lang="${other()}" lang="${other()}">${icon('globe', 18)}<span>${L.switchTo}</span></button>`;
+  const langButton = (cls = '') => `<button type="button" class="lang-switch ${cls}" data-lang="${other()}" lang="${other()}" aria-label="${L.switchTo}">${icon('globe', 18)}<span class="ls-long">${L.switchTo}</span><span class="ls-short" aria-hidden="true">${other() === 'fr' ? 'FR' : 'ع'}</span></button>`;
 
   // Login
   // Animated backdrop of the login page: drifting glows, a moving gold floor grid and rising sparks.
@@ -556,7 +558,7 @@
         </div>
       </aside>
       <div class="page">
-        <header class="page-head"><div><h1>${title}</h1>${sub ? `<p class="muted">${sub}</p>` : ''}</div><div class="head-actions">${langButton('mobile-only')}${actions}</div></header>
+        <header class="page-head"><div><h1>${title}</h1>${sub ? `<p class="muted">${sub}</p>` : ''}</div><div class="head-actions">${langButton('mobile-only')}${actions}<button type="button" class="head-logout mobile-only" data-logout data-ask aria-label="${L.logout}" title="${L.logout}">${icon('logout', 18)}</button></div></header>
         <main class="page-body">${content}</main>
       </div>
       <nav class="tabbar">${nav}</nav>`;
@@ -570,7 +572,10 @@
       else route();
       return;
     }
-    if (e.target.closest('[data-logout]')) {
+    const out = e.target.closest('[data-logout]');
+    if (out) {
+      // The phone button sits next to other buttons: ask first so a slip of the finger does not sign out.
+      if (out.hasAttribute('data-ask') && !confirm(L.logoutAsk)) return;
       await api('/logout', { method: 'POST', body: {} });
       login();
     }
