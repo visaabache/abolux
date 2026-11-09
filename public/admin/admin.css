@@ -378,3 +378,67 @@ details summary { cursor: pointer; }
 .danger-text { color: #c0392b; }
 .opt-add { display: flex; flex-wrap: wrap; gap: 8px; }
 .swatch-ico { width: 16px; height: 16px; border-radius: 50%; background: conic-gradient(#ef4444, #f59e0b, #22c55e, #3b82f6, #a855f7, #ef4444); display: inline-block; }
+
+/* Login, animated: night background with drifting gold/violet glows, a moving gold floor grid and rising
+   sparks; a glass card with a gold light running round its border, a shine across the logo, a shake on a
+   wrong password and an opening on success. Everything stops for people who ask for less motion. */
+@property --lg-a { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+.is-login { background: #0b0a18; color: #fff; }
+.login-fx { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; background: radial-gradient(ellipse 80% 60% at 50% 115%, #2b1f55 0%, transparent 70%), #0b0a18; }
+.login-fx::before { content: ''; position: absolute; left: -60%; right: -60%; top: 56%; height: 90%; transform: perspective(380px) rotateX(64deg); transform-origin: top; background-image: linear-gradient(rgb(233 185 73 / 0.22) 1px, transparent 1px), linear-gradient(90deg, rgb(233 185 73 / 0.22) 1px, transparent 1px); background-size: 56px 56px; -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, transparent 80%); mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, transparent 80%); animation: lg-grid 3.2s linear infinite; }
+.login-fx .orb { position: absolute; width: 60vmax; height: 60vmax; border-radius: 50%; opacity: 0.5; animation: lg-float 18s ease-in-out infinite alternate; }
+.login-fx .o1 { top: -26vmax; left: -20vmax; background: radial-gradient(circle, rgb(233 185 73 / 0.75), transparent 62%); }
+.login-fx .o2 { bottom: -30vmax; right: -24vmax; background: radial-gradient(circle, rgb(109 74 255 / 0.8), transparent 62%); animation-duration: 22s; animation-delay: -7s; }
+.login-fx .o3 { top: 30%; left: 55%; width: 34vmax; height: 34vmax; opacity: 0.28; background: radial-gradient(circle, rgb(255 106 61 / 0.8), transparent 62%); animation-duration: 26s; animation-delay: -12s; }
+.login-fx .spark { position: absolute; bottom: -12px; left: var(--x); width: var(--s); height: var(--s); border-radius: 50%; background: #ffe7a3; box-shadow: 0 0 10px 2px rgb(233 185 73 / 0.75); opacity: 0; animation: lg-spark var(--d) linear var(--t) infinite; }
+
+.is-login .login { position: relative; z-index: 1; width: min(420px, 100%); gap: 16px; padding: 34px 30px 30px; border-radius: 28px; color: #fff; background: linear-gradient(160deg, rgb(255 255 255 / 0.13), rgb(255 255 255 / 0.04)); border: 1px solid rgb(255 255 255 / 0.12); -webkit-backdrop-filter: blur(22px) saturate(150%); backdrop-filter: blur(22px) saturate(150%); box-shadow: 0 50px 90px -40px rgb(0 0 0 / 0.9), 0 0 60px -20px rgb(233 185 73 / 0.35), inset 0 1px 0 rgb(255 255 255 / 0.18); transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform 0.3s ease-out; animation: lg-card 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.is-login .login::before { content: ''; position: absolute; inset: -1px; padding: 1.5px; border-radius: inherit; pointer-events: none; background: conic-gradient(from var(--lg-a), transparent 0 62%, rgb(233 185 73 / 0.2) 70%, #f7dc8b 82%, #fff6d6 86%, #e9b949 90%, transparent 100%); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; animation: lg-spin 5s linear infinite; }
+.is-login .login > * { --i: 0; animation: lg-rise 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) calc(0.25s + var(--i) * 0.09s) both; }
+.is-login .login > :nth-child(2) { --i: 1; }
+.is-login .login > :nth-child(3) { --i: 2; }
+.is-login .login > :nth-child(4) { --i: 3; }
+.is-login .login > :nth-child(5) { --i: 4; }
+.is-login .login > :nth-child(6) { --i: 0; animation-delay: 0s; }
+
+.login-logo-wrap { position: relative; display: inline-block; line-height: 0; }
+.is-login .login-logo { filter: brightness(1.18) drop-shadow(0 0 18px rgb(233 185 73 / 0.45)); }
+.login-logo-wrap::after { content: ''; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 40%, rgb(255 255 255 / 0.95) 50%, transparent 60%) 0 0 / 300% 100% no-repeat; -webkit-mask: url(/admin/logo.png) center / contain no-repeat; mask: url(/admin/logo.png) center / contain no-repeat; animation: lg-shine 4.5s ease-in-out 1.2s infinite; }
+.is-login .lang-switch { background: rgb(255 255 255 / 0.06); color: #fff; border-color: rgb(255 255 255 / 0.18); transition: border-color 0.2s, background 0.2s; }
+.is-login .lang-switch:hover { border-color: #e9b949; background: rgb(233 185 73 / 0.12); }
+.is-login .login h1 { font-size: 1.75rem; line-height: 1.35; margin-top: 10px; padding-bottom: 0.15em; margin-bottom: -0.15em; background: linear-gradient(90deg, #fff 0%, #fff 35%, #f7dc8b 50%, #fff 65%, #fff 100%) 0 0 / 250% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: lg-rise 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) calc(0.25s + var(--i) * 0.09s) both, lg-text 5s linear 1.5s infinite; }
+.is-login .login .muted { color: rgb(255 255 255 / 0.62); }
+.is-login .login label { color: rgb(255 255 255 / 0.86); }
+.is-login .login input { min-height: 52px; border-radius: 14px; color: #fff; background: rgb(255 255 255 / 0.06); border-color: rgb(255 255 255 / 0.16); transition: border-color 0.2s, box-shadow 0.25s, background 0.2s; }
+.is-login .login input:focus { outline: none; border-color: #e9b949; background: rgb(255 255 255 / 0.09); box-shadow: 0 0 0 4px rgb(233 185 73 / 0.18), 0 0 26px rgb(233 185 73 / 0.25); }
+.is-login .login input:-webkit-autofill { -webkit-text-fill-color: #fff; caret-color: #fff; box-shadow: 0 0 0 1000px #1d1933 inset; }
+.is-login .login-go { position: relative; overflow: hidden; min-height: 54px; border: 0; border-radius: 16px; color: #1a1426; font-weight: 800; font-size: 1.05rem; background: linear-gradient(135deg, #f7dc8b, #e9b949 45%, #c4922f); box-shadow: 0 16px 32px -14px rgb(233 185 73 / 0.8); transition: transform 0.15s, box-shadow 0.2s; }
+.is-login .login-go:hover { transform: translateY(-2px); box-shadow: 0 22px 40px -14px rgb(233 185 73 / 0.95); }
+.is-login .login-go:active { transform: scale(0.98); }
+.is-login .login-go::before { content: ''; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%; background: linear-gradient(100deg, transparent, rgb(255 255 255 / 0.7), transparent); transform: skewX(-20deg); animation: lg-sweep 3.4s ease-in-out 1.8s infinite; }
+.is-login .login-go span { transition: opacity 0.2s; }
+.is-login .login.busy .login-go span { opacity: 0; }
+.is-login .login.busy .login-go::after { content: ''; position: absolute; width: 22px; height: 22px; border-radius: 50%; border: 2.5px solid rgb(26 20 38 / 0.25); border-top-color: #1a1426; animation: lg-rot 0.7s linear infinite; }
+.is-login .login .error { margin: 0; padding: 10px 12px; border-radius: 12px; color: #ffb9ad; background: rgb(255 90 70 / 0.12); border: 1px solid rgb(255 90 70 / 0.28); }
+.is-login .login.shake { animation: lg-shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+.is-login .login.ok { animation: lg-open 0.55s cubic-bezier(0.6, 0, 0.4, 1) forwards; }
+@media (max-width: 480px) { .is-login .login { padding: 28px 20px 24px; border-radius: 24px; } }
+
+@keyframes lg-grid { to { background-position: 0 56px; } }
+@keyframes lg-float { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(7vmax, 5vmax) scale(1.12); } 100% { transform: translate(-5vmax, 8vmax) scale(0.94); } }
+@keyframes lg-spark { 0% { transform: translate(0, 0); opacity: 0; } 10% { opacity: 0.95; } 85% { opacity: 0.6; } 100% { transform: translate(var(--dx), -105vh); opacity: 0; } }
+@keyframes lg-card { from { opacity: 0; translate: 0 36px; scale: 0.94; } to { opacity: 1; translate: 0 0; scale: 1; } }
+@keyframes lg-rise { from { opacity: 0; translate: 0 14px; } to { opacity: 1; translate: 0 0; } }
+@keyframes lg-spin { to { --lg-a: 360deg; } }
+@keyframes lg-shine { 0% { background-position: 100% 0; } 45%, 100% { background-position: 0 0; } }
+@keyframes lg-text { 0% { background-position: 100% 0; } 60%, 100% { background-position: 0 0; } }
+@keyframes lg-sweep { 0% { left: -60%; } 45%, 100% { left: 130%; } }
+@keyframes lg-rot { to { transform: rotate(360deg); } }
+@keyframes lg-shake { 10%, 90% { translate: -2px 0; } 20%, 80% { translate: 4px 0; } 30%, 50%, 70% { translate: -9px 0; } 40%, 60% { translate: 9px 0; } }
+@keyframes lg-open { to { opacity: 0; scale: 1.08; filter: blur(8px); } }
+@media (prefers-reduced-motion: reduce) {
+  .login-fx::before, .login-fx .orb, .login-fx .spark, .is-login .login, .is-login .login::before, .is-login .login > *, .is-login .login h1, .login-logo-wrap::after, .is-login .login-go::before { animation: none !important; }
+  .login-fx .spark { display: none; }
+  .is-login .login { transform: none; }
+  .is-login .login h1 { color: #fff; background: none; }
+}

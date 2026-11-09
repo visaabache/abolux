@@ -483,26 +483,59 @@
   const langButton = (cls = '') => `<button type="button" class="lang-switch ${cls}" data-lang="${other()}" lang="${other()}">${icon('globe', 18)}<span>${L.switchTo}</span></button>`;
 
   // Login
+  // Animated backdrop of the login page: drifting glows, a moving gold floor grid and rising sparks.
+  function loginBackdrop() {
+    const sparks = Array.from({ length: 22 }, () => {
+      const r = (a, b) => (a + Math.random() * (b - a)).toFixed(2);
+      return `<i class="spark" style="--x:${r(0, 100)}%;--s:${r(2, 5)}px;--d:${r(7, 14)}s;--t:-${r(0, 14)}s;--dx:${r(-40, 40)}px"></i>`;
+    }).join('');
+    return `<div class="login-fx" aria-hidden="true"><i class="orb o1"></i><i class="orb o2"></i><i class="orb o3"></i>${sparks}</div>`;
+  }
+
   function login() {
     document.body.className = 'is-login';
-    app.innerHTML = `<form class="login" id="login">
-      <div class="login-top"><img src="/admin/logo.png" alt="Abolux" class="login-logo">${langButton()}</div>
+    app.innerHTML = `${loginBackdrop()}<form class="login" id="login">
+      <div class="login-top"><span class="login-logo-wrap"><img src="/admin/logo.png" alt="Abolux" class="login-logo"></span>${langButton()}</div>
       <h1>${L.sellerSpace}</h1>
       <p class="muted">${L.loginHint}</p>
       <label>${L.password}<input type="password" name="password" autocomplete="current-password" required autofocus dir="ltr"></label>
-      <button class="btn btn-lg">${L.signIn}</button>
+      <button class="btn btn-lg login-go"><span>${L.signIn}</span></button>
       <p class="error" hidden></p>
     </form>`;
     const f = document.getElementById('login');
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // A slight 3D tilt of the card that follows the mouse (computers only).
+    if (!calm && matchMedia('(pointer: fine)').matches) {
+      const tilt = (e) => {
+        if (!f.isConnected) return document.removeEventListener('pointermove', tilt);
+        const x = e.clientX / innerWidth - 0.5;
+        const y = e.clientY / innerHeight - 0.5;
+        f.style.setProperty('--ry', `${(x * 7).toFixed(2)}deg`);
+        f.style.setProperty('--rx', `${(-y * 7).toFixed(2)}deg`);
+      };
+      document.addEventListener('pointermove', tilt);
+    }
     f.addEventListener('submit', async (e) => {
       e.preventDefault();
+      const btn = f.querySelector('.login-go');
+      const p = f.querySelector('.error');
+      btn.disabled = true;
+      p.hidden = true;
+      f.classList.add('busy');
       try {
         await api('/login', { method: 'POST', body: { password: f.password.value } });
+        f.classList.remove('busy');
+        f.classList.add('ok');
+        if (!calm) await new Promise((r) => setTimeout(r, 520));
         start();
       } catch (err) {
-        const p = f.querySelector('.error');
+        f.classList.remove('busy', 'shake');
+        void f.offsetWidth; // restart the shake each time
+        f.classList.add('shake');
         p.textContent = err.message;
         p.hidden = false;
+        btn.disabled = false;
+        f.password.select();
       }
     });
   }
