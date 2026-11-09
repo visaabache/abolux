@@ -3,7 +3,7 @@
 
 import { sanitizeRich, isRich } from './rich.js';
 import { sendEmail, sendStatusEmail, emailConfig, confirmationEmail, validEmail, STATUS_EMAILS } from './email.js';
-import { json, getSettings, slugify, STATUSES, RESTOCK_STATUSES, randomToken, parseJSON, displayPhone, visitorId, recentHits, addHit, sameOrigin, looksLikeImage, looksLikeVideo } from './lib.js';
+import { json, getSettings, slugify, STATUSES, RESTOCK_STATUSES, randomToken, parseJSON, displayPhone, visitorId, recentHits, addHit, sameOrigin, looksLikeImage, looksLikeVideo, cleanOptions } from './lib.js';
 
 const SESSION_DAYS = 7;
 // Password guessing: after 5 wrong passwords in 15 minutes, or 20 in a day, that visitor is locked out for a while.
@@ -424,7 +424,7 @@ async function saveProduct(db, id, b) {
       return isRich(d) ? sanitizeRich(d) : d.slice(0, 20000);
     }),
     price, int(b.compare_price), stock == null ? null : Math.max(0, stock),
-    String(b.options || '').split(',').map((s) => s.trim()).filter(Boolean).join(', '),
+    (() => { const g = cleanOptions(b.options); return g.length ? JSON.stringify(g) : ''; })(),
     JSON.stringify(images), b.featured ? 1 : 0, b.active === false || b.active === 0 ? 0 : 1, int(b.sort, 0),
     JSON.stringify(descMedia(b.desc_media)),
   ];
