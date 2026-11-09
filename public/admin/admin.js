@@ -9,7 +9,7 @@
       locale: 'ar-MA',
       status: { new: 'جديد', confirmed: 'مؤكد', shipped: 'تم الشحن', delivered: 'تم التوصيل', cancelled: 'ملغى', returned: 'مرتجع' },
       nav: { dashboard: 'لوحة التحكم', orders: 'الطلبات', products: 'المنتجات', categories: 'الأصناف', blog: 'المدونة', settings: 'الإعدادات' },
-      navShort: { dashboard: 'الرئيسية' },
+      navShort: { dashboard: 'الرئيسية', settings: 'الإعدادات' },
       blog: {
         postTitle: 'العنوان', date: 'التاريخ', newPost: 'مقال جديد', editPost: 'تعديل المقال',
         count: (n) => (n === 1 ? 'مقال واحد' : `${n} مقالات`),
@@ -197,7 +197,7 @@
       locale: 'fr-MA',
       status: { new: 'Nouvelle', confirmed: 'Confirmée', shipped: 'Expédiée', delivered: 'Livrée', cancelled: 'Annulée', returned: 'Retournée' },
       nav: { dashboard: 'Tableau de bord', orders: 'Commandes', products: 'Produits', categories: 'Catégories', blog: 'Blog', settings: 'Réglages' },
-      navShort: { dashboard: 'Accueil' },
+      navShort: { dashboard: 'Accueil', orders: 'Commandes', categories: 'Catégories', settings: 'Réglages' },
       blog: {
         postTitle: 'Titre', date: 'Date', newPost: 'Nouvel article', editPost: 'Modifier l’article',
         count: (n) => (n === 1 ? '1 article' : `${n} articles`),
