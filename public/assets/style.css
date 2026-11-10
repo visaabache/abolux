@@ -890,3 +890,4 @@ body.bare { --tabbar: 0px; }
 .lpx .lp-go .quick-go { background: var(--x1); border-color: var(--x1); }
 .lpx .lp-go .quick-go:hover { background: var(--x1-dark); border-color: var(--x1-dark); }
 .lpx .buy-bar .lp-btn { background: var(--x1); }
+.lpx-offer .lpx-photo-wide { max-width: 100%; }

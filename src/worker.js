@@ -176,6 +176,14 @@ async function storefront(request, env, url, lang, rest, exec) {
       const moved = await db.prepare('SELECT target FROM redirects WHERE path = ?').bind(`/p/${landing.product}`).first();
       if (moved?.target.startsWith('/p/')) p = await find(moved.target.slice(3));
     }
+    // Still not found: the newest active product whose name or address matches one of the landing's patterns.
+    for (const pattern of landing.match || []) {
+      if (p) break;
+      p = await db
+        .prepare('SELECT * FROM products WHERE active = 1 AND (slug LIKE ?1 OR name_fr LIKE ?1 OR name_ar LIKE ?1 OR name_en LIKE ?1) ORDER BY id DESC LIMIT 1')
+        .bind(pattern)
+        .first();
+    }
     if (!p) return html(notFoundPage(ctx), 404);
     res = html(landingPage({ ...ctx, cur: 'MAD', rates: null }, landing, p));
   } else if (rest === '/blog') {

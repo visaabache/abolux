@@ -275,10 +275,159 @@ ${soldOut ? '' : `<div class="buy-bar" aria-hidden="true"><a class="lp-btn" href
   });
 }
 
-// slug → { lang, product (its slug in the admin), render, reviews (real customer reviews only) }
+// Electric lunch box 4 in 1. Same simple two-colour structure as the cutter: a strong promise, the
+// problem it solves, features turned into benefits, and after each convincing block a call to action
+// that finishes its idea and carries a value. Photos are the seller's own, in /assets/lp/lunchbox/.
+function lunchbox(ctx, p, landing) {
+  const lang = ctx.lang;
+  const A = '/assets/lp/lunchbox/';
+  const price = esc(money(p.price, lang));
+  const old = p.compare_price && p.compare_price > p.price ? esc(money(p.compare_price, lang)) : '';
+  const soldOut = p.stock != null && p.stock <= 0;
+  const fewLeft = p.stock != null && p.stock > 0 && p.stock <= 20;
+  const reviews = landing.reviews || [];
+  const cta = (text, value) => (soldOut ? '' : `<a class="lpx-cta" href="#order"><b>${esc(text)} 👈</b><span>${esc(value)}</span></a>`);
+  const photo = (file, alt, w, h, extra = '') => `<img class="lpx-photo${extra}" src="${A}${file}" alt="${esc(alt)}" width="${w}" height="${h}" loading="lazy">`;
+
+  const body = `<div class="lpx">
+<section class="lpx-sec lpx-hero">
+  <div class="lp-wrap">
+    <p class="lpx-kicker">🍱 البواطة ديال الغدا الكهربائية 4 فـ1</p>
+    <h1>ماكلة الدار سخونة فالخدمة… <mark>بلا ميكروند</mark></h1>
+    <p class="lpx-lead">عييتي بالماكلة الباردة، ولا بالصف قدام الميكروند، ولا بالفلوس اللي كتمشي كل نهار فالسندويتشات؟ هاد البواطة <b>كتسخن ماكلتك بالبخار ف 10 حتى 15 دقيقة</b>: شوية ديال الما، بوطونة وحدة، وصافي.</p>
+    <img class="lpx-photo lpx-hero-photo" src="${A}hero-desk.webp" alt="البواطة الكهربائية فوق المكتب والماكلة سخونة" width="1000" height="1000" fetchpriority="high">
+    ${reviews.length ? `<ul class="lpx-reviews">${reviews.slice(0, 2).map((r) => `<li><span class="lpx-stars" aria-label="${r.stars || 5}/5">${'★'.repeat(r.stars || 5)}</span><p>«${esc(r.text)}»</p><small>${esc(r.name)}${r.city ? ` · ${esc(r.city)}` : ''}</small></li>`).join('')}</ul>` : ''}
+    <p class="lpx-price"><strong>${price}</strong>${old ? `<s>${old}</s>` : ''}<span>التوصيل فابور</span></p>
+    ${fewLeft ? `<p class="lpx-hurry">⚡ باقي غير ${p.stock} فالستوك</p>` : ''}
+    ${soldOut ? '<p class="lpx-hurry">سالا الستوك دابا، رجع قريب إن شاء الله</p>' : cta('إيه، بغيت ناكل سخون فالخدمة', `${money(p.price, lang)} · التوصيل فابور`)}
+  </div>
+</section>
+
+<section class="lpx-sec lpx-soft">
+  <div class="lp-wrap">
+    <h2>4 بواطات… <mark>4 ماكلات</mark> فبلاصة وحدة 🍲</h2>
+    ${photo('box-4-bowls.webp', 'البواطة الكهربائية مع 4 بواطات ديال الإينوكس', 1000, 1000)}
+    <ul class="lpx-three">
+      <li><i>🥘</i><b>4 بواطات</b><span>إينوكس 304، نص لتر كل وحدة</span></li>
+      <li><i>🫙</i><b>2 لتر</b><span>كتكفي غدا كامل وزيادة</span></li>
+      <li><i>🧱</i><b>2 طبقات</b><span>كيسخنو بجوج فمرة وحدة</span></li>
+    </ul>
+    <p class="lpx-note">الطاجين، الروز، الخضرة والفاكية: كل ماكلة فبواطتها، ما كيتخلطوش.</p>
+    ${cta('بغيت 4 ماكلات فبواطة وحدة', `غير ${money(p.price, lang)}`)}
+  </div>
+</section>
+
+<section class="lpx-sec">
+  <div class="lp-wrap">
+    <h2>علاش غادي <mark>تعجبك</mark>؟</h2>
+    ${photo('features.webp', 'مميزات البواطة الكهربائية', 1000, 1000)}
+    <ul class="lpx-benefits">
+      <li><i>♨️</i><div><b>كتسخن بالبخار من كل جيهة</b><span>الماكلة كتسخن مزيان وكتبقى طرية، ما كتنشفش بحال الميكروند.</span></div></li>
+      <li><i>🍚</i><div><b>كتطيب حتى هي</b><span>الروز ف 25 حتى 35 دقيقة، والبيض مسلوق ف 15 حتى 20 دقيقة.</span></div></li>
+      <li><i>💧</i><div><b>الغطا ما كيسيلش</b><span>المرقة والصلصة ما يتكبوش فالصاك.</span></div></li>
+      <li><i>🛡️</i><div><b>محمية</b><span>فيها حماية إلا نشف الما، وثقوب كيخرجو السخانة الزايدة.</span></div></li>
+      <li><i>🎒</i><div><b>ساهلة فالهزان</b><span>مقبض كيتخبى، وقفال من جوج جيهات (وقفال احتياطي معاها).</span></div></li>
+      <li><i>🧽</i><div><b>كتغسل بالساهل</b><span>بواطات الإينوكس كيتحيدو، وكيدوزو حتى فماكينة الماعن.</span></div></li>
+    </ul>
+    ${cta('إيه، بغيت ماكلة صحية كل نهار', '+ 4 بواطات إينوكس فالكرطونة')}
+  </div>
+</section>
+
+<section class="lpx-sec lpx-soft">
+  <div class="lp-wrap">
+    <h2>فالخدمة، فالقراية، فالسفر… <mark>وحتى فالدار</mark></h2>
+    ${photo('places.webp', 'البواطة فالخدمة، فالدار، فالسفر وفالقراية', 970, 600)}
+    <p class="lpx-lead">فين ما كاينة بريز، ماكلتك سخونة. <b>ووفر الفلوس</b> اللي كتخسر كل نهار على الماكلة ديال برا: ماكلة الدار، نقية وصحية.</p>
+    ${photo('meal-table.webp', 'البواطة مع 4 بواطات فيهم الماكلة', 990, 1080)}
+    ${cta('بغيت نوفر فلوس الماكلة ديال برا', 'ماكلة الدار كل نهار')}
+  </div>
+</section>
+
+<section class="lpx-sec">
+  <div class="lp-wrap">
+    <h2>كيفاش <mark>كتخدم</mark>؟</h2>
+    ${photo('steps.webp', 'طريقة الاستعمال ف 4 مراحل', 600, 520)}
+    <ol class="lpx-steps">
+      <li><b>1</b>زيد شوية ديال الما فالتحت</li>
+      <li><b>2</b>حط البواطات وسد الغطا</li>
+      <li><b>3</b>دخل الكابل وكليكي على البوطونة</li>
+      <li><b>4</b>تسنى 10 حتى 15 دقيقة… وكول سخون 😋</li>
+    </ol>
+    ${cta('ساهلة! بغيتها', 'كتوصلك ف 24 حتى 72 ساعة')}
+  </div>
+</section>
+
+<section class="lpx-sec lpx-soft">
+  <div class="lp-wrap">
+    <h2>التفاصيل</h2>
+    ${photo('sizes.webp', 'المقاسات ديال البواطة الكهربائية', 1000, 1000)}
+    <ul class="lpx-checks">
+      <li>المقاس: 25 × 13 × 21 سم</li>
+      <li>السعة: 2 لتر (4 بواطات × نص لتر)</li>
+      <li>البواطات: إينوكس 304</li>
+      <li>البلاستيك: PP صالح للماكلة</li>
+      <li>كتخدم ب 220 و 110 فولط</li>
+    </ul>
+  </div>
+</section>
+
+<section class="lpx-sec">
+  <div class="lp-wrap">
+    <div class="lpx-offer">
+      ${photo('in-the-box.webp', 'شنو كاين فالكرطونة', 990, 779, ' lpx-photo-wide')}
+      <h2>العرض ديال اليوم</h2>
+      <p class="lpx-price lpx-price-big"><strong>${price}</strong>${old ? `<s>${old}</s>` : ''}</p>
+      <ul class="lpx-checks">
+        <li>البواطة الكهربائية + 4 بواطات إينوكس</li>
+        <li>الكابل + ورقة طريقة الاستعمال</li>
+        <li>التوصيل فابور لجميع المدن</li>
+        <li>الخلاص ملي توصلك</li>
+        <li>7 أيام باش ترجعها إلا ما عجباتكش</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="lpx-sec lpx-order" id="commande">
+  <div class="lp-wrap">
+    <h2>عمّر المعلومات ديالك <mark>وتوصلك لدارك</mark> 👇</h2>
+    ${fewLeft ? `<p class="lpx-hurry">⚡ باقي غير ${p.stock} فالستوك</p>` : ''}
+    ${soldOut ? '<p class="lpx-hurry">سالا الستوك دابا، رجع قريب إن شاء الله</p>' : orderForm(ctx, p, price, `${A}box-4-bowls.webp`, 'أكد الطلب', 'البواطة')}
+  </div>
+</section>
+
+<section class="lp-wrap lp-faq">
+  <div class="accordion">
+    <details><summary>شحال كتاخد باش تسخن الماكلة؟</summary><div>من 10 حتى 15 دقيقة تقريبا، على حسب الماكلة.</div></details>
+    <details><summary>واش خاصني نزيد الما؟</summary><div>إيه، شوية ديال الما فالتحت: هو اللي كيدير البخار اللي كيسخن الماكلة.</div></details>
+    <details><summary>واش البواطات كيتغسلو فماكينة الماعن؟</summary><div>إيه، بواطات الإينوكس كيتحيدو وكيتغسلو بالساهل، باليد ولا فماكينة الماعن.</div></details>
+    <details><summary>إمتى غادي توصلني؟</summary><div>من 24 حتى 72 ساعة فالمدن الكبار، و2 حتى 5 أيام فالمدن لخرين.</div></details>
+  </div>
+</section>
+${soldOut ? '' : `<div class="buy-bar" aria-hidden="true"><a class="lp-btn" href="#order" data-buy-now>🛒 اطلب دابا · ${price}</a></div>`}
+</div>`;
+
+  return layout(ctx, {
+    title: 'البواطة ديال الغدا الكهربائية 4 فـ1',
+    seoTitle: 'علبة غداء كهربائية 4 في 1 لتسخين الأكل بالبخار، بلا ميكروند',
+    description: 'علبة الغداء الكهربائية 4 في 1: كتسخن الماكلة بالبخار ف 10 حتى 15 دقيقة، 4 علب إينوكس، غطاء ما كيسيلش. التوصيل فابور والخلاص عند الاستلام فجميع مدن المغرب.',
+    path: `/lp/lunchbox`,
+    body,
+    image: `${A}hero-desk.webp`,
+    page: 'landing',
+    bare: true,
+    strip: ['التوصيل فابور لجميع المدن', 'الخلاص عند الاستلام', 'كنعيطو ليك نأكدو قبل الإرسال', '7 أيام باش ترجع'],
+    product: { name: p.name_ar || p.name_fr, price: money(p.price, lang), slug: p.slug },
+    track: { event: 'ViewContent', value: p.price, items: [{ id: p.id, name: p.name_ar || p.name_fr, price: p.price, qty: 1 }] },
+  });
+}
+
+// slug → { lang, product (its slug in the admin), match (name patterns used when that slug is not found),
+//          render, reviews (real customer reviews only) }
 export const LANDINGS = {
   'h69-plus': { lang: 'ar', product: 'h69-plus', render: h69Plus },
   qatta3a: { lang: 'ar', product: 'produit-mw2ix4i4', render: qatta3a, reviews: [] },
+  lunchbox: { lang: 'ar', product: 'lunchbox', match: ['%lunch%box%', '%lunchbox%', '%غداء%كهرب%', '%boite%repas%', '%boîte%repas%'], render: lunchbox, reviews: [] },
 };
 
 export function landingPage(ctx, landing, product) {
