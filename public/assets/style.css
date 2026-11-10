@@ -328,6 +328,7 @@ textarea { resize: vertical; }
   .offer-tags { grid-column: 2 / -1; justify-items: start; grid-auto-flow: column; justify-content: start; align-items: center; gap: 8px; }
 }
 .offers + .quick { margin-top: 18px; }
+.price [hidden] { display: none; }
 .options legend .picked { font-style: normal; font-weight: 400; color: var(--muted); }
 .options .opt-extra { margin-inline-start: 6px; font-size: 0.78em; font-weight: 600; opacity: 0.75; }
 .options > div:has(.opt-extra), .swatches > div { display: flex; flex-wrap: wrap; }
