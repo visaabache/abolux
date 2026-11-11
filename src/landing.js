@@ -2,8 +2,8 @@
 // product by its slug, so the price, the old price, the stock and the order all come from the admin.
 // The page lives at /<lang>/lp/<slug> (and /lp/<slug> as a short link).
 
-import { layout, icon, optionFieldset } from './render.js';
-import { CITIES, esc, money, productImages, productOptions } from './lib.js';
+import { layout, icon, optionFieldset, cityField } from './render.js';
+import { esc, money, productImages, productOptions } from './lib.js';
 
 const PLACEHOLDER = '/assets/placeholder.svg';
 
@@ -15,8 +15,7 @@ function orderForm(ctx, p, price, image, button, item = 'المنتج') {
       <div class="quick">
         <div class="quick-fields">
           <label class="qf">${icon('user', 20)}<input name="name" autocomplete="name" required maxlength="80" placeholder="الإسم الكامل" aria-label="الإسم الكامل"></label>
-          <label class="qf">${icon('pin', 20)}<select name="city" required aria-label="المدينة"><option value="">المدينة</option>${CITIES.map((c) => `<option>${esc(c)}</option>`).join('')}<option value="__other">مدينة أخرى</option></select></label>
-          <label class="qf other-city" hidden>${icon('pin', 20)}<input name="city_other" maxlength="60" placeholder="كتبي المدينة ديالك" aria-label="مدينة أخرى"></label>
+          ${cityField({ city: 'المدينة', cityType: 'المدينة (كتبي أول حرف)' }, true)}
           <label class="qf">${icon('home', 20)}<input name="address" required maxlength="300" autocomplete="street-address" placeholder="العنوان" aria-label="العنوان"></label>
           <label class="qf">${icon('phone', 20)}<input name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="20" dir="ltr" placeholder="رقم الهاتف" aria-label="رقم الهاتف"></label>
           <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
