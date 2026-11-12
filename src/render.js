@@ -217,11 +217,11 @@ ${verify ? `<meta name="google-site-verification" content="${esc(verify)}">` : '
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?${fonts}&display=swap">
-<link rel="stylesheet" href="/assets/style.css?v=27">
+<link rel="stylesheet" href="/assets/style.css?v=28">
 <script src="/assets/js-on.js"></script>
 ${pixels ? `<script type="application/json" id="pixels">${JSON.stringify({ ...px, page: track }).replace(/</g, '\\u003c')}</script>
 <script src="/assets/pixels.js?v=1" defer></script>` : ''}
-<script src="/assets/store.js?v=15" defer></script>
+<script src="/assets/store.js?v=16" defer></script>
 </head>
 <body data-lang="${lang}" class="page-${page || 'default'}${bare ? ' bare' : ''}">
 <a class="skip" href="#main">${esc(t.allProducts)}</a>
@@ -473,16 +473,20 @@ export function optionFieldset(ctx, g, gi) {
 
 // Quantity offers as cards to pick from ("1 piece", "2 pieces −60 DH", "3 pieces −120 DH 🔥").
 // Picking one sets the quantity; the server prices it again from the database.
-// The card picked when the page opens: the 2-piece offer, so its price is the first one customers see
-// (or the smallest offer when there is no 2-piece one).
-function defaultOffer(bundles) {
+// The card picked when the page opens: 1 piece at the normal price; the customer picks a bigger offer.
+function defaultOffer(p) {
+  return { qty: 1, price: p.price };
+}
+
+// The offer the "only N left" line talks about: the 2-piece one (or the smallest offer).
+function featuredOffer(bundles) {
   return bundles.find((b) => b.qty === 2) || bundles[0];
 }
 
 function offerCards(ctx, p, bundles, image) {
   const t = T[ctx.lang];
   const tiers = [{ qty: 1, price: p.price, label: {}, hot: false }, ...bundles];
-  const picked = defaultOffer(bundles).qty;
+  const picked = defaultOffer(p).qty;
   return `<fieldset class="offers" data-offers><legend>${esc(t.offersTitle)}</legend>${tiers
     .map((b, i) => {
       const was = p.price * b.qty;
@@ -522,7 +526,7 @@ function scarcityLine(ctx, p, bundles) {
   if (left <= 0) return '';
   const t = T[ctx.lang];
   const pct = Math.max(8, Math.min(100, Math.round((left / 20) * 100)));
-  return `<div class="scarce"><p>🔥 ${t.offerLeft(`<b>${left}</b>`, defaultOffer(bundles).qty)}</p><span class="scarce-bar" style="--w:${pct}%"><i></i></span></div>`;
+  return `<div class="scarce"><p>🔥 ${t.offerLeft(`<b>${left}</b>`, featuredOffer(bundles).qty)}</p><span class="scarce-bar" style="--w:${pct}%"><i></i></span></div>`;
 }
 
 export function productPage(ctx, p, category, related) {
@@ -579,9 +583,12 @@ export function productPage(ctx, p, category, related) {
     <h1>${esc(name)}</h1>
     ${bundles.length && !soldOut
       ? (() => {
-          const b = defaultOffer(bundles);
-          const was = p.price * b.qty;
-          return `<p class="price big"><span data-bar-total>${esc(price(ctx, b.price))}</span> <s data-top-was>${esc(price(ctx, was))}</s> <span class="save" data-top-save>−${Math.round((1 - b.price / was) * 100)}%</span></p>`;
+          const b = defaultOffer(p);
+          // 1 piece picked: its price, with the old price struck through when the product is on sale.
+          // store.js rewrites these three when another offer is picked.
+          const was = onSale ? p.compare_price : p.price * b.qty;
+          const off = was > b.price;
+          return `<p class="price big"><span data-bar-total>${esc(price(ctx, b.price))}</span> <s data-top-was${off ? '' : ' hidden'}>${esc(price(ctx, was))}</s> <span class="save" data-top-save${off ? '' : ' hidden'}>−${Math.round((1 - b.price / was) * 100)}%</span></p>`;
         })()
       : `<p class="price big"><span data-unit>${esc(price(ctx, p.price))}</span>${onSale ? ` <s>${esc(price(ctx, p.compare_price))}</s> <span class="save">−${Math.round((1 - p.price / p.compare_price) * 100)}%</span>` : ''}</p>`}
     ${ctx.cur && ctx.cur !== 'MAD' && !bundles.length ? `<p class="price-mad">${esc(t.paidInMad(money(p.price, lang)))}</p>` : ''}
@@ -589,9 +596,9 @@ export function productPage(ctx, p, category, related) {
     ${onSale && !bundles.length ? `<p class="you-save">${esc(t.youSave(price(ctx, p.compare_price - p.price)))}</p>` : ''}
     ${stockLine}
     ${soldOut ? '' : `<div class="eta">${icon('truck', 22)}<div><strong>${esc(t.deliveryLong)}</strong><span data-eta hidden></span></div></div>`}
-    <form class="buy" novalidate data-product="${p.id}" data-name="${esc(name)}" data-price="${p.price}" data-image="${esc(images[0])}" data-slug="${esc(p.slug)}">
+    <form class="buy" novalidate data-product="${p.id}" data-name="${esc(name)}" data-price="${p.price}"${onSale ? ` data-compare="${p.compare_price}"` : ''} data-image="${esc(images[0])}" data-slug="${esc(p.slug)}">
       ${options.map((g, gi) => optionFieldset(ctx, g, gi)).join('')}
-      ${bundles.length && !soldOut ? `${scarce}${offerCards(ctx, p, bundles, images[0])}<input type="hidden" name="qty" value="${defaultOffer(bundles).qty}">` : `<div class="qty-row">
+      ${bundles.length && !soldOut ? `${scarce}${offerCards(ctx, p, bundles, images[0])}<input type="hidden" name="qty" value="${defaultOffer(p).qty}">` : `<div class="qty-row">
         <label for="qty">${esc(t.quantity)}</label>
         <div class="qty"><button type="button" data-step="-1" aria-label="−">−</button><input id="qty" name="qty" type="number" inputmode="numeric" min="1" max="${p.stock != null ? Math.max(1, Math.min(20, p.stock)) : 20}" value="1"><button type="button" data-step="1" aria-label="+">+</button></div>
       </div>`}
@@ -605,9 +612,9 @@ export function productPage(ctx, p, category, related) {
           <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
         </div>
         <ul class="quick-sum" data-quick-sum>
-          <li><span>${esc(t.quickItems)}</span><span data-q-sub>${esc(price(ctx, bundles.length ? defaultOffer(bundles).price : p.price))}</span></li>
+          <li><span>${esc(t.quickItems)}</span><span data-q-sub>${esc(price(ctx, bundles.length ? defaultOffer(p).price : p.price))}</span></li>
           <li><span>${esc(t.quickShipping)}</span><span data-q-ship${freeShip ? ' class="free"' : ''}>${esc(freeShip ? t.freeDelivery : t.quickShipAfter)}</span></li>
-          <li class="total"><span>${esc(t.quickTotal)}</span><span data-q-total>${esc(price(ctx, bundles.length ? defaultOffer(bundles).price : p.price))}</span></li>
+          <li class="total"><span>${esc(t.quickTotal)}</span><span data-q-total>${esc(price(ctx, bundles.length ? defaultOffer(p).price : p.price))}</span></li>
           ${ctx.cur && ctx.cur !== 'MAD' ? `<li class="pay-mad"><span>${esc(t.js.payMad)}</span><span data-q-mad>${esc(money(p.price, lang))}</span></li>` : ''}
         </ul>
         <button class="btn btn-block btn-accent btn-lg quick-go" type="submit" name="go" value="order">${icon('check', 22)}<span>${esc(t.buyNow)}</span></button>
@@ -634,7 +641,7 @@ export function productPage(ctx, p, category, related) {
     </div>
   </div>
 </section>
-${soldOut ? '' : `<div class="buy-bar" aria-hidden="true"><div><strong${bundles.length ? ' data-bar-total' : ' data-unit'}>${esc(price(ctx, bundles.length ? defaultOffer(bundles).price : p.price))}</strong><small>${esc(freeShip ? t.freeDelivery : t.cod)}</small></div><a class="btn btn-accent" href="#order" data-buy-now>${esc(t.buyNow)}</a></div>`}
+${soldOut ? '' : `<div class="buy-bar" aria-hidden="true"><div><strong${bundles.length ? ' data-bar-total' : ' data-unit'}>${esc(price(ctx, bundles.length ? defaultOffer(p).price : p.price))}</strong><small>${esc(freeShip ? t.freeDelivery : t.cod)}</small></div><a class="btn btn-accent" href="#order" data-buy-now>${esc(t.buyNow)}</a></div>`}
 ${related.length ? `<section class="section wrap">${sectionHead(t.alsoLike, category ? catName(category, lang) : t.shop, category ? `/${lang}/c/${category.slug}` : `/${lang}/shop`, t.viewAll)}${grid(related, ctx, '')}</section>` : ''}
 <script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>`;
   const crumbs = [[t.home, `/${lang}/`], ...(category ? [[catName(category, lang), `/${lang}/c/${category.slug}`]] : []), [name, `/${lang}/p/${p.slug}`]];

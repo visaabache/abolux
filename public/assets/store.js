@@ -202,7 +202,9 @@
     const pick = offerPick(form);
     $$('[data-bar-total]').forEach((el) => (el.textContent = money(pick ? pick.total : unit)));
     // Price under the product name: the picked offer, with the normal price of those pieces struck through.
-    const was = unit * (pick ? pick.qty : 1);
+    // One piece on sale: its old price is the one struck through.
+    const single = !pick || pick.qty === 1;
+    const was = single && Number(form.dataset.compare) > unit ? Number(form.dataset.compare) : unit * (pick ? pick.qty : 1);
     const now = pick ? pick.total : unit;
     $$('[data-top-was]').forEach((el) => {
       el.textContent = money(was);
