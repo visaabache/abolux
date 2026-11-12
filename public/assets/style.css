@@ -277,7 +277,10 @@ textarea { resize: vertical; }
 .crumbs { display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.85rem; color: var(--muted); padding-block: 16px 4px; }
 .crumbs a { text-decoration: none; }
 .crumbs a:hover { color: var(--ink); }
-.product { display: grid; gap: 24px; padding-block: 8px 24px; }
+.product { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; padding-block: 8px 24px; }
+/* Nothing inside the product (a wide photo, table or option list) can make the page wider than the screen. */
+.product > * { min-width: 0; }
+.gallery, .gallery-track { max-width: 100vw; }
 .gallery { position: relative; margin-inline: -20px; }
 .gallery-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; scroll-behavior: smooth; }
 .gallery-track::-webkit-scrollbar { display: none; }
