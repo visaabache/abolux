@@ -41,6 +41,7 @@
         too_large: 'الصورة كبيرة جدًا (5 ميغا كحد أقصى).',
         video_too_large: 'الفيديو كبير جدًا (5 ميغا كحد أقصى).',
         bad_type: 'صيغة الصورة غير مدعومة.',
+        no_ai_key: 'مفتاح Claude (ANTHROPIC_API_KEY) غير مثبت فـ Cloudflare.', ai_bad_key: 'مفتاح Claude غير صحيح.', ai_busy: 'Claude مشغول، عاود من بعد دقيقة.', ai_failed: 'ما قدرش يكتب الوصف، عاود.', ai_refused: 'Claude رفض يكتب على هاد المنتج.', ai_needs_input: 'زيد سمية المنتج، معلومات ولا تصاور أولا.',
         no_email_key: 'مفتاح Brevo غير مثبت بعد (انظر الخطوات أسفله).',
         no_email_from: 'أدخل عنوان الإرسال (المؤكد في Brevo).',
         no_notify_email: 'أدخل العنوان الذي يستقبل التنبيهات.',
@@ -137,6 +138,15 @@
       videoTooBig: (n) => `الفيديو ${n} أكبر من 5 ميغا. صغّره ثم أعد المحاولة.`, photoTooBig: (n) => `الصورة ${n} أكبر من 1 ميغا.`,
       notMedia: (n) => `${n} ليس صورة أو فيديو مدعوم`,
       gifTooBig: (n, mb) => `صورة GIF ${n} أكبر من ${mb} ميغا.`,
+      ai: {
+        title: 'اكتب الوصف بالذكاء الاصطناعي', hint: 'Claude يشوف تصاور المنتج والمعلومات ديالك، ويكتب وصف كيبيع بالعربية والفرنسية والإنجليزية: وعد قوي، المشكل اللي كيحل، المميزات كفوائد، طريقة الاستعمال، شنو فالعلبة والعرض.',
+        notes: 'شنو كتعرف على المنتج؟', notesPh: 'مثلا: 4 علب إينوكس، 2 لتر، كيسخن ف 10 دقايق، 220 فولط، فالعلبة: الكابل والدليل…',
+        style: 'أسلوب العربية', darija: 'الدارجة المغربية', fusha: 'العربية الفصحى', alsoNames: 'اقترح حتى سمية المنتج',
+        go: 'اكتب الوصف', working: 'كيكتب… (حتى دقيقة)', done: 'الوصف واجد. راجعو قبل ما تسجل.',
+        review: 'كيستعمل غير المعلومات اللي عطيتي واللي باينة فالتصاور. راجع الأرقام قبل التسجيل.',
+        replace: 'الوصف الحالي غادي يتبدل. نكملو؟',
+        noKey: 'خاص مفتاح Claude (ANTHROPIC_API_KEY) فـ Cloudflare باش تخدم هاد الخاصية.',
+      },
       rte: {
         hint: 'اكتب كما في Word. أضف الصور وصور GIF والفيديو بالأزرار، أو اسحبها أو الصقها داخل النص. اضغط على صورة أو فيديو لتغيير الحجم أو المحاذاة أو حذفه، أو اسحب أحد جوانبه أو زواياه.',
         placeholder: 'اكتب وصف المنتج هنا…', undo: 'تراجع', redo: 'إعادة', p: 'نص عادي', h2: 'عنوان كبير', h3: 'عنوان صغير', quote: 'اقتباس',
@@ -240,6 +250,7 @@
         too_large: 'Photo trop lourde (5 Mo max).',
         video_too_large: 'Vidéo trop lourde (5 Mo max).',
         bad_type: 'Format de photo non pris en charge.',
+        no_ai_key: 'La clé Claude (ANTHROPIC_API_KEY) n’est pas installée dans Cloudflare.', ai_bad_key: 'La clé Claude n’est pas valide.', ai_busy: 'Claude est occupé, réessayez dans une minute.', ai_failed: 'La description n’a pas pu être écrite, réessayez.', ai_refused: 'Claude a refusé d’écrire sur ce produit.', ai_needs_input: 'Ajoutez d’abord un nom, des notes ou des photos.',
         no_email_key: 'La clé Brevo n’est pas encore installée (voir les étapes ci-dessous).',
         no_email_from: 'Indiquez l’adresse d’envoi (vérifiée dans Brevo).',
         no_notify_email: 'Indiquez l’adresse qui reçoit les alertes.',
@@ -336,6 +347,15 @@
       videoTooBig: (n) => `La vidéo ${n} dépasse 5 Mo. Réduisez-la puis réessayez.`, photoTooBig: (n) => `La photo ${n} dépasse 1 Mo.`,
       notMedia: (n) => `${n} n’est pas une photo ou une vidéo prise en charge`,
       gifTooBig: (n, mb) => `Le GIF ${n} dépasse ${mb} Mo.`,
+      ai: {
+        title: 'Écrire la description avec l’IA', hint: 'Claude regarde les photos du produit et vos notes, et écrit une description qui vend en arabe, français et anglais : promesse forte, problème résolu, avantages, mode d’emploi, contenu de la boîte et offre.',
+        notes: 'Ce que vous savez du produit', notesPh: 'Ex. : 4 bols inox, 2 L, chauffe en 10 min, 220 V, dans la boîte : câble et notice…',
+        style: 'Style de l’arabe', darija: 'Darija marocaine', fusha: 'Arabe standard', alsoNames: 'Proposer aussi le nom du produit',
+        go: 'Écrire la description', working: 'Rédaction… (jusqu’à 1 min)', done: 'Description prête. Relisez-la avant d’enregistrer.',
+        review: 'Seules vos informations et ce qui est visible sur les photos sont utilisés. Vérifiez les chiffres avant d’enregistrer.',
+        replace: 'La description actuelle sera remplacée. Continuer ?',
+        noKey: 'Cette fonction demande la clé Claude (ANTHROPIC_API_KEY) dans Cloudflare.',
+      },
       rte: {
         hint: 'Écrivez comme dans Word. Ajoutez photos, GIF et vidéos avec les boutons, ou glissez-les / collez-les dans le texte. Cliquez sur une photo ou une vidéo pour changer sa taille, son alignement ou la supprimer, ou tirez un de ses côtés ou coins.',
         placeholder: 'Écrivez la description du produit…', undo: 'Annuler', redo: 'Rétablir', p: 'Texte normal', h2: 'Grand titre', h3: 'Petit titre', quote: 'Citation',
@@ -439,6 +459,7 @@
         too_large: 'Photo too large (5 MB max).',
         video_too_large: 'Video too large (5 MB max).',
         bad_type: 'Photo format not supported.',
+        no_ai_key: 'The Claude key (ANTHROPIC_API_KEY) is not installed in Cloudflare.', ai_bad_key: 'The Claude key is not valid.', ai_busy: 'Claude is busy, try again in a minute.', ai_failed: 'The description could not be written, try again.', ai_refused: 'Claude declined to write about this product.', ai_needs_input: 'Add a name, notes or photos first.',
         no_email_key: 'The Brevo key is not installed yet (see the steps below).',
         no_email_from: 'Enter the sender address (verified in Brevo).',
         no_notify_email: 'Enter the address that receives the alerts.',
@@ -533,6 +554,15 @@
       photoLinks: 'Photo links (one per line)', remove: 'Remove',
       description: 'Description', display: 'Display',
       gifTooBig: (n, mb) => `The GIF ${n} is over ${mb} MB.`,
+      ai: {
+        title: 'Write the description with AI', hint: 'Claude looks at the product photos and your notes and writes a selling description in Arabic, French and English: a strong promise, the problem it solves, benefits, how to use it, what is in the box and the offer.',
+        notes: 'What you know about the product', notesPh: 'E.g. 4 stainless steel bowls, 2 L, heats in 10 min, 220 V, in the box: cable and manual…',
+        style: 'Arabic style', darija: 'Moroccan Darija', fusha: 'Standard Arabic', alsoNames: 'Also suggest the product name',
+        go: 'Write the description', working: 'Writing… (up to 1 min)', done: 'Description ready. Check it before saving.',
+        review: 'Only your notes and what the photos show are used. Check the numbers before saving.',
+        replace: 'The current description will be replaced. Continue?',
+        noKey: 'This needs the Claude key (ANTHROPIC_API_KEY) in Cloudflare.',
+      },
       rte: {
         hint: 'Write like in Word. Add photos, GIFs and videos with the buttons, or drag / paste them into the text. Click a photo or video to change its size or alignment or delete it, or pull one of its sides or corners.',
         placeholder: 'Write the product description…', undo: 'Undo', redo: 'Redo', p: 'Normal text', h2: 'Large heading', h3: 'Small heading', quote: 'Quote',
@@ -814,6 +844,7 @@
       state.images = me.images;
       state.r2 = me.r2;
       state.emails = me.emails;
+      state.ai = me.ai;
       state.settings = (await api('/settings')).settings;
       state.categories = (await api('/categories')).categories;
       route();
@@ -1200,19 +1231,22 @@
       let saved = null;
       let selected = null;
       const raw = p[`${field}_${l}`] || '';
-      area.innerHTML = (isRich(raw) ? raw : plainToHtml(raw)) + legacy.map((m) => figureHtml(m)).join('');
-      // Media sits in its own block that the caret can't enter; wrap any loose media the same way.
-      area.querySelectorAll('img, video, iframe').forEach((el) => {
-        let fig = el.closest('figure');
-        if (!fig) {
-          fig = document.createElement('figure');
-          fig.className = 'w-100 al-center';
-          el.replaceWith(fig);
-          fig.append(el);
-        }
-        fig.contentEditable = 'false';
-        if (el.tagName === 'VIDEO') el.controls = true;
-      });
+      const load = (html) => {
+        area.innerHTML = html;
+        // Media sits in its own block that the caret can't enter; wrap any loose media the same way.
+        area.querySelectorAll('img, video, iframe').forEach((el) => {
+          let fig = el.closest('figure');
+          if (!fig) {
+            fig = document.createElement('figure');
+            fig.className = 'w-100 al-center';
+            el.replaceWith(fig);
+            fig.append(el);
+          }
+          fig.contentEditable = 'false';
+          if (el.tagName === 'VIDEO') el.controls = true;
+        });
+      };
+      load((isRich(raw) ? raw : plainToHtml(raw)) + legacy.map((m) => figureHtml(m)).join(''));
 
       const restore = () => {
         area.focus();
@@ -1461,10 +1495,23 @@
         const empty = !clone.textContent.trim() && !clone.querySelector('img, video, iframe, hr, table');
         return empty ? '' : clone.innerHTML;
       };
-      return { sync: () => (input.value = value()) };
+      return {
+        lang: l,
+        sync: () => (input.value = value()),
+        text: () => area.innerText.trim(),
+        set: (html) => {
+          load(html);
+          input.value = value();
+        },
+      };
     });
     document.execCommand('defaultParagraphSeparator', false, 'p');
-    return { busy: () => busy > 0, sync: () => list.forEach((x) => x.sync()) };
+    return {
+      busy: () => busy > 0,
+      sync: () => list.forEach((x) => x.sync()),
+      text: (l) => list.find((x) => x.lang === l)?.text() || '',
+      set: (l, html) => list.find((x) => x.lang === l)?.set(html),
+    };
   }
 
   // Uploads: each photo is shrunk in the browser (longest side 1600 px, WebP or JPEG) and sent as it is.
@@ -1568,6 +1615,17 @@
         <label>${L.photoLinks}<textarea name="images" rows="2" dir="ltr">${esc(images.join('\n'))}</textarea></label></details>
       </div>
       <div class="card"><h2>${L.description}</h2><p class="muted small">${L.rte.hint}</p>
+        <details class="ai-box"><summary>✨ ${L.ai.title}</summary>
+          <p class="muted small">${L.ai.hint}</p>
+          <label>${L.ai.notes}<textarea name="ai_notes" rows="5" dir="auto" placeholder="${esc(L.ai.notesPh)}"></textarea></label>
+          <div class="ai-row">
+            <label>${L.ai.style}<select name="ai_style"><option value="darija">${L.ai.darija}</option><option value="fusha">${L.ai.fusha}</option></select></label>
+            <label class="switch"><input type="checkbox" name="ai_names"><span></span> ${L.ai.alsoNames}</label>
+          </div>
+          <button type="button" class="btn ai-go" data-ai>✨ <span>${L.ai.go}</span></button>
+          ${state.ai ? '' : `<p class="ai-warn small">${L.ai.noKey}</p>`}
+          <p class="muted small">${L.ai.review}</p>
+        </details>
         ${contentLangs().map((l) => richEditor(l)).join('')}
         <input type="hidden" name="desc_media" value="[]">
       </div>
@@ -1696,6 +1754,30 @@
     });
     // Description editors (one per language): Word-like text with photos, GIFs, videos and embeds.
     const editors = initEditors(f, p, shrink);
+    // AI description writer: Claude reads the photos and the notes, writes the three languages,
+    // and the result goes into the editors for the seller to check before saving.
+    const aiBtn = f.querySelector('[data-ai]');
+    aiBtn.addEventListener('click', async () => {
+      const filled = contentLangs().some((l) => editors.text(l));
+      if (filled && !confirm(L.ai.replace)) return;
+      const notes = f.ai_notes.value.trim() || contentLangs().map((l) => editors.text(l)).filter(Boolean)[0] || '';
+      const names = Object.fromEntries(['ar', 'fr', 'en'].map((l) => [l, f[`name_${l}`]?.value || '']));
+      const label = aiBtn.querySelector('span');
+      aiBtn.disabled = true;
+      label.textContent = L.ai.working;
+      try {
+        const r = await api('/ai/describe', { method: 'POST', body: { names, notes, style: f.ai_style.value, images: list().slice(0, 4) } });
+        contentLangs().forEach((l) => r.desc[l] && editors.set(l, r.desc[l]));
+        if (f.ai_names.checked) contentLangs().forEach((l) => r.names[l] && f[`name_${l}`] && (f[`name_${l}`].value = r.names[l]));
+        toast(L.ai.done);
+        f.querySelector('.rte')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (err) {
+        if (err.message !== 'unauthorized') toast(err.message, true);
+      } finally {
+        aiBtn.disabled = false;
+        label.textContent = L.ai.go;
+      }
+    });
     // Options builder (colours, sizes…). Saved as JSON; older products with "S, M, L" open as one group.
     const opts = parseOptions(p.options);
     const optsBox = document.getElementById('opts');

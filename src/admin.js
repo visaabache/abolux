@@ -2,6 +2,7 @@
 // logging in sets a signed, HttpOnly session cookie that lasts 7 days.
 
 import { sanitizeRich, isRich } from './rich.js';
+import { writeDescription } from './ai.js';
 import { sendEmail, sendStatusEmail, emailConfig, confirmationEmail, validEmail, STATUS_EMAILS } from './email.js';
 import { json, getSettings, slugify, STATUSES, RESTOCK_STATUSES, randomToken, parseJSON, displayPhone, visitorId, recentHits, addHit, sameOrigin, looksLikeImage, looksLikeVideo, packOptions } from './lib.js';
 
@@ -103,7 +104,15 @@ export async function handleAdmin(request, env, url, ctx) {
   const db = env.DB;
   let m;
 
-  if (path === '/me') return json({ ok: true, images: true, r2: Boolean(env.IMAGES), emails: Boolean(env.BREVO_API_KEY), weak_password: secret.length < 12 });
+  if (path === '/me') return json({ ok: true, images: true, r2: Boolean(env.IMAGES), emails: Boolean(env.BREVO_API_KEY), ai: Boolean(env.ANTHROPIC_API_KEY), weak_password: secret.length < 12 });
+
+  // AI description writer: the seller reviews the text before saving it.
+  if (path === '/ai/describe' && method === 'POST') {
+    const b = await body(request);
+    if (!b) return json({ error: 'bad_request' }, 400);
+    const r = await writeDescription(env, url.origin, b);
+    return json(r.body, r.status);
+  }
 
   if (path === '/stats' && method === 'GET') {
     // Dashboard numbers. Days are counted in Morocco time (UTC+1).

@@ -66,6 +66,13 @@ The store sends emails through [Brevo](https://www.brevo.com), whose free plan a
 
 Once abolux.store is bought, verify the domain in Brevo and send from an address like `commandes@abolux.store`. That lands in inboxes more reliably than a Gmail sender.
 
+### AI product descriptions (optional)
+
+In a product's form, **✨ Write the description with AI** (in the Description card) sends the first four product photos, the product name and your notes to Claude (`claude-opus-5-5`). Claude writes a selling description in Arabic (Moroccan Darija or standard Arabic), French and English, places some of the photos between the sections, and can suggest the product names. The text goes into the editors so you can check it before saving. It only uses facts from your notes and the photos, and never writes prices.
+
+1. Create an API key at [platform.claude.com](https://platform.claude.com) (Settings → API keys). Usage is billed per request, a few cents per description.
+2. In the Cloudflare dashboard, open **Workers & Pages → abolux → Settings → Variables and Secrets**, click **Add**, choose type **Secret**, name it `ANTHROPIC_API_KEY` and paste the key. Or run `npx wrangler secret put ANTHROPIC_API_KEY`.
+
 ### Optional: get notified of each new order
 
 Set `ORDER_WEBHOOK` (`npx wrangler secret put ORDER_WEBHOOK`) to a URL that accepts a JSON POST, such as a Make/Zapier webhook or a Slack incoming webhook. Each order sends `{ text, number, total, city }`.

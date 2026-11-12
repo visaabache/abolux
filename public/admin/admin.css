@@ -476,3 +476,15 @@ details summary { cursor: pointer; }
 .bun-save { color: #fff; background: #e11d2e; border-radius: 99px; padding: 2px 10px; font-weight: 700; }
 .bun-warn { color: #b45309; font-weight: 600; }
 @media (max-width: 560px) { .bun-row { grid-template-columns: 1fr 1fr 36px; } .bun-row .switch { grid-column: 1 / -2; grid-row: 2; } }
+
+/* AI description writer */
+.ai-box { margin: 4px 0 18px; padding: 14px 16px; border-radius: 16px; background: linear-gradient(135deg, #f5f3ff, #fff7e6); border: 1.5px solid #e4dcff; display: grid; gap: 10px; }
+.ai-box > summary { cursor: pointer; font-weight: 800; font-size: 1rem; list-style: none; }
+.ai-box > summary::-webkit-details-marker { display: none; }
+.ai-box[open] { gap: 12px; }
+.ai-box p { margin: 0; }
+.ai-row { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: end; }
+.ai-row label:first-child { flex: 1 1 200px; }
+.ai-go { justify-self: start; background: linear-gradient(135deg, #6d4aff, #2b50ee); border-color: transparent; }
+.ai-go:disabled { cursor: progress; }
+.ai-warn { margin: 0; padding: 8px 12px; border-radius: 10px; background: #fff4e5; color: #8a4b00; font-weight: 700; }
