@@ -281,7 +281,8 @@ textarea { resize: vertical; }
 .gallery { position: relative; margin-inline: -20px; }
 .gallery-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; scroll-behavior: smooth; }
 .gallery-track::-webkit-scrollbar { display: none; }
-.gallery-track img { flex: none; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; scroll-snap-align: start; background: var(--grey-1); }
+/* The whole photo is always shown (never cropped), whatever its shape, on a light frame. */
+.gallery-track img { flex: none; width: 100%; aspect-ratio: 4 / 5; object-fit: contain; scroll-snap-align: start; background: var(--grey-1); }
 .thumbs { display: flex; gap: 8px; padding: 10px 20px 0; overflow-x: auto; }
 .thumbs button { flex: none; border: 0; border-radius: 4px; padding: 0; overflow: hidden; cursor: pointer; width: 60px; opacity: 1; position: relative; background: var(--grey-1); }
 .thumbs button::after { content: ''; position: absolute; inset: 0; background: rgb(0 0 0 / 0); transition: background 0.2s; }
