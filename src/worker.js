@@ -2,7 +2,7 @@
 // the admin API (/api/admin/*), product photos from R2 or D1 (/img/*) and static files (public/).
 
 import { T } from './i18n.js';
-import { LANGS, HREFLANG, findLandingProduct, DEFAULT_LANG, matchCity, storeLeft, json, esc, getSettings, quote, normalizePhone, orderNumber, randomToken, productName, visitorId, recentHits, addHit, sameOrigin, parseJSON, lineText, splitLine } from './lib.js';
+import { LANGS, HREFLANG, findLandingProduct, DEFAULT_LANG, matchCity, storeLeft, json, esc, getSettings, quote, normalizePhone, orderNumber, randomToken, productName, productDesc, productImages, visitorId, recentHits, addHit, sameOrigin, parseJSON, lineText, splitLine } from './lib.js';
 import { homePage, listingPage, productPage, cartPage, checkoutPage, orderPage, notFoundPage, creditsPage, legalPage, aboutPage, blogIndexPage, blogPostPage, catName } from './render.js';
 
 const ORDER_BY = { price_asc: 'price ASC, id DESC', price_desc: 'price DESC, id DESC' };
@@ -10,6 +10,7 @@ import { handleAdmin, CHUNK as VIDEO_CHUNK } from './admin.js';
 import { pixelCsp } from './pixels.js';
 import { LANDINGS, landingPage } from './landing.js';
 import { CURRENCIES, currencyFor, ratesFrom } from './currency.js';
+import { richText } from './rich.js';
 import { sendOrderEmails, validEmail } from './email.js';
 
 const SECURITY_HEADERS = {
@@ -56,6 +57,7 @@ export default {
       if (path.startsWith('/img/')) return await serveImage(env, path.slice(5), request);
       if (path === '/admin') return Response.redirect(`${url.origin}/admin/`, 301);
       if (path === '/sitemap.xml') return await sitemap(env, site);
+      if (path === '/merchant-feed.xml') return await merchantFeed(env, site, url.searchParams.get('lang'));
       if (path === '/currency') return setCurrency(url);
       const lp = path.match(/^\/lp\/([a-z0-9-]+)\/?$/);
       if (lp && LANDINGS[lp[1]]) return Response.redirect(`${url.origin}/${LANDINGS[lp[1]].lang}/lp/${lp[1]}${url.search}`, 302);
@@ -385,6 +387,37 @@ async function movedTo(db, slug, categories) {
   if (!r) return null;
   const gone = r.target.startsWith('/c/') && !categories.some((c) => `/c/${c.slug}` === r.target);
   return { to: gone ? '/shop' : r.target, status: 301 };
+}
+
+// Product feed for Google Merchant Center (free listings in the Shopping tab): one product per item,
+// in French by default or ?lang=ar, prices in dirhams, free delivery to Morocco. Google fetches it daily.
+async function merchantFeed(env, origin, wanted) {
+  const lang = LANGS.includes(wanted) ? wanted : 'fr';
+  const [products, cats, settings] = await Promise.all([
+    env.DB.prepare('SELECT * FROM products WHERE active = 1 ORDER BY id DESC').all(),
+    env.DB.prepare('SELECT * FROM categories').all(),
+    getSettings(env.DB),
+  ]);
+  const store = settings.store_name || 'Abolux';
+  const abs = (u) => (/^https?:/.test(u) ? u : origin + u);
+  const tag = (k, v) => (v === '' || v == null ? '' : `<${k}>${esc(String(v))}</${k}>`);
+  const items = products.results
+    .map((p) => {
+      const images = productImages(p).filter((u) => !/\.svg$/i.test(u));
+      if (!images.length || !(p.price > 0)) return '';
+      const name = productName(p, lang).slice(0, 150);
+      const desc = richText(productDesc(p, lang)).replace(/\s+/g, ' ').trim() || name;
+      const cat = cats.results.find((c) => c.id === p.category_id);
+      const onSale = p.compare_price && p.compare_price > p.price;
+      const soldOut = p.stock != null && p.stock <= 0;
+      return `<item>${tag('g:id', p.id)}${tag('g:title', name)}${tag('g:description', desc.slice(0, 5000))}${tag('g:link', `${origin}/${lang}/p/${p.slug}`)}${tag('g:image_link', abs(images[0]))}${images
+        .slice(1, 10)
+        .map((u) => tag('g:additional_image_link', abs(u)))
+        .join('')}${tag('g:availability', soldOut ? 'out_of_stock' : 'in_stock')}${tag('g:price', `${(onSale ? p.compare_price : p.price).toFixed(2)} MAD`)}${onSale ? tag('g:sale_price', `${p.price.toFixed(2)} MAD`) : ''}${tag('g:condition', 'new')}${tag('g:brand', store)}${tag('g:identifier_exists', 'no')}${cat ? tag('g:product_type', catName(cat, lang)) : ''}<g:shipping><g:country>MA</g:country><g:price>0.00 MAD</g:price></g:shipping></item>`;
+    })
+    .join('');
+  const xml = `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:g="http://base.google.com/ns/1.0"><channel><title>${esc(store)}</title><link>${esc(origin)}/${lang}/</link><description>${esc(store)}</description>${items}</channel></rss>`;
+  return new Response(xml, { headers: { 'content-type': 'application/xml; charset=utf-8', 'cache-control': 'public, max-age=3600' } });
 }
 
 async function sitemap(env, origin) {
