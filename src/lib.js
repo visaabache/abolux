@@ -4,6 +4,12 @@ export const LANGS = ['ar', 'fr', 'en'];
 // Language codes for search engines: Arabic and French are for Morocco; English stays open to everyone.
 export const HREFLANG = { ar: 'ar-MA', fr: 'fr-MA', en: 'en' };
 
+// Google AdSense publisher ID from the admin ("ca-pub-123…" or "pub-123…"), or '' when not set.
+export function adsenseId(settings) {
+  const m = String(settings?.adsense_client || '').match(/(?:ca-)?pub-(\d{10,20})/);
+  return m ? `ca-pub-${m[1]}` : '';
+}
+
 // The product a landing page sells: its address in the admin, a renamed address (redirects table),
 // then the newest active product whose name or address matches one of the landing's patterns.
 export async function findLandingProduct(db, landing) {

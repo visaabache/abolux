@@ -7,7 +7,7 @@ import { legalDoc } from './legal.js';
 import { richHtml, richText } from './rich.js';
 import { CURRENCIES, formatPrice } from './currency.js';
 import { pixelConfig } from './pixels.js';
-import { CITIES, CITY_SUGGEST, LANGS, HREFLANG, esc, money, productName, productDesc, productImages, productOptions, productLeft, storeLeft, liveBundles, bundleTitle, optionGroupName } from './lib.js';
+import { CITIES, CITY_SUGGEST, LANGS, HREFLANG, adsenseId, esc, money, productName, productDesc, productImages, productOptions, productLeft, storeLeft, liveBundles, bundleTitle, optionGroupName } from './lib.js';
 
 const PLACEHOLDER = '/assets/placeholder.svg';
 const OG_LOCALE = { fr: 'fr_MA', en: 'en_US', ar: 'ar_MA' };
@@ -177,6 +177,9 @@ export function layout(ctx, { title, seoTitle = '', description = '', path, body
   const metaDesc = description || t.seoDesc;
   const pageUrl = `${origin}/${lang}${path}`;
   const verify = String(settings.google_verify || '').match(/content=["']?([\w-]{10,100})/)?.[1] || (/^[\w-]{10,100}$/.test(String(settings.google_verify || '').trim()) ? String(settings.google_verify).trim() : '');
+  // Google AdSense: the account tag on every page (Google checks it, nothing is downloaded); the ads
+  // themselves only on blog pages, loaded after the article (assets/ads.js), never on shop pages.
+  const adsense = adsenseId(settings);
   const ldTags = ld.filter(Boolean).map((o) => `<script type="application/ld+json">${JSON.stringify(o).replace(/</g, '\\u003c')}</script>`).join('');
   const announcement = settings[`announcement_${lang}`] || '';
   const wa = waLink(settings.whatsapp);
@@ -206,7 +209,7 @@ ${noindex ? '<meta name="robots" content="noindex">' : `<meta name="robots" cont
 <meta property="og:description" content="${esc(metaDesc)}">
 <meta property="og:type" content="${ogType}">
 ${noindex ? '' : `<meta property="og:url" content="${esc(pageUrl)}">`}<meta property="og:locale" content="${OG_LOCALE[lang]}">${LANGS.filter((l) => l !== lang).map((l) => `<meta property="og:locale:alternate" content="${OG_LOCALE[l]}">`).join('')}
-${verify ? `<meta name="google-site-verification" content="${esc(verify)}">` : ''}${ldTags}
+${verify ? `<meta name="google-site-verification" content="${esc(verify)}">` : ''}${adsense ? `<meta name="google-adsense-account" content="${adsense}">` : ''}${ldTags}
 <meta property="og:site_name" content="${esc(store)}">
 <meta property="og:image" content="${esc(ogImage)}">${og === BRAND_OG ? '<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">' : ''}<meta property="og:image:alt" content="${esc(title || store)}"><meta name="twitter:card" content="summary_large_image">
 ${preload ? `<link rel="preload" as="image" href="${esc(preload)}" fetchpriority="high">` : ''}
@@ -223,6 +226,7 @@ ${preload ? `<link rel="preload" as="image" href="${esc(preload)}" fetchpriority
 ${pixels ? `<script type="application/json" id="pixels">${JSON.stringify({ ...px, page: track }).replace(/</g, '\\u003c')}</script>
 <script src="/assets/pixels.js?v=1" defer></script>` : ''}
 <script src="/assets/store.js?v=16" defer></script>
+${adsense && page === 'blog' ? `<script type="application/json" id="adsense">${JSON.stringify({ client: adsense })}</script><script src="/assets/ads.js?v=1" defer></script>` : ''}
 </head>
 <body data-lang="${lang}" class="page-${page || 'default'}${bare ? ' bare' : ''}">
 <a class="skip" href="#main">${esc(t.allProducts)}</a>

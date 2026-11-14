@@ -183,6 +183,7 @@
       socialHint: 'الصق رابط الصفحة أو اسم الحساب فقط (مثلا @abolux). تظهر الأيقونات أسفل المتجر.',
       pixels: 'بيكسل الإعلانات',
       pixelsHint: 'الصق رقم البيكسل فقط، وليس الكود كاملًا. لا يُحمَّل أي بيكسل إلا بعد موافقة الزائر على ملفات الارتباط.',
+      adsenseHint: 'إعلانات Google تظهر فمقالات المدونة فقط، ماشي فصفحات المتجر ولا الطلب. كتحمّل من بعد ما يتحمّل المقال، باش ما تبطّاش الموقع.', adsenseId: 'رقم الناشر (Publisher ID)', adsenseHow: 'فـ AdSense: Account ← Account information ← Publisher ID (كيبدا بـ pub-). ملف ads.txt كيتزاد بوحدو.',
       metaPixel: 'رقم Meta Pixel (فيسبوك وإنستغرام)',
       metaHow: 'فيسبوك: Meta Events Manager ← مصادر البيانات ← اختر البيكسل ← الرقم (Dataset ID) من 15 أو 16 رقمًا.',
       tiktokPixel: 'رقم TikTok Pixel',
@@ -392,6 +393,7 @@
       socialHint: 'Collez le lien de la page ou juste le nom du compte (ex. @abolux). Les icônes s’affichent en bas de la boutique.',
       pixels: 'Pixels publicitaires',
       pixelsHint: 'Collez seulement l’identifiant, pas le code complet. Aucun pixel n’est chargé tant que le visiteur n’a pas accepté les cookies.',
+      adsenseHint: 'Les annonces Google s’affichent seulement dans les articles du blog, jamais sur les pages de la boutique ni de commande. Elles se chargent après l’article, sans ralentir le site.', adsenseId: 'ID d’éditeur (Publisher ID)', adsenseHow: 'Dans AdSense : Compte → Informations sur le compte → ID d’éditeur (commence par pub-). Le fichier ads.txt est ajouté tout seul.',
       metaPixel: 'ID Meta Pixel (Facebook et Instagram)',
       metaHow: 'Facebook : Meta Events Manager → Sources de données → votre pixel → l’ID (Dataset ID) de 15 ou 16 chiffres.',
       tiktokPixel: 'ID TikTok Pixel',
@@ -601,6 +603,7 @@
       socialHint: 'Paste the page link or just the account name (e.g. @abolux). The icons show at the bottom of the store.',
       pixels: 'Ad pixels',
       pixelsHint: 'Paste only the ID, not the full code. No pixel loads until the visitor accepts cookies.',
+      adsenseHint: 'Google ads show only in blog articles, never on shop or order pages. They load after the article, so the site stays fast.', adsenseId: 'Publisher ID', adsenseHow: 'In AdSense: Account → Account information → Publisher ID (starts with pub-). The ads.txt file is added for you.',
       metaPixel: 'Meta Pixel ID (Facebook and Instagram)',
       metaHow: 'Facebook: Meta Events Manager → Data sources → your pixel → the 15 or 16 digit ID (Dataset ID).',
       tiktokPixel: 'TikTok Pixel ID',
@@ -2102,6 +2105,9 @@
       <div class="card"><h2>${L.seo}</h2><p class="muted small">${L.seoHint}</p>
         ${field('google_verify', L.googleVerify, 'dir="ltr" placeholder="&lt;meta name=&quot;google-site-verification&quot; content=&quot;…&quot;&gt;"')}<p class="muted small">${L.googleHow}</p>
       </div>
+      <div class="card"><h2>Google AdSense</h2><p class="muted small">${L.adsenseHint}</p>
+        ${field('adsense_client', L.adsenseId, 'dir="ltr" pattern="(ca-)?pub-[0-9]{10,20}" placeholder="ca-pub-1234567890123456"')}<p class="muted small">${L.adsenseHow}</p>
+      </div>
       <div class="card"><h2>${L.pixels}</h2><p class="muted small">${L.pixelsHint}</p><div class="cols">
         <div>${field('meta_pixel_id', L.metaPixel, 'dir="ltr" inputmode="numeric" pattern="[0-9]{8,20}" placeholder="123456789012345"')}<p class="muted small">${L.metaHow}</p></div>
         <div>${field('tiktok_pixel_id', L.tiktokPixel, 'dir="ltr" pattern="[A-Za-z0-9]{10,30}" placeholder="C4ABCDEFGHIJ1234567"')}<p class="muted small">${L.tiktokHow}</p></div>
@@ -2141,6 +2147,7 @@
       data.auto_currency = f.auto_currency.checked ? '1' : '0';
       data.countdown = f.countdown.checked ? '1' : '0';
       data.meta_pixel_id = data.meta_pixel_id.trim();
+      data.adsense_client = (data.adsense_client.match(/pub-\d{10,20}/) || [''])[0].replace(/^pub-/, 'ca-pub-');
       data.tiktok_pixel_id = data.tiktok_pixel_id.trim().toUpperCase();
       await api('/settings', { method: 'PUT', body: data });
       state.settings = (await api('/settings')).settings;

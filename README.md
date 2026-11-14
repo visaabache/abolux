@@ -73,6 +73,10 @@ In a product's form, **✨ Write the description with AI** (in the Description c
 1. Create an API key at [platform.claude.com](https://platform.claude.com) (Settings → API keys). Usage is billed per request, a few cents per description.
 2. In the Cloudflare dashboard, open **Workers & Pages → abolux → Settings → Variables and Secrets**, click **Add**, choose type **Secret**, name it `ANTHROPIC_API_KEY` and paste the key. Or run `npx wrangler secret put ANTHROPIC_API_KEY`.
 
+### Google AdSense on the blog (optional)
+
+Paste your Publisher ID (`pub-…`) in **Réglages → Google AdSense**. Every page then carries the `google-adsense-account` tag that AdSense checks when you apply, `/ads.txt` is served automatically, and the privacy policy mentions the ads. Ads show **only on blog pages**: the AdSense script is added after the article has loaded and the reader scrolls (or after 4 seconds), so it never slows the first view, and shop, product, landing and order pages never load it. Ads are non-personalised unless the visitor accepted advertising cookies.
+
 ### Optional: get notified of each new order
 
 Set `ORDER_WEBHOOK` (`npx wrangler secret put ORDER_WEBHOOK`) to a URL that accepts a JSON POST, such as a Make/Zapier webhook or a Slack incoming webhook. Each order sends `{ text, number, total, city }`.

@@ -100,3 +100,18 @@ test('landing page: product data at the landing address, no hreflang (one langua
   assert.equal(prod.url, 'https://abolux.store/ar/lp/lunchbox');
   assert.equal(prod.offers.price, '219');
 });
+
+test('AdSense: account tag on every page, ads loader on the blog only, privacy note', async () => {
+  const s = { ...settings, adsense_client: 'pub-1234567890123456' };
+  const c = (lang = 'fr') => ({ lang, settings: s, categories, origin: 'https://abolux.store' });
+  const blog = blogPostPage(c(), post, [], []);
+  const prod = productPage(c(), product, categories[0], []);
+  assert.match(blog, /<meta name="google-adsense-account" content="ca-pub-1234567890123456">/);
+  assert.match(blog, /\/assets\/ads\.js/);
+  assert.match(prod, /<meta name="google-adsense-account" content="ca-pub-1234567890123456">/);
+  assert.doesNotMatch(prod, /ads\.js|adsbygoogle/);
+  const { legalDoc } = await import('../src/legal.js');
+  const doc = legalDoc('privacy', 'fr', s);
+  assert.ok(doc.sections.some(([, html]) => /Google AdSense/.test(html)));
+  assert.ok(!legalDoc('privacy', 'fr', settings).sections.some(([, html]) => /Google AdSense/.test(html)));
+});

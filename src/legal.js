@@ -2,7 +2,7 @@
 // (law 09-08 on personal data, law 31-08 on consumer protection). They are drafts: the store owner
 // should have them checked by a professional. Company details come from the admin settings.
 
-import { esc } from './lib.js';
+import { esc, adsenseId } from './lib.js';
 import { pixelConfig } from './pixels.js';
 
 const MISSING = { fr: 'à compléter', en: 'to be completed', ar: 'يُستكمل' };
@@ -129,8 +129,18 @@ const DRAFT = {
 };
 export const UPDATED = '2026-10-22';
 
+const ADSENSE = {
+  fr: '<p><strong>Publicités sur le blog :</strong> les articles du blog affichent des publicités de Google AdSense. Google et ses partenaires utilisent des cookies pour diffuser ces annonces ; les annonces ne sont personnalisées que si vous avez accepté les cookies publicitaires. Les pages de la boutique et de commande n’affichent aucune publicité. Plus d’informations : <a href="https://policies.google.com/technologies/ads" rel="noopener">policies.google.com/technologies/ads</a>.</p>',
+  en: '<p><strong>Ads on the blog:</strong> blog articles show ads from Google AdSense. Google and its partners use cookies to serve these ads; ads are personalised only if you accepted advertising cookies. Shop and order pages show no ads. More information: <a href="https://policies.google.com/technologies/ads" rel="noopener">policies.google.com/technologies/ads</a>.</p>',
+  ar: '<p><strong>الإعلانات في المدونة:</strong> تعرض مقالات المدونة إعلانات من Google AdSense. تستخدم Google وشركاؤها ملفات تعريف الارتباط لعرض هذه الإعلانات، ولا تكون الإعلانات مخصصة إلا إذا قبلت ملفات الإعلانات. صفحات المتجر والطلب لا تعرض أي إعلان. للمزيد: <a href="https://policies.google.com/technologies/ads" rel="noopener">policies.google.com/technologies/ads</a>.</p>',
+};
+
 export function legalDoc(kind, lang, settings) {
   const i = info(settings, lang);
   const doc = (kind === 'privacy' ? PRIVACY : TERMS)[lang](i, settings);
+  if (kind === 'privacy' && adsenseId(settings)) {
+    // Ads are shown on the blog only: say so in the cookies section.
+    doc.sections = doc.sections.map(([h, html]) => [h, /cookie|ملفات/i.test(h) ? html + ADSENSE[lang] : html]);
+  }
   return { ...doc, draft: DRAFT[lang], updated: UPDATED };
 }

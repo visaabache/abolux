@@ -2,7 +2,7 @@
 // the admin API (/api/admin/*), product photos from R2 or D1 (/img/*) and static files (public/).
 
 import { T } from './i18n.js';
-import { LANGS, HREFLANG, findLandingProduct, DEFAULT_LANG, matchCity, storeLeft, json, esc, getSettings, quote, normalizePhone, orderNumber, randomToken, productName, productDesc, productImages, visitorId, recentHits, addHit, sameOrigin, parseJSON, lineText, splitLine } from './lib.js';
+import { LANGS, HREFLANG, findLandingProduct, DEFAULT_LANG, matchCity, storeLeft, json, esc, getSettings, quote, normalizePhone, orderNumber, randomToken, productName, productDesc, productImages, adsenseId, visitorId, recentHits, addHit, sameOrigin, parseJSON, lineText, splitLine } from './lib.js';
 import { homePage, listingPage, productPage, cartPage, checkoutPage, orderPage, notFoundPage, creditsPage, legalPage, aboutPage, blogIndexPage, blogPostPage, catName } from './render.js';
 
 const ORDER_BY = { price_asc: 'price ASC, id DESC', price_desc: 'price DESC, id DESC' };
@@ -57,6 +57,10 @@ export default {
       if (path.startsWith('/img/')) return await serveImage(env, path.slice(5), request);
       if (path === '/admin') return Response.redirect(`${url.origin}/admin/`, 301);
       if (path === '/sitemap.xml') return await sitemap(env, site);
+      if (path === '/ads.txt') {
+        const pub = adsenseId(await getSettings(env.DB));
+        return new Response(pub ? `google.com, ${pub.slice(3)}, DIRECT, f08c47fec0942fa0\n` : '', { headers: { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'public, max-age=3600' } });
+      }
       if (path === '/merchant-feed.xml') return await merchantFeed(env, site, url.searchParams.get('lang'));
       if (path === '/currency') return setCurrency(url);
       const lp = path.match(/^\/lp\/([a-z0-9-]+)\/?$/);
@@ -205,7 +209,14 @@ async function storefront(request, env, url, lang, rest, exec) {
     return html(notFoundPage(ctx), 404);
   }
   res.headers.append('set-cookie', `lang=${lang}; Path=/; Max-Age=31536000; SameSite=Lax; Secure`);
-  res.headers.set('content-security-policy', pixelCsp(SECURITY_HEADERS['content-security-policy'], settings));
+  let csp = pixelCsp(SECURITY_HEADERS['content-security-policy'], settings);
+  if (adsenseId(settings) && (rest === '/blog' || rest.startsWith('/blog/'))) {
+    // Blog pages only: Google AdSense scripts, ad frames and their measurement calls; ad clicks open new tabs.
+    const g = 'https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.googleadservices.com https://*.adtrafficquality.google https://*.gstatic.com https://*.googletagservices.com';
+    csp = csp.replace("script-src 'self'", `script-src 'self' ${g}`).replace('connect-src \'self\'', `connect-src 'self' ${g}`).replace('frame-src ', `frame-src ${g} `);
+    res.headers.set('cross-origin-opener-policy', 'same-origin-allow-popups');
+  }
+  res.headers.set('content-security-policy', csp);
   return res;
 }
 
