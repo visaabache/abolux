@@ -16,7 +16,12 @@ test('home page: keyword title, canonical on the store domain, store and FAQ dat
   const html = homePage(ctx(), [], []);
   assert.match(html, /<title>Abolux · Boutique en ligne au Maroc/);
   assert.match(html, /<link rel="canonical" href="https:\/\/abolux.store\/fr\/">/);
-  assert.match(html, /<meta property="og:locale" content="fr_FR">/);
+  assert.match(html, /<meta property="og:locale" content="fr_MA">/);
+  // Arabic and French pages are marked for Morocco; English stays open; large image previews allowed.
+  assert.match(html, /hreflang="ar-MA" href="https:\/\/abolux.store\/ar\/"/);
+  assert.match(html, /hreflang="fr-MA" href="https:\/\/abolux.store\/fr\/"/);
+  assert.match(html, /hreflang="en" href="https:\/\/abolux.store\/en\/"/);
+  assert.match(html, /max-image-preview:large/);
   assert.match(html, /<meta name="google-site-verification" content="abc123DEF456ghi789">/);
   assert.deepEqual(types(html), ['OnlineStore', 'WebSite', 'FAQPage']);
   assert.ok(ld(html)[0].sameAs.includes('https://www.instagram.com/abolux.store'));
@@ -38,6 +43,10 @@ test('product page: description fallback with the price, free shipping and retur
   assert.equal(offer.shippingDetails.shippingRate.value, '0');
   assert.equal(offer.hasMerchantReturnPolicy.merchantReturnDays, 7);
   assert.ok(types(html).includes('BreadcrumbList'));
+  const prod = ld(html).find((o) => o['@type'] === 'Product');
+  assert.equal(prod.url, 'https://abolux.store/fr/p/sac-cuir');
+  assert.match(prod.offers.priceValidUntil, /^\d{4}-12-31$/);
+  assert.match(html, /<link rel="preload" as="image" href="\/assets\/photos\/handbag.webp"/);
 });
 
 test('blog pages: list and article with cleaned text, article data and links back to the shop', () => {
@@ -79,4 +88,15 @@ test('www and workers.dev addresses redirect to the store domain; API calls do n
   }
   const api = await go('https://abolux.visaabache.workers.dev/api/orders', 'POST').catch(() => null);
   assert.ok(!api || api.status !== 301);
+});
+
+test('landing page: product data at the landing address, no hreflang (one language only)', async () => {
+  const { LANDINGS, landingPage } = await import('../src/landing.js');
+  const p = { ...product, name_ar: 'قطاعة', price: 219, images: '["/assets/lp/lunchbox/box-4-bowls.webp"]' };
+  const html = landingPage({ ...ctx('ar'), cur: 'MAD', rates: null }, LANDINGS.lunchbox, p);
+  assert.match(html, /<link rel="canonical" href="https:\/\/abolux.store\/ar\/lp\/lunchbox">/);
+  assert.doesNotMatch(html, /hreflang=/);
+  const prod = ld(html).find((o) => o['@type'] === 'Product');
+  assert.equal(prod.url, 'https://abolux.store/ar/lp/lunchbox');
+  assert.equal(prod.offers.price, '219');
 });

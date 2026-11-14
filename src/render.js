@@ -7,10 +7,10 @@ import { legalDoc } from './legal.js';
 import { richHtml, richText } from './rich.js';
 import { CURRENCIES, formatPrice } from './currency.js';
 import { pixelConfig } from './pixels.js';
-import { CITIES, CITY_SUGGEST, LANGS, esc, money, productName, productDesc, productImages, productOptions, productLeft, storeLeft, liveBundles, bundleTitle, optionGroupName } from './lib.js';
+import { CITIES, CITY_SUGGEST, LANGS, HREFLANG, esc, money, productName, productDesc, productImages, productOptions, productLeft, storeLeft, liveBundles, bundleTitle, optionGroupName } from './lib.js';
 
 const PLACEHOLDER = '/assets/placeholder.svg';
-const OG_LOCALE = { fr: 'fr_FR', en: 'en_US', ar: 'ar_MA' };
+const OG_LOCALE = { fr: 'fr_MA', en: 'en_US', ar: 'ar_MA' };
 const DATE_LOCALE = { fr: 'fr-FR', en: 'en-GB', ar: 'ar-MA' };
 
 // Structured data shared by several pages.
@@ -166,7 +166,7 @@ function srcset(url) {
 }
 
 // bare: a landing page for ads — logo only at the top, no menus, search or tab bar, a short footer.
-export function layout(ctx, { title, seoTitle = '', description = '', path, body, noindex = false, image = '', page = '', product = null, track = null, ld = [], ogType = 'website', bare = false, strip = null }) {
+export function layout(ctx, { title, seoTitle = '', description = '', path, body, noindex = false, image = '', page = '', product = null, track = null, ld = [], ogType = 'website', bare = false, strip = null, preload = '' }) {
   const { lang, settings, origin, categories = [] } = ctx;
   const t = T[lang];
   const px = pixelConfig(settings);
@@ -180,7 +180,7 @@ export function layout(ctx, { title, seoTitle = '', description = '', path, body
   const ldTags = ld.filter(Boolean).map((o) => `<script type="application/ld+json">${JSON.stringify(o).replace(/</g, '\\u003c')}</script>`).join('');
   const announcement = settings[`announcement_${lang}`] || '';
   const wa = waLink(settings.whatsapp);
-  const alternates = LANGS.map((l) => `<link rel="alternate" hreflang="${l}" href="${esc(origin)}/${l}${esc(path)}">`).join('');
+  const alternates = LANGS.map((l) => `<link rel="alternate" hreflang="${HREFLANG[l]}" href="${esc(origin)}/${l}${esc(path)}">`).join('');
   const langLinks = LANGS.map(
     (l) => `<a href="/${l}${esc(path)}" hreflang="${l}" lang="${l}"${l === lang ? ' aria-current="true"' : ''}>${l === 'ar' ? 'ع' : l.toUpperCase()}</a>`,
   ).join('');
@@ -201,14 +201,15 @@ export function layout(ctx, { title, seoTitle = '', description = '', path, body
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(fullTitle)}</title>
 <meta name="description" content="${esc(metaDesc)}">
-${noindex ? '<meta name="robots" content="noindex">' : `<link rel="canonical" href="${esc(origin)}/${lang}${esc(path)}">${bare ? '' : `${alternates}<link rel="alternate" hreflang="x-default" href="${esc(origin)}/fr${esc(path)}">`}`}
+${noindex ? '<meta name="robots" content="noindex">' : `<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><link rel="canonical" href="${esc(origin)}/${lang}${esc(path)}">${bare ? '' : `${alternates}<link rel="alternate" hreflang="x-default" href="${esc(origin)}/fr${esc(path)}">`}`}
 <meta property="og:title" content="${esc(fullTitle)}">
 <meta property="og:description" content="${esc(metaDesc)}">
 <meta property="og:type" content="${ogType}">
 ${noindex ? '' : `<meta property="og:url" content="${esc(pageUrl)}">`}<meta property="og:locale" content="${OG_LOCALE[lang]}">${LANGS.filter((l) => l !== lang).map((l) => `<meta property="og:locale:alternate" content="${OG_LOCALE[l]}">`).join('')}
 ${verify ? `<meta name="google-site-verification" content="${esc(verify)}">` : ''}${ldTags}
 <meta property="og:site_name" content="${esc(store)}">
-<meta property="og:image" content="${esc(ogImage)}"><meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="${esc(ogImage)}">${og === BRAND_OG ? '<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">' : ''}<meta property="og:image:alt" content="${esc(title || store)}"><meta name="twitter:card" content="summary_large_image">
+${preload ? `<link rel="preload" as="image" href="${esc(preload)}" fetchpriority="high">` : ''}
 <meta name="theme-color" content="#ffffff">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/assets/favicon.png?v=6" type="image/png">
@@ -529,6 +530,44 @@ function scarcityLine(ctx, p, bundles) {
   return `<div class="scarce"><p>🔥 ${t.offerLeft(`<b>${left}</b>`, featuredOffer(bundles).qty)}</p><span class="scarce-bar" style="--w:${pct}%"><i></i></span></div>`;
 }
 
+// Product structured data (Google shopping results): price in dirhams, free delivery to Morocco in
+// 1 to 3 days, 7-day free returns. Used by the product page and the landing pages.
+export function productLd(ctx, p, { name, desc, images, category = null, url }) {
+  const { origin, settings, lang } = ctx;
+  const store = settings.store_name || 'Abolux';
+  const soldOut = p.stock != null && p.stock <= 0;
+  const year = new Date().getUTCFullYear();
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    '@id': `${url}#product`,
+    name,
+    description: String(desc || name).slice(0, 5000),
+    image: images.map((u) => (u.startsWith('http') ? u : origin + u)),
+    sku: String(p.id),
+    url,
+    offers: {
+      '@type': 'Offer',
+      price: String(p.price),
+      priceCurrency: 'MAD',
+      priceValidUntil: `${year + 1}-12-31`,
+      availability: soldOut ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
+      url,
+      itemCondition: 'https://schema.org/NewCondition',
+      seller: { '@type': 'Organization', name: store, url: `${origin}/` },
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: 'MAD' },
+        shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'MA' },
+        deliveryTime: { '@type': 'ShippingDeliveryTime', handlingTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 1, unitCode: 'DAY' }, transitTime: { '@type': 'QuantitativeValue', minValue: 1, maxValue: 3, unitCode: 'DAY' } },
+      },
+      hasMerchantReturnPolicy: { '@type': 'MerchantReturnPolicy', applicableCountry: 'MA', returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow', merchantReturnDays: 7, returnMethod: 'https://schema.org/ReturnByMail', returnFees: 'https://schema.org/FreeReturn' },
+    },
+    brand: { '@type': 'Brand', name: store },
+    ...(category ? { category: catName(category, lang) } : {}),
+  };
+}
+
 export function productPage(ctx, p, category, related) {
   const { lang, origin, settings } = ctx;
   const t = T[lang];
@@ -543,32 +582,7 @@ export function productPage(ctx, p, category, related) {
   const soldOut = p.stock != null && p.stock <= 0;
   const onSale = p.compare_price && p.compare_price > p.price;
   const freeShip = true; // delivery is included in every price
-  const ld = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name,
-    description: desc,
-    image: images.map((u) => (u.startsWith('http') ? u : origin + u)),
-    sku: String(p.id),
-    offers: {
-      '@type': 'Offer',
-      price: String(p.price),
-      priceCurrency: 'MAD',
-      availability: soldOut ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
-      url: `${origin}/${lang}/p/${p.slug}`,
-      itemCondition: 'https://schema.org/NewCondition',
-      seller: { '@type': 'Organization', name: settings.store_name || 'Abolux' },
-      shippingDetails: {
-        '@type': 'OfferShippingDetails',
-        shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: 'MAD' },
-        shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'MA' },
-        deliveryTime: { '@type': 'ShippingDeliveryTime', handlingTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 1, unitCode: 'DAY' }, transitTime: { '@type': 'QuantitativeValue', minValue: 1, maxValue: 3, unitCode: 'DAY' } },
-      },
-      hasMerchantReturnPolicy: { '@type': 'MerchantReturnPolicy', applicableCountry: 'MA', returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow', merchantReturnDays: 7, returnMethod: 'https://schema.org/ReturnByMail', returnFees: 'https://schema.org/FreeReturn' },
-    },
-    brand: { '@type': 'Brand', name: settings.store_name || 'Abolux' },
-    ...(category ? { category: catName(category, lang) } : {}),
-  };
+  const ld = productLd(ctx, p, { name, desc, images, category, url: `${origin}/${lang}/p/${p.slug}` });
   const wa = waLink(settings.whatsapp, `${name} — ${money(p.price, lang)}\n${origin}/${lang}/p/${p.slug}`);
   const scarce = soldOut ? '' : scarcityLine(ctx, p, bundles);
   const stockLine = soldOut ? '' : p.stock != null && p.stock <= 5 ? `<p class="stock stock-low"><span class="dot"></span>${esc(t.onlyLeft(p.stock))}</p>` : `<p class="stock"><span class="dot"></span>${esc(t.inStock)}</p>`;
@@ -645,7 +659,7 @@ ${soldOut ? '' : `<div class="buy-bar" aria-hidden="true"><div><strong${bundles.
 ${related.length ? `<section class="section wrap">${sectionHead(t.alsoLike, category ? catName(category, lang) : t.shop, category ? `/${lang}/c/${category.slug}` : `/${lang}/shop`, t.viewAll)}${grid(related, ctx, '')}</section>` : ''}
 <script type="application/ld+json">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>`;
   const crumbs = [[t.home, `/${lang}/`], ...(category ? [[catName(category, lang), `/${lang}/c/${category.slug}`]] : []), [name, `/${lang}/p/${p.slug}`]];
-  return layout(ctx, { title: name, seoTitle: t.productSeoTitle(name), description: desc.length >= 70 ? desc.slice(0, 158) : t.productSeoDesc(name, money(p.price, lang)), ld: [breadcrumbLd(origin, crumbs)], path: `/p/${p.slug}`, body, image: images[0], page: 'product', product: { name, price: money(p.price, lang), slug: p.slug }, track: { event: 'ViewContent', value: p.price, items: [{ id: p.id, name, price: p.price, qty: 1 }] } });
+  return layout(ctx, { title: name, seoTitle: t.productSeoTitle(name), description: desc.length >= 70 ? desc.slice(0, 158) : t.productSeoDesc(name, money(p.price, lang)), ld: [breadcrumbLd(origin, crumbs)], path: `/p/${p.slug}`, body, image: images[0], preload: images[0], page: 'product', product: { name, price: money(p.price, lang), slug: p.slug }, track: { event: 'ViewContent', value: p.price, items: [{ id: p.id, name, price: p.price, qty: 1 }] } });
 }
 
 function stepsBar(lang, current) {

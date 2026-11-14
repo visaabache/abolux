@@ -2,10 +2,19 @@
 // product by its slug, so the price, the old price, the stock and the order all come from the admin.
 // The page lives at /<lang>/lp/<slug> (and /lp/<slug> as a short link).
 
-import { layout, icon, optionFieldset, cityField } from './render.js';
-import { esc, money, productImages, productOptions } from './lib.js';
+import { layout, icon, optionFieldset, cityField, productLd } from './render.js';
+import { esc, money, productImages, productOptions, productName } from './lib.js';
+import { richText } from './rich.js';
 
 const PLACEHOLDER = '/assets/placeholder.svg';
+
+// Structured data for a landing page: the product (price, delivery, returns), at the landing's own address.
+function landingLd(ctx, p, path) {
+  const lang = ctx.lang;
+  const images = productImages(p);
+  return [productLd(ctx, p, { name: productName(p, lang), desc: richText(p[`desc_${lang}`] || p.desc_fr || p.desc_ar || ''), images: images.length ? images : [PLACEHOLDER], url: `${ctx.origin}/${lang}${path}` })];
+}
+
 
 // The order form shared by every landing page: name, city, address, phone, live total, quantity and button.
 // store.js wires it (quickOrder) and sends the order for this one product.
@@ -144,7 +153,8 @@ ${soldOut ? '' : '<div class="buy-bar" aria-hidden="true"><a class="lp-btn" href
     title: 'طقم H69 Plus الملكي',
     seoTitle: 'طقم H69 Plus: ساعة ذكية + مجوهرات، هدية فاخرة للنساء',
     description: 'طقم H69 Plus فيه 10 قطع: ساعة ذكية AMOLED، ساعة بيجو، عقد، سوار، خاتم وحلق بالحجر الأخضر. التوصيل فابور والخلاص عند الاستلام فجميع مدن المغرب.',
-    path: `/lp/${p.slug}`,
+    path: `/lp/h69-plus`,
+    ld: landingLd(ctx, p, '/lp/h69-plus'),
     body,
     image: `${IMG}/box.webp`,
     page: 'landing',
@@ -264,6 +274,7 @@ ${soldOut ? '' : `<div class="buy-bar" aria-hidden="true"><a class="lp-btn" href
     seoTitle: 'قطاعة الخضرة اليدوية 3 فـ1: شرائح وحك خشن ورقيق، بلا كهرباء',
     description: 'قطاعة الخضرة والفرماج 3 فـ1 بدورة يد، بلا كهرباء، وصباعك بعاد على الشفرات. التوصيل فابور والخلاص عند الاستلام فجميع مدن المغرب.',
     path: `/lp/qatta3a`,
+    ld: landingLd(ctx, p, '/lp/qatta3a'),
     body,
     image: pic(0),
     page: 'landing',
@@ -411,6 +422,7 @@ ${soldOut ? '' : `<div class="buy-bar" aria-hidden="true"><a class="lp-btn" href
     seoTitle: 'علبة غداء كهربائية 4 في 1 لتسخين الأكل بالبخار، بلا ميكروند',
     description: 'علبة الغداء الكهربائية 4 في 1: كتسخن الماكلة بالبخار ف 10 حتى 15 دقيقة، 4 علب إينوكس، غطاء ما كيسيلش. التوصيل فابور والخلاص عند الاستلام فجميع مدن المغرب.',
     path: `/lp/lunchbox`,
+    ld: landingLd(ctx, p, '/lp/lunchbox'),
     body,
     image: `${A}hero-desk.webp`,
     page: 'landing',

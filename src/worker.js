@@ -2,7 +2,7 @@
 // the admin API (/api/admin/*), product photos from R2 or D1 (/img/*) and static files (public/).
 
 import { T } from './i18n.js';
-import { LANGS, DEFAULT_LANG, matchCity, storeLeft, json, esc, getSettings, quote, normalizePhone, orderNumber, randomToken, productName, visitorId, recentHits, addHit, sameOrigin, parseJSON, lineText, splitLine } from './lib.js';
+import { LANGS, HREFLANG, findLandingProduct, DEFAULT_LANG, matchCity, storeLeft, json, esc, getSettings, quote, normalizePhone, orderNumber, randomToken, productName, visitorId, recentHits, addHit, sameOrigin, parseJSON, lineText, splitLine } from './lib.js';
 import { homePage, listingPage, productPage, cartPage, checkoutPage, orderPage, notFoundPage, creditsPage, legalPage, aboutPage, blogIndexPage, blogPostPage, catName } from './render.js';
 
 const ORDER_BY = { price_asc: 'price ASC, id DESC', price_desc: 'price DESC, id DESC' };
@@ -169,21 +169,8 @@ async function storefront(request, env, url, lang, rest, exec) {
     const landing = LANDINGS[slug];
     if (!landing) return html(notFoundPage(ctx), 404);
     if (landing.lang !== lang) return Response.redirect(`${url.origin}/${landing.lang}/lp/${slug}${url.search}`, 302);
-    const find = (s) => db.prepare('SELECT * FROM products WHERE active = 1 AND slug = ?').bind(s).first();
-    let p = await find(landing.product);
-    if (!p) {
-      // The product's address was changed in the admin: follow it, so the ad link keeps working.
-      const moved = await db.prepare('SELECT target FROM redirects WHERE path = ?').bind(`/p/${landing.product}`).first();
-      if (moved?.target.startsWith('/p/')) p = await find(moved.target.slice(3));
-    }
-    // Still not found: the newest active product whose name or address matches one of the landing's patterns.
-    for (const pattern of landing.match || []) {
-      if (p) break;
-      p = await db
-        .prepare('SELECT * FROM products WHERE active = 1 AND (slug LIKE ?1 OR name_fr LIKE ?1 OR name_ar LIKE ?1 OR name_en LIKE ?1) ORDER BY id DESC LIMIT 1')
-        .bind(pattern)
-        .first();
-    }
+    // Its product, followed when its address changed in the admin, so the ad link keeps working.
+    const p = await findLandingProduct(db, landing);
     if (!p) return html(notFoundPage(ctx), 404);
     res = html(landingPage({ ...ctx, cur: 'MAD', rates: null }, landing, p));
   } else if (rest === '/blog') {
@@ -401,6 +388,13 @@ async function movedTo(db, slug, categories) {
 }
 
 async function sitemap(env, origin) {
+  // Landing pages exist in one language only; listed when their product is on sale.
+  const landingEntries = await Promise.all(
+    Object.entries(LANDINGS).map(async ([slug, l]) => {
+      const p = await findLandingProduct(env.DB, l);
+      return p ? { p: `/lp/${slug}`, pri: '0.8', only: l.lang, imgs: parseJSON(p.images || '[]', []).slice(0, 1) } : null;
+    }),
+  );
   const [products, cats, posts] = await Promise.all([
     env.DB.prepare('SELECT slug, images, created_at FROM products WHERE active = 1 ORDER BY id DESC').all(),
     env.DB.prepare('SELECT slug FROM categories').all(),
@@ -411,7 +405,8 @@ async function sitemap(env, origin) {
     { p: '/', pri: '1.0' },
     { p: '/shop', pri: '0.9' },
     ...cats.results.map((c) => ({ p: `/c/${c.slug}`, pri: '0.8' })),
-    ...products.results.map((x) => ({ p: `/p/${x.slug}`, pri: '0.7', mod: day(x.created_at), img: parseJSON(x.images || '[]', [])[0] })),
+    ...products.results.map((x) => ({ p: `/p/${x.slug}`, pri: '0.7', mod: day(x.created_at), imgs: parseJSON(x.images || '[]', []).slice(0, 6) })),
+    ...landingEntries.filter(Boolean),
     { p: '/blog', pri: '0.6', mod: day(posts.results[0]?.updated_at) },
     ...posts.results.map((x) => ({ p: `/blog/${x.slug}`, pri: '0.6', mod: day(x.updated_at) })),
     { p: '/about', pri: '0.4' },
@@ -420,10 +415,13 @@ async function sitemap(env, origin) {
     { p: '/credits', pri: '0.1' },
   ];
   const urls = pages
-    .map(({ p, pri, mod, img }) => {
-      const alts = LANGS.map((l) => `<xhtml:link rel="alternate" hreflang="${l}" href="${esc(origin)}/${l}${esc(p)}"/>`).join('') + `<xhtml:link rel="alternate" hreflang="x-default" href="${esc(origin)}/fr${esc(p)}"/>`;
-      const image = typeof img === 'string' && img ? `<image:image><image:loc>${esc(img.startsWith('http') ? img : origin + img)}</image:loc></image:image>` : '';
-      return LANGS.map((l) => `<url><loc>${esc(origin)}/${l}${esc(p)}</loc>${mod ? `<lastmod>${mod}</lastmod>` : ''}<priority>${pri}</priority>${alts}${image}</url>`).join('');
+    .map(({ p, pri, mod, imgs = [], only }) => {
+      const alts = only ? '' : LANGS.map((l) => `<xhtml:link rel="alternate" hreflang="${HREFLANG[l]}" href="${esc(origin)}/${l}${esc(p)}"/>`).join('') + `<xhtml:link rel="alternate" hreflang="x-default" href="${esc(origin)}/fr${esc(p)}"/>`;
+      const image = imgs
+        .filter((img) => typeof img === 'string' && img)
+        .map((img) => `<image:image><image:loc>${esc(img.startsWith('http') ? img : origin + img)}</image:loc></image:image>`)
+        .join('');
+      return (only ? [only] : LANGS).map((l) => `<url><loc>${esc(origin)}/${l}${esc(p)}</loc>${mod ? `<lastmod>${mod}</lastmod>` : ''}<priority>${pri}</priority>${alts}${image}</url>`).join('');
     })
     .join('');
   return new Response(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">${urls}</urlset>`, {

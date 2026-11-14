@@ -1,6 +1,27 @@
 // Small helpers shared by the storefront, the public API and the admin API.
 
 export const LANGS = ['ar', 'fr', 'en'];
+// Language codes for search engines: Arabic and French are for Morocco; English stays open to everyone.
+export const HREFLANG = { ar: 'ar-MA', fr: 'fr-MA', en: 'en' };
+
+// The product a landing page sells: its address in the admin, a renamed address (redirects table),
+// then the newest active product whose name or address matches one of the landing's patterns.
+export async function findLandingProduct(db, landing) {
+  const find = (s) => db.prepare('SELECT * FROM products WHERE active = 1 AND slug = ?').bind(s).first();
+  let p = await find(landing.product);
+  if (!p) {
+    const moved = await db.prepare('SELECT target FROM redirects WHERE path = ?').bind(`/p/${landing.product}`).first();
+    if (moved?.target.startsWith('/p/')) p = await find(moved.target.slice(3));
+  }
+  for (const pattern of landing.match || []) {
+    if (p) break;
+    p = await db
+      .prepare('SELECT * FROM products WHERE active = 1 AND (slug LIKE ?1 OR name_fr LIKE ?1 OR name_ar LIKE ?1 OR name_en LIKE ?1) ORDER BY id DESC LIMIT 1')
+      .bind(pattern)
+      .first();
+  }
+  return p || null;
+}
 export const DEFAULT_LANG = 'fr';
 
 // Order statuses, in the order they usually happen. "cancelled" and "returned" put the stock back.
