@@ -531,7 +531,7 @@ function scarcityLine(ctx, p, bundles) {
 }
 
 // Product structured data (Google shopping results): price in dirhams, free delivery to Morocco in
-// 1 to 3 days, 7-day free returns. Used by the product page and the landing pages.
+// 1 to 3 days, 7-day returns (return shipping paid by the customer, as the terms of sale say). Used by the product page and the landing pages.
 export function productLd(ctx, p, { name, desc, images, category = null, url }) {
   const { origin, settings, lang } = ctx;
   const store = settings.store_name || 'Abolux';
@@ -561,7 +561,7 @@ export function productLd(ctx, p, { name, desc, images, category = null, url }) 
         shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'MA' },
         deliveryTime: { '@type': 'ShippingDeliveryTime', handlingTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 1, unitCode: 'DAY' }, transitTime: { '@type': 'QuantitativeValue', minValue: 1, maxValue: 3, unitCode: 'DAY' } },
       },
-      hasMerchantReturnPolicy: { '@type': 'MerchantReturnPolicy', applicableCountry: 'MA', returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow', merchantReturnDays: 7, returnMethod: 'https://schema.org/ReturnByMail', returnFees: 'https://schema.org/FreeReturn' },
+      hasMerchantReturnPolicy: { '@type': 'MerchantReturnPolicy', applicableCountry: 'MA', returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow', merchantReturnDays: 7, returnMethod: 'https://schema.org/ReturnByMail', returnFees: 'https://schema.org/ReturnFeesCustomerResponsibility' },
     },
     brand: { '@type': 'Brand', name: store },
     ...(category ? { category: catName(category, lang) } : {}),
