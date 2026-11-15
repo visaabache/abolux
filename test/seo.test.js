@@ -46,6 +46,7 @@ test('product page: description fallback with the price, free shipping and retur
   const prod = ld(html).find((o) => o['@type'] === 'Product');
   assert.equal(prod.url, 'https://abolux.store/fr/p/sac-cuir');
   assert.match(prod.offers.priceValidUntil, /^\d{4}-12-31$/);
+  assert.match(prod.offers.validFrom, /^\d{4}-\d{2}-\d{2}T00:00:00\+01:00$/);
   assert.match(html, /<link rel="preload" as="image" href="\/assets\/photos\/handbag.webp"/);
 });
 

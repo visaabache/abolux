@@ -555,6 +555,8 @@ export function productLd(ctx, p, { name, desc, images, category = null, url }) 
       price: String(p.price),
       priceCurrency: 'MAD',
       priceValidUntil: `${year + 1}-12-31`,
+      // The day the product was added (its price has been valid since then); today when unknown.
+      validFrom: /^\d{4}-\d{2}-\d{2}/.test(String(p.created_at || '')) ? `${String(p.created_at).slice(0, 10)}T00:00:00+01:00` : `${new Date().toISOString().slice(0, 10)}T00:00:00+01:00`,
       availability: soldOut ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
       url,
       itemCondition: 'https://schema.org/NewCondition',
