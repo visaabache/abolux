@@ -914,3 +914,7 @@ body.bare { --tabbar: 0px; }
 .city-list li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 11px 12px; border-radius: 10px; cursor: pointer; font-weight: 700; }
 .city-list li small { color: var(--muted); font-weight: 500; }
 .city-list li[aria-selected='true'], .city-list li:hover { background: var(--brand-soft); color: var(--ink); }
+
+/* Cloudflare Turnstile check above the order button (empty for most visitors) */
+.ts-box { margin: 10px 0 0; min-height: 0; }
+.ts-box:empty { display: none; }

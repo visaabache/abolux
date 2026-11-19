@@ -73,6 +73,12 @@ In a product's form, **✨ Write the description with AI** (in the Description c
 1. Create an API key at [platform.claude.com](https://platform.claude.com) (Settings → API keys). Usage is billed per request, a few cents per description.
 2. In the Cloudflare dashboard, open **Workers & Pages → abolux → Settings → Variables and Secrets**, click **Add**, choose type **Secret**, name it `ANTHROPIC_API_KEY` and paste the key. Or run `npx wrangler secret put ANTHROPIC_API_KEY`.
 
+### Security against bots and attacks
+
+Built in: security headers and a strict Content-Security-Policy on every page, signed admin sessions (HttpOnly, Secure, SameSite=Strict), admin writes accepted only as same-origin JSON, a login limit (5 tries per 15 minutes, 20 a day), order limits (3 per phone and 6 per visitor an hour, 15 a day), a hidden honeypot field in order forms, uploaded files checked by their content, and description HTML cleaned against an allowlist. Scanner probes (`/wp-admin`, `/.env`, `.php`, …) get a 404 before any database work, known hacking tools (sqlmap, Nikto, Nuclei, WPScan…) a 403, and API writes without a browser user agent are refused.
+
+**Cloudflare Turnstile (recommended, free):** an invisible check that a person, not a bot, is ordering or signing in to the admin. In the Cloudflare dashboard open **Turnstile → Add widget**, add `abolux.store`, keep the **Managed** mode. Paste the **Site key** in **Admin → Réglages → Bot protection**, and add the **Secret key** as a secret named `TURNSTILE_SECRET` (Workers & Pages → abolux → Settings → Variables and Secrets, type Secret). It switches on when both are set. Its script loads only when someone starts filling in an order form.
+
 ### Google AdSense on the blog (optional)
 
 Paste your Publisher ID (`pub-…`) in **Réglages → Google AdSense**. Every page then carries the `google-adsense-account` tag that AdSense checks when you apply, `/ads.txt` is served automatically, and the privacy policy mentions the ads. Ads show **only on blog pages**: the AdSense script is added after the article has loaded and the reader scrolls (or after 4 seconds), so it never slows the first view, and shop, product, landing and order pages never load it. Ads are non-personalised unless the visitor accepted advertising cookies.

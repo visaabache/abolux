@@ -4,6 +4,33 @@ export const LANGS = ['ar', 'fr', 'en'];
 // Language codes for search engines: Arabic and French are for Morocco; English stays open to everyone.
 export const HREFLANG = { ar: 'ar-MA', fr: 'fr-MA', en: 'en' };
 
+// Cloudflare Turnstile (invisible anti-bot check): the public site key saved in the admin.
+export function turnstileKey(settings) {
+  const k = String(settings?.turnstile_site_key || '').trim();
+  return /^[0-9A-Za-z_-]{10,80}$/.test(k) ? k : '';
+}
+
+// Checks a Turnstile token with Cloudflare. Only enforced when both the site key (admin) and the
+// TURNSTILE_SECRET secret are set. A clear "no" blocks; if Cloudflare cannot be reached the request
+// goes through, so a Cloudflare hiccup never costs an order (the other protections still apply).
+export async function botCheck(env, settings, token, request) {
+  if (!env.TURNSTILE_SECRET || !turnstileKey(settings)) return true;
+  if (!token || String(token).length > 2048) return false;
+  try {
+    const body = new FormData();
+    body.append('secret', env.TURNSTILE_SECRET);
+    body.append('response', String(token));
+    const ip = request.headers.get('cf-connecting-ip');
+    if (ip) body.append('remoteip', ip);
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body });
+    if (!res.ok) return true;
+    const out = await res.json();
+    return out.success === true;
+  } catch {
+    return true;
+  }
+}
+
 // Google AdSense publisher ID from the admin ("ca-pub-123…" or "pub-123…"), or '' when not set.
 export function adsenseId(settings) {
   const m = String(settings?.adsense_client || '').match(/(?:ca-)?pub-(\d{10,20})/);

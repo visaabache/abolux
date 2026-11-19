@@ -41,6 +41,7 @@
         too_large: 'الصورة كبيرة جدًا (5 ميغا كحد أقصى).',
         video_too_large: 'الفيديو كبير جدًا (5 ميغا كحد أقصى).',
         bad_type: 'صيغة الصورة غير مدعومة.',
+        bot: 'تأكد من خانة التحقق ومن بعد عاود.',
         no_ai_key: 'مفتاح Claude (ANTHROPIC_API_KEY) غير مثبت فـ Cloudflare.', ai_bad_key: 'مفتاح Claude غير صحيح.', ai_busy: 'Claude مشغول، عاود من بعد دقيقة.', ai_failed: 'ما قدرش يكتب الوصف، عاود.', ai_refused: 'Claude رفض يكتب على هاد المنتج.', ai_needs_input: 'زيد سمية المنتج، معلومات ولا تصاور أولا.',
         no_email_key: 'مفتاح Brevo غير مثبت بعد (انظر الخطوات أسفله).',
         no_email_from: 'أدخل عنوان الإرسال (المؤكد في Brevo).',
@@ -183,6 +184,7 @@
       socialHint: 'الصق رابط الصفحة أو اسم الحساب فقط (مثلا @abolux). تظهر الأيقونات أسفل المتجر.',
       pixels: 'بيكسل الإعلانات',
       pixelsHint: 'الصق رقم البيكسل فقط، وليس الكود كاملًا. لا يُحمَّل أي بيكسل إلا بعد موافقة الزائر على ملفات الارتباط.',
+      security: 'الحماية من الروبوتات', securityHint: 'Cloudflare Turnstile: فحص خفي كيتأكد بلي اللي كيطلب ولا كيدخل للأدمين إنسان ماشي روبوت. أغلب الناس ما كيشوفو والو.', turnstileKey: 'Site key ديال Turnstile', turnstileOn: '✓ مفعّل: الطلبات وتسجيل الدخول محميين.', turnstileHow: 'فـ Cloudflare: Turnstile ← Add widget ← abolux.store. حط Site key هنا، وزيد Secret key فـ Workers ← abolux ← Settings ← Variables and Secrets باسم TURNSTILE_SECRET (نوع Secret).',
       adsenseHint: 'إعلانات Google تظهر فمقالات المدونة فقط، ماشي فصفحات المتجر ولا الطلب. كتحمّل من بعد ما يتحمّل المقال، باش ما تبطّاش الموقع.', adsenseId: 'رقم الناشر (Publisher ID)', adsenseHow: 'فـ AdSense: Account ← Account information ← Publisher ID (كيبدا بـ pub-). ملف ads.txt كيتزاد بوحدو.',
       metaPixel: 'رقم Meta Pixel (فيسبوك وإنستغرام)',
       metaHow: 'فيسبوك: Meta Events Manager ← مصادر البيانات ← اختر البيكسل ← الرقم (Dataset ID) من 15 أو 16 رقمًا.',
@@ -251,6 +253,7 @@
         too_large: 'Photo trop lourde (5 Mo max).',
         video_too_large: 'Vidéo trop lourde (5 Mo max).',
         bad_type: 'Format de photo non pris en charge.',
+        bot: 'Cochez la case de vérification, puis réessayez.',
         no_ai_key: 'La clé Claude (ANTHROPIC_API_KEY) n’est pas installée dans Cloudflare.', ai_bad_key: 'La clé Claude n’est pas valide.', ai_busy: 'Claude est occupé, réessayez dans une minute.', ai_failed: 'La description n’a pas pu être écrite, réessayez.', ai_refused: 'Claude a refusé d’écrire sur ce produit.', ai_needs_input: 'Ajoutez d’abord un nom, des notes ou des photos.',
         no_email_key: 'La clé Brevo n’est pas encore installée (voir les étapes ci-dessous).',
         no_email_from: 'Indiquez l’adresse d’envoi (vérifiée dans Brevo).',
@@ -393,6 +396,7 @@
       socialHint: 'Collez le lien de la page ou juste le nom du compte (ex. @abolux). Les icônes s’affichent en bas de la boutique.',
       pixels: 'Pixels publicitaires',
       pixelsHint: 'Collez seulement l’identifiant, pas le code complet. Aucun pixel n’est chargé tant que le visiteur n’a pas accepté les cookies.',
+      security: 'Protection anti-robots', securityHint: 'Cloudflare Turnstile : une vérification invisible qui s’assure qu’une personne commande ou se connecte à l’admin, pas un robot. La plupart des visiteurs ne voient rien.', turnstileKey: 'Site key Turnstile', turnstileOn: '✓ Activé : commandes et connexion protégées.', turnstileHow: 'Dans Cloudflare : Turnstile → Add widget → abolux.store. Collez la Site key ici, et ajoutez la Secret key dans Workers → abolux → Settings → Variables and Secrets sous le nom TURNSTILE_SECRET (type Secret).',
       adsenseHint: 'Les annonces Google s’affichent seulement dans les articles du blog, jamais sur les pages de la boutique ni de commande. Elles se chargent après l’article, sans ralentir le site.', adsenseId: 'ID d’éditeur (Publisher ID)', adsenseHow: 'Dans AdSense : Compte → Informations sur le compte → ID d’éditeur (commence par pub-). Le fichier ads.txt est ajouté tout seul.',
       metaPixel: 'ID Meta Pixel (Facebook et Instagram)',
       metaHow: 'Facebook : Meta Events Manager → Sources de données → votre pixel → l’ID (Dataset ID) de 15 ou 16 chiffres.',
@@ -461,6 +465,7 @@
         too_large: 'Photo too large (5 MB max).',
         video_too_large: 'Video too large (5 MB max).',
         bad_type: 'Photo format not supported.',
+        bot: 'Tick the check box, then try again.',
         no_ai_key: 'The Claude key (ANTHROPIC_API_KEY) is not installed in Cloudflare.', ai_bad_key: 'The Claude key is not valid.', ai_busy: 'Claude is busy, try again in a minute.', ai_failed: 'The description could not be written, try again.', ai_refused: 'Claude declined to write about this product.', ai_needs_input: 'Add a name, notes or photos first.',
         no_email_key: 'The Brevo key is not installed yet (see the steps below).',
         no_email_from: 'Enter the sender address (verified in Brevo).',
@@ -603,6 +608,7 @@
       socialHint: 'Paste the page link or just the account name (e.g. @abolux). The icons show at the bottom of the store.',
       pixels: 'Ad pixels',
       pixelsHint: 'Paste only the ID, not the full code. No pixel loads until the visitor accepts cookies.',
+      security: 'Bot protection', securityHint: 'Cloudflare Turnstile: an invisible check that a person, not a bot, is ordering or signing in to the admin. Most visitors see nothing.', turnstileKey: 'Turnstile site key', turnstileOn: '✓ On: orders and sign-in are protected.', turnstileHow: 'In Cloudflare: Turnstile → Add widget → abolux.store. Paste the Site key here, and add the Secret key under Workers → abolux → Settings → Variables and Secrets as TURNSTILE_SECRET (type Secret).',
       adsenseHint: 'Google ads show only in blog articles, never on shop or order pages. They load after the article, so the site stays fast.', adsenseId: 'Publisher ID', adsenseHow: 'In AdSense: Account → Account information → Publisher ID (starts with pub-). The ads.txt file is added for you.',
       metaPixel: 'Meta Pixel ID (Facebook and Instagram)',
       metaHow: 'Facebook: Meta Events Manager → Data sources → your pixel → the 15 or 16 digit ID (Dataset ID).',
@@ -753,13 +759,49 @@
     return `<div class="login-fx" aria-hidden="true"><i class="orb o1"></i><i class="orb o2"></i><i class="orb o3"></i>${sparks}</div>`;
   }
 
+  // Cloudflare Turnstile on the login (when the shop has it set up): an invisible check that a
+  // person is signing in, on top of the attempt limit. Its key comes from /login-config.
+  let tsLogin = null;
+  function loginTurnstile() {
+    if (!tsLogin) {
+      tsLogin = fetch('/api/admin/login-config', { credentials: 'same-origin' })
+        .then((r) => r.json())
+        .then((c) =>
+          c.turnstile
+            ? new Promise((resolve) => {
+                window.__tsLoaded = () => resolve({ ts: window.turnstile, key: c.turnstile });
+                const s = document.createElement('script');
+                s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=__tsLoaded';
+                s.async = true;
+                s.onerror = () => resolve(null);
+                document.head.appendChild(s);
+              })
+            : null,
+        )
+        .catch(() => null);
+    }
+    return tsLogin;
+  }
+  async function loginToken(f) {
+    const t = await loginTurnstile();
+    const box = f.querySelector('.ts-box');
+    if (!t || !box) return '';
+    return new Promise((resolve) => {
+      if (box.dataset.id) t.ts.remove(box.dataset.id);
+      box.dataset.id = t.ts.render(box, { sitekey: t.key, appearance: 'interaction-only', theme: 'dark', size: 'flexible', callback: resolve, 'error-callback': () => resolve(''), 'expired-callback': () => resolve('') });
+      setTimeout(() => resolve(''), 30000);
+    });
+  }
+
   function login() {
+    loginTurnstile();
     document.body.className = 'is-login';
     app.innerHTML = `${loginBackdrop()}<form class="login" id="login">
       <div class="login-top"><span class="login-logo-wrap"><img src="/admin/logo.png" alt="Abolux" class="login-logo"></span>${langButton()}</div>
       <h1>${L.sellerSpace}</h1>
       <p class="muted">${L.loginHint}</p>
       <label>${L.password}<input type="password" name="password" autocomplete="current-password" required autofocus dir="ltr"></label>
+      <div class="ts-box"></div>
       <button class="btn btn-lg login-go"><span>${L.signIn}</span></button>
       <p class="error" hidden></p>
     </form>`;
@@ -784,7 +826,7 @@
       p.hidden = true;
       f.classList.add('busy');
       try {
-        await api('/login', { method: 'POST', body: { password: f.password.value } });
+        await api('/login', { method: 'POST', body: { password: f.password.value, cf_token: await loginToken(f) } });
         f.classList.remove('busy');
         f.classList.add('ok');
         if (!calm) await new Promise((r) => setTimeout(r, 520));
@@ -848,6 +890,7 @@
       state.r2 = me.r2;
       state.emails = me.emails;
       state.ai = me.ai;
+      state.turnstile = me.turnstile;
       state.settings = (await api('/settings')).settings;
       state.categories = (await api('/categories')).categories;
       route();
@@ -2145,6 +2188,10 @@
       <div class="card"><h2>${L.seo}</h2><p class="muted small">${L.seoHint}</p>
         ${field('google_verify', L.googleVerify, 'dir="ltr" placeholder="&lt;meta name=&quot;google-site-verification&quot; content=&quot;…&quot;&gt;"')}<p class="muted small">${L.googleHow}</p>
       </div>
+      <div class="card"><h2>${L.security}</h2><p class="muted small">${L.securityHint}</p>
+        ${field('turnstile_site_key', L.turnstileKey, 'dir="ltr" pattern="[0-9A-Za-z_-]{10,80}" placeholder="0x4AAAAAAA…"')}
+        <p class="small ${state.turnstile ? 'ok-text' : 'muted'}">${state.turnstile ? L.turnstileOn : L.turnstileHow}</p>
+      </div>
       <div class="card"><h2>Google AdSense</h2><p class="muted small">${L.adsenseHint}</p>
         ${field('adsense_client', L.adsenseId, 'dir="ltr" pattern="(ca-)?pub-[0-9]{10,20}" placeholder="ca-pub-1234567890123456"')}<p class="muted small">${L.adsenseHow}</p>
       </div>
@@ -2187,6 +2234,7 @@
       data.auto_currency = f.auto_currency.checked ? '1' : '0';
       data.countdown = f.countdown.checked ? '1' : '0';
       data.meta_pixel_id = data.meta_pixel_id.trim();
+      data.turnstile_site_key = data.turnstile_site_key.trim();
       data.adsense_client = (data.adsense_client.match(/pub-\d{10,20}/) || [''])[0].replace(/^pub-/, 'ca-pub-');
       data.tiktok_pixel_id = data.tiktok_pixel_id.trim().toUpperCase();
       await api('/settings', { method: 'PUT', body: data });

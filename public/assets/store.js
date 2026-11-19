@@ -5,6 +5,45 @@
   document.documentElement.classList.add('js');
   const KEY = 'cart.v1';
   const i18n = JSON.parse(document.getElementById('i18n')?.textContent || '{}');
+
+  // Cloudflare Turnstile (when the shop has it): an invisible check that a person is ordering.
+  // Its script loads only once someone starts filling in an order form, so pages stay fast. Most
+  // people never see anything; a doubtful visitor gets a one-click box above the order button.
+  const TS_KEY = document.body.dataset.ts || '';
+  let tsReady = null;
+  function loadTurnstile() {
+    if (!TS_KEY) return Promise.resolve(null);
+    if (!tsReady) {
+      tsReady = new Promise((resolve) => {
+        window.__tsLoaded = () => resolve(window.turnstile);
+        const s = document.createElement('script');
+        s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=__tsLoaded';
+        s.async = true;
+        s.onerror = () => resolve(null);
+        document.head.appendChild(s);
+      });
+    }
+    return tsReady;
+  }
+  // A fresh one-time token for this form ('' when Turnstile is off or could not load: the server decides).
+  async function botToken(form) {
+    const ts = await loadTurnstile();
+    if (!ts) return '';
+    let box = form.querySelector('.ts-box');
+    if (!box) {
+      box = document.createElement('div');
+      box.className = 'ts-box';
+      const go = form.querySelector('.lp-go, .quick-go, button[type=submit]');
+      (go?.closest('.lp-go') || go || form).before(box);
+    }
+    return new Promise((resolve) => {
+      const done = (t) => resolve(t || '');
+      if (box.dataset.id) ts.remove(box.dataset.id);
+      box.dataset.id = ts.render(box, { sitekey: TS_KEY, appearance: 'interaction-only', size: 'flexible', language: document.documentElement.lang || 'auto', callback: done, 'error-callback': () => done(''), 'expired-callback': () => done('') });
+      setTimeout(() => done(''), 30000);
+    });
+  }
+  if (TS_KEY) document.addEventListener('focusin', (e) => e.target.closest?.('form.buy, form.checkout, #checkout, form[data-checkout]') && loadTurnstile(), { passive: true });
   const lang = i18n.lang || document.documentElement.lang || 'fr';
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
@@ -355,6 +394,7 @@
             city: cityOf(),
             address: form.address.value,
             website: form.website.value,
+            cf_token: await botToken(form),
             lang,
           }),
         });
@@ -365,6 +405,9 @@
         }
         if (res.status === 409) {
           err.textContent = i18n.issueStock;
+          err.hidden = false;
+        } else if (res.status === 403) {
+          err.textContent = i18n.botCheck || i18n.error;
           err.hidden = false;
         } else if (res.status === 429) {
           err.textContent = i18n.tooMany;
@@ -571,6 +614,7 @@
             city: selectedCity(),
             address: f.address.value,
             website: f.website.value,
+            cf_token: await botToken(f),
             lang,
           }),
         });
@@ -582,6 +626,9 @@
         }
         if (res.status === 409) {
           await refresh();
+        } else if (res.status === 403) {
+          err.textContent = i18n.botCheck || i18n.error;
+          err.hidden = false;
         } else if (res.status === 429) {
           err.textContent = i18n.tooMany;
           err.hidden = false;

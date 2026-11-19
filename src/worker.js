@@ -2,7 +2,7 @@
 // the admin API (/api/admin/*), product photos from R2 or D1 (/img/*) and static files (public/).
 
 import { T } from './i18n.js';
-import { LANGS, HREFLANG, findLandingProduct, DEFAULT_LANG, matchCity, storeLeft, json, esc, getSettings, quote, normalizePhone, orderNumber, randomToken, productName, productDesc, productImages, adsenseId, visitorId, recentHits, addHit, sameOrigin, parseJSON, lineText, splitLine } from './lib.js';
+import { LANGS, HREFLANG, findLandingProduct, DEFAULT_LANG, matchCity, storeLeft, json, esc, getSettings, quote, normalizePhone, orderNumber, randomToken, productName, productDesc, productImages, adsenseId, turnstileKey, botCheck, visitorId, recentHits, addHit, sameOrigin, parseJSON, lineText, splitLine } from './lib.js';
 import { homePage, listingPage, productPage, cartPage, checkoutPage, orderPage, notFoundPage, creditsPage, legalPage, aboutPage, blogIndexPage, blogPostPage, catName } from './render.js';
 
 const ORDER_BY = { price_asc: 'price ASC, id DESC', price_desc: 'price DESC, id DESC' };
@@ -21,7 +21,7 @@ const SECURITY_HEADERS = {
   'strict-transport-security': 'max-age=31536000; includeSubDomains',
   'cross-origin-opener-policy': 'same-origin',
   'content-security-policy':
-    "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; media-src 'self' https:; frame-src https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+    "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; media-src 'self' https:; frame-src https://www.youtube-nocookie.com https://www.youtube.com https://player.vimeo.com; connect-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests",
 };
 
 function html(body, status = 200) {
@@ -43,10 +43,21 @@ function pickLang(request) {
   return DEFAULT_LANG;
 }
 
+// Paths only attack scanners ask for (WordPress, PHP, leaked config files, routers…): answered at
+// once, without touching the database. The shop has none of them.
+const PROBE = /(\.(php\d?|asp|aspx|jsp|cgi|env|ini|sql|bak|old|swp|log|yml|yaml)(\/|$)|^\/(wp-|wordpress|wp\/|phpmyadmin|pma\/|xmlrpc|\.git|\.env|\.aws|\.ssh|\.svn|\.ds_store|vendor\/|cgi-bin|boaform|hnap1|actuator|server-status|config\.json|owa\/|autodiscover|telescope|_profiler|solr\/|jenkins|console\/))/i;
+// Hacking and scanning tools that announce themselves.
+const BAD_AGENT = /(sqlmap|nikto|nuclei|masscan|zgrab|wpscan|acunetix|nessus|openvas|dirbuster|gobuster|feroxbuster|ffuf|wfuzz|nmap|netsparker|havij|jaeles|whatweb|commix|xsstrike)/i;
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;
+    const agent = request.headers.get('user-agent') || '';
+    if (BAD_AGENT.test(agent)) return new Response('Forbidden', { status: 403 });
+    if (PROBE.test(path)) return new Response('Not found', { status: 404, headers: { 'cache-control': 'public, max-age=86400' } });
+    // Real browsers always say who they are; a write to the API without it is a script.
+    if (path.startsWith('/api/') && request.method !== 'GET' && request.method !== 'HEAD' && !agent) return json({ error: 'bad_request' }, 400);
     const site = siteOrigin(env, url);
     if (site !== url.origin && (request.method === 'GET' || request.method === 'HEAD') && !path.startsWith('/api/') && (url.hostname.startsWith('www.') || url.hostname.endsWith('.workers.dev'))) {
       return Response.redirect(`${site}${path}${url.search}`, 301);
@@ -210,6 +221,10 @@ async function storefront(request, env, url, lang, rest, exec) {
   }
   res.headers.append('set-cookie', `lang=${lang}; Path=/; Max-Age=31536000; SameSite=Lax; Secure`);
   let csp = pixelCsp(SECURITY_HEADERS['content-security-policy'], settings);
+  if (turnstileKey(settings)) {
+    // Cloudflare Turnstile's script and its small check frame (order forms).
+    csp = csp.replace("script-src 'self'", "script-src 'self' https://challenges.cloudflare.com").replace('frame-src ', 'frame-src https://challenges.cloudflare.com ');
+  }
   if (adsenseId(settings) && (rest === '/blog' || rest.startsWith('/blog/'))) {
     // Blog pages only: Google AdSense scripts, ad frames and their measurement calls; ad clicks open new tabs.
     const g = 'https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.googleadservices.com https://*.adtrafficquality.google https://*.gstatic.com https://*.googletagservices.com';
@@ -254,6 +269,8 @@ async function handleApi(request, env, url, ctx) {
     const body = await readJSON(request);
     if (!body) return json({ error: 'bad_request' }, 400);
     if (body.website) return json({ error: 'bad_request' }, 400); // honeypot filled in by a bot
+    // Cloudflare Turnstile, when it is set up: an invisible check that a person is ordering.
+    if (!(await botCheck(env, await getSettings(env.DB), body.cf_token, request))) return json({ error: 'bot' }, 403);
     const orderLang = LANGS.includes(body.lang) ? body.lang : lang;
     const name = String(body.name || '').trim().slice(0, 80);
     const phone = normalizePhone(body.phone);

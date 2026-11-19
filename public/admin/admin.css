@@ -513,3 +513,7 @@ details summary { cursor: pointer; }
   .cat-grid { grid-template-columns: 96px 1fr; gap: 12px; }
   .cat-pic { width: 96px; }
 }
+
+/* Turnstile check (empty for most visitors) */
+.ts-box:empty { display: none; }
+.ok-text { color: var(--mint); font-weight: 700; }

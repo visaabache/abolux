@@ -4,7 +4,7 @@
 import { sanitizeRich, isRich } from './rich.js';
 import { writeDescription } from './ai.js';
 import { sendEmail, sendStatusEmail, emailConfig, confirmationEmail, validEmail, STATUS_EMAILS } from './email.js';
-import { json, getSettings, slugify, STATUSES, RESTOCK_STATUSES, randomToken, parseJSON, displayPhone, visitorId, recentHits, addHit, sameOrigin, looksLikeImage, looksLikeVideo, packOptions } from './lib.js';
+import { json, getSettings, turnstileKey, botCheck, slugify, STATUSES, RESTOCK_STATUSES, randomToken, parseJSON, displayPhone, visitorId, recentHits, addHit, sameOrigin, looksLikeImage, looksLikeVideo, packOptions } from './lib.js';
 
 const SESSION_DAYS = 7;
 // Password guessing: after 5 wrong passwords in 15 minutes, or 20 in a day, that visitor is locked out for a while.
@@ -15,7 +15,7 @@ const SETTING_KEYS = [
   'announcement_ar', 'announcement_fr', 'announcement_en',
   'hero_title_ar', 'hero_title_fr', 'hero_title_en', 'hero_text_ar', 'hero_text_fr', 'hero_text_en',
   'email_from', 'notify_email', 'email_status_updates', 'auto_currency', 'countdown', 'offer_left',
-  'instagram', 'facebook', 'tiktok', 'meta_pixel_id', 'tiktok_pixel_id', 'google_verify', 'adsense_client',
+  'instagram', 'facebook', 'tiktok', 'meta_pixel_id', 'tiktok_pixel_id', 'google_verify', 'adsense_client', 'turnstile_site_key',
   'legal_name', 'legal_ice', 'legal_rc', 'legal_address', 'legal_cndp',
 ];
 
@@ -77,13 +77,22 @@ export async function handleAdmin(request, env, url, ctx) {
 
   if (method !== 'GET' && !sameOrigin(request, url)) return json({ error: 'bad_origin' }, 403);
 
+  // The login page asks which anti-bot check to show (the public Turnstile key, or none).
+  if (path === '/login-config' && method === 'GET') {
+    const settings = await getSettings(env.DB);
+    return json({ turnstile: env.TURNSTILE_SECRET ? turnstileKey(settings) : '' });
+  }
   if (path === '/login' && method === 'POST') {
     const bucket = `login:${await visitorId(request, secret)}`;
     for (const [max, seconds] of LOGIN_LIMITS) {
       if ((await recentHits(env.DB, bucket, seconds)) >= max) return json({ error: 'locked', minutes: Math.ceil(seconds / 60) }, 429);
     }
     const b = await body(request);
-    if (!b || !(await samePassword(String(b.password || '').slice(0, 200), secret))) {
+    if (!b || !(await botCheck(env, await getSettings(env.DB), b.cf_token, request))) {
+      await addHit(env.DB, bucket);
+      return json({ error: 'bot' }, 403);
+    }
+    if (!(await samePassword(String(b.password || '').slice(0, 200), secret))) {
       await addHit(env.DB, bucket);
       await new Promise((r) => setTimeout(r, 800));
       return json({ error: 'wrong_password' }, 401);
@@ -104,7 +113,7 @@ export async function handleAdmin(request, env, url, ctx) {
   const db = env.DB;
   let m;
 
-  if (path === '/me') return json({ ok: true, images: true, r2: Boolean(env.IMAGES), emails: Boolean(env.BREVO_API_KEY), ai: Boolean(env.ANTHROPIC_API_KEY), weak_password: secret.length < 12 });
+  if (path === '/me') return json({ ok: true, images: true, r2: Boolean(env.IMAGES), emails: Boolean(env.BREVO_API_KEY), ai: Boolean(env.ANTHROPIC_API_KEY), turnstile: Boolean(env.TURNSTILE_SECRET), weak_password: secret.length < 12 });
 
   // AI description writer: the seller reviews the text before saving it.
   if (path === '/ai/describe' && method === 'POST') {

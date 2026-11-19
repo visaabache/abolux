@@ -7,7 +7,7 @@ import { legalDoc } from './legal.js';
 import { richHtml, richText } from './rich.js';
 import { CURRENCIES, formatPrice } from './currency.js';
 import { pixelConfig } from './pixels.js';
-import { CITIES, CITY_SUGGEST, LANGS, HREFLANG, adsenseId, esc, money, productName, productDesc, productImages, productOptions, productLeft, storeLeft, liveBundles, bundleTitle, optionGroupName } from './lib.js';
+import { CITIES, CITY_SUGGEST, LANGS, HREFLANG, adsenseId, turnstileKey, esc, money, productName, productDesc, productImages, productOptions, productLeft, storeLeft, liveBundles, bundleTitle, optionGroupName } from './lib.js';
 
 const PLACEHOLDER = '/assets/placeholder.svg';
 const OG_LOCALE = { fr: 'fr_MA', en: 'en_US', ar: 'ar_MA' };
@@ -221,14 +221,14 @@ ${preload ? `<link rel="preload" as="image" href="${esc(preload)}" fetchpriority
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?${fonts}&display=swap">
-<link rel="stylesheet" href="/assets/style.css?v=28">
+<link rel="stylesheet" href="/assets/style.css?v=29">
 <script src="/assets/js-on.js"></script>
 ${pixels ? `<script type="application/json" id="pixels">${JSON.stringify({ ...px, page: track }).replace(/</g, '\\u003c')}</script>
 <script src="/assets/pixels.js?v=1" defer></script>` : ''}
-<script src="/assets/store.js?v=16" defer></script>
+<script src="/assets/store.js?v=17" defer></script>
 ${adsense && page === 'blog' ? `<script type="application/json" id="adsense">${JSON.stringify({ client: adsense })}</script><script src="/assets/ads.js?v=1" defer></script>` : ''}
 </head>
-<body data-lang="${lang}" class="page-${page || 'default'}${bare ? ' bare' : ''}">
+<body data-lang="${lang}"${turnstileKey(settings) ? ` data-ts="${esc(turnstileKey(settings))}"` : ''} class="page-${page || 'default'}${bare ? ' bare' : ''}">
 <a class="skip" href="#main">${esc(t.allProducts)}</a>
 <div class="ticker" aria-label="${esc(tickerItems[0] || t.cod)}"><div class="ticker-track">${ticker}${ticker}</div></div>
 <header class="top">
