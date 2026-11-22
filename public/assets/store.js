@@ -467,15 +467,62 @@
         track.scrollTo({ left: (document.dir === 'rtl' ? -1 : 1) * i * width(), behavior: reduceMotion ? 'auto' : 'smooth' });
       }),
     );
+    const count = $('[data-gal-i]', g);
+    const go = (i) => track.scrollTo({ left: (document.dir === 'rtl' ? -1 : 1) * i * width(), behavior: reduceMotion ? 'auto' : 'smooth' });
+    const at = () => Math.round(Math.abs(track.scrollLeft) / width());
+    // Arrows on the photo: previous / next, wrapping round.
+    $$('[data-gal]', g).forEach((b) => b.addEventListener('click', () => go((at() + Number(b.dataset.gal) + thumbs.length) % thumbs.length)));
     track.addEventListener(
       'scroll',
       () => {
-        const i = Math.round(Math.abs(track.scrollLeft) / width());
+        const i = at();
         thumbs.forEach((b, j) => b.classList.toggle('on', i === j));
+        if (count) count.textContent = i + 1;
       },
       { passive: true },
     );
   });
+
+  // Menu and search panels (header buttons and the search tab).
+  const back = $('.drawer-back');
+  const closeDrawers = () => {
+    $$('.drawer').forEach((d) => (d.hidden = true));
+    if (back) back.hidden = true;
+    document.documentElement.classList.remove('drawer-open');
+  };
+  async function fillPopular(panel) {
+    const box = $('[data-popular]', panel);
+    if (!box || box.dataset.done) return;
+    box.dataset.done = '1';
+    try {
+      const r = await fetch(`/api/popular?lang=${encodeURIComponent(panel.dataset.lang || '')}`);
+      const list = await r.json();
+      box.innerHTML = list
+        .map((p) => `<a class="pop" href="${esc(p.url)}"><span class="pop-img"><img src="${esc(p.image)}" alt="" loading="lazy" width="240" height="300">${p.badge ? `<b>${esc(p.badge)}</b>` : ''}</span><span class="pop-name">${esc(p.name)}</span><span class="pop-price">${p.was ? `<s>${esc(money(p.was))}</s> ` : ''}<em>${esc(money(p.price))}</em></span></a>`)
+        .join('');
+    } catch {}
+  }
+  document.addEventListener('click', (e) => {
+    const open = e.target.closest('[data-drawer]');
+    if (open) {
+      const panel = $(`#${open.dataset.drawer}-panel`);
+      if (!panel) return;
+      e.preventDefault();
+      closeDrawers();
+      panel.hidden = false;
+      if (back) back.hidden = false;
+      document.documentElement.classList.add('drawer-open');
+      if (open.dataset.drawer === 'search') {
+        fillPopular(panel);
+        setTimeout(() => $('input[type=search]', panel)?.focus(), 50);
+      }
+      return;
+    }
+    if (e.target.closest('[data-drawer-close]')) closeDrawers();
+  });
+  document.addEventListener('keydown', (e) => e.key === 'Escape' && closeDrawers());
+  // Footer sections: folded on phones, open on computers.
+  if (matchMedia('(min-width: 900px)').matches) $$('[data-foot-acc]').forEach((d) => (d.open = true));
 
   // Cart page and checkout summary.
   const box = $('#cart');

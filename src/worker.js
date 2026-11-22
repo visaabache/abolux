@@ -3,7 +3,7 @@
 
 import { T } from './i18n.js';
 import { LANGS, HREFLANG, findLandingProduct, DEFAULT_LANG, matchCity, storeLeft, json, esc, getSettings, quote, normalizePhone, orderNumber, randomToken, productName, productDesc, productImages, adsenseId, turnstileKey, botCheck, visitorId, recentHits, addHit, sameOrigin, parseJSON, lineText, splitLine } from './lib.js';
-import { homePage, listingPage, productPage, cartPage, checkoutPage, orderPage, notFoundPage, creditsPage, legalPage, aboutPage, blogIndexPage, blogPostPage, catName } from './render.js';
+import { small, homePage, listingPage, productPage, cartPage, checkoutPage, orderPage, notFoundPage, creditsPage, legalPage, aboutPage, blogIndexPage, blogPostPage, catName } from './render.js';
 
 const ORDER_BY = { price_asc: 'price ASC, id DESC', price_desc: 'price DESC, id DESC' };
 import { handleAdmin, CHUNK as VIDEO_CHUNK } from './admin.js';
@@ -254,6 +254,24 @@ function publicLine(line, lang) {
 async function handleApi(request, env, url, ctx) {
   if (request.method !== 'GET' && !sameOrigin(request, url)) return json({ error: 'bad_origin' }, 403);
   const lang = LANGS.includes(url.searchParams.get('lang')) ? url.searchParams.get('lang') : DEFAULT_LANG;
+
+  // GET /api/popular?lang= → four products for the search panel: favourites first, then the newest.
+  if (url.pathname === '/api/popular' && request.method === 'GET') {
+    const rows = await env.DB.prepare('SELECT * FROM products WHERE active = 1 AND (stock IS NULL OR stock > 0) ORDER BY featured DESC, id DESC LIMIT 4').all();
+    const t = T[lang];
+    const list = rows.results.map((p) => {
+      const onSale = p.compare_price && p.compare_price > p.price;
+      return {
+        name: productName(p, lang),
+        url: `/${lang}/p/${p.slug}`,
+        image: small(productImages(p)[0] || '/assets/placeholder.svg'),
+        price: p.price,
+        was: onSale ? p.compare_price : 0,
+        badge: onSale ? `${t.sale} ${Math.round((1 - p.price / p.compare_price) * 100)}%` : '',
+      };
+    });
+    return new Response(JSON.stringify(list), { headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'public, max-age=300' } });
+  }
 
   // POST /api/quote {items, city} → the cart priced by the server (the browser's copy is never trusted).
   if (url.pathname === '/api/quote' && request.method === 'POST') {

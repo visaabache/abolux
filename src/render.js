@@ -48,6 +48,10 @@ function brandLogo(stacked = false) {
 
 // Line icons (24×24, stroke = currentColor).
 const ICONS = {
+  menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+  close: '<path d="M6 6l12 12M18 6 6 18"/>',
+  chevronL: '<path d="m15 5-7 7 7 7"/>',
+  chevronR: '<path d="m9 5 7 7-7 7"/>',
   cart: '<path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2"/><circle cx="10" cy="20.5" r="1.3"/><circle cx="17" cy="20.5" r="1.3"/>',
   home: '<path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/><path d="M10 20v-5h4v5"/>',
   grid: '<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
@@ -157,7 +161,7 @@ function waLink(number, text) {
 }
 
 // Our own photos come in a large (1000×1250) and a small (480×600) version.
-function small(url) {
+export function small(url) {
   return /^\/assets\/photos\/[a-z0-9-]+\.webp$/.test(url) && !url.endsWith('-sm.webp') ? url.replace(/\.webp$/, '-sm.webp') : url;
 }
 function srcset(url) {
@@ -221,11 +225,11 @@ ${preload ? `<link rel="preload" as="image" href="${esc(preload)}" fetchpriority
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?${fonts}&display=swap">
-<link rel="stylesheet" href="/assets/style.css?v=29">
+<link rel="stylesheet" href="/assets/style.css?v=30">
 <script src="/assets/js-on.js"></script>
 ${pixels ? `<script type="application/json" id="pixels">${JSON.stringify({ ...px, page: track }).replace(/</g, '\\u003c')}</script>
 <script src="/assets/pixels.js?v=1" defer></script>` : ''}
-<script src="/assets/store.js?v=17" defer></script>
+<script src="/assets/store.js?v=18" defer></script>
 ${adsense && page === 'blog' ? `<script type="application/json" id="adsense">${JSON.stringify({ client: adsense })}</script><script src="/assets/ads.js?v=1" defer></script>` : ''}
 </head>
 <body data-lang="${lang}"${turnstileKey(settings) ? ` data-ts="${esc(turnstileKey(settings))}"` : ''} class="page-${page || 'default'}${bare ? ' bare' : ''}">
@@ -233,6 +237,7 @@ ${adsense && page === 'blog' ? `<script type="application/json" id="adsense">${J
 <div class="ticker" aria-label="${esc(tickerItems[0] || t.cod)}"><div class="ticker-track">${ticker}${ticker}</div></div>
 <header class="top">
   <div class="wrap top-row">
+    ${bare ? '' : `<div class="top-start"><button type="button" class="icon-btn" data-drawer="menu" aria-label="${esc(t.menu)}" aria-controls="menu-panel">${icon('menu', 24)}</button><button type="button" class="icon-btn" data-drawer="search" aria-label="${esc(t.search)}" aria-controls="search-panel">${icon('search', 22)}</button></div>`}
     <a class="logo" href="/${lang}/" aria-label="${esc(store)}">${brandLogo()}</a>
     ${bare ? '' : `<nav class="main-nav" aria-label="${esc(t.categories)}"><a href="/${lang}/shop">${esc(t.shop)}</a>${navCats}<a href="/${lang}/blog">${esc(t.blog)}</a></nav>
     <div class="top-actions">
@@ -243,6 +248,19 @@ ${adsense && page === 'blog' ? `<script type="application/json" id="adsense">${J
   </div>
   ${!bare && categories.length ? `<nav class="chips" aria-label="${esc(t.categories)}"><a class="chip" href="/${lang}/shop">${esc(t.allProducts)}</a>${categories.map((c) => `<a class="chip" href="/${lang}/c/${esc(c.slug)}">${esc(catName(c, lang))}</a>`).join('')}</nav>` : ''}
 </header>
+${bare ? '' : `<div class="drawer-back" data-drawer-close hidden></div>
+<aside class="drawer" id="menu-panel" aria-label="${esc(t.menu)}" hidden>
+  <div class="drawer-head"><a class="logo" href="/${lang}/" aria-label="${esc(store)}">${brandLogo()}</a><button type="button" class="icon-btn" data-drawer-close aria-label="${esc(t.close)}">${icon('close', 24)}</button></div>
+  <nav class="drawer-nav"><a href="/${lang}/">${esc(t.home)}</a><a href="/${lang}/shop">${esc(t.allProducts)}</a>${categories.map((c) => `<a href="/${lang}/c/${esc(c.slug)}">${esc(catName(c, lang))}</a>`).join('')}<a href="/${lang}/blog">${esc(t.blog)}</a><a href="/${lang}/about">${esc(t.aboutUs)}</a>${wa ? `<a href="${esc(wa)}" rel="noopener">${esc(t.whatsappUs)}</a>` : ''}</nav>
+  <div class="drawer-foot"><span class="langs">${langLinks}</span></div>
+</aside>
+<aside class="drawer drawer-search" id="search-panel" aria-label="${esc(t.search)}" data-lang="${lang}" hidden>
+  <div class="drawer-head"><strong>${esc(t.searchTab)}</strong><button type="button" class="icon-btn" data-drawer-close aria-label="${esc(t.close)}">${icon('close', 24)}</button></div>
+  <form class="drawer-search-form" action="/${lang}/shop" method="get" role="search"><input type="search" name="q" placeholder="${esc(t.searchPh)}" aria-label="${esc(t.search)}" enterkeyhint="search"><button aria-label="${esc(t.search)}">${icon('search', 22)}</button></form>
+  ${categories.length ? `<div class="drawer-chips">${categories.map((c) => `<a href="/${lang}/c/${esc(c.slug)}">${icon('search', 16)}${esc(catName(c, lang))}</a>`).join('')}</div>` : ''}
+  <p class="drawer-title">${esc(t.popular)}</p>
+  <div class="drawer-popular" data-popular></div>
+</aside>`}
 <main id="main">
 ${body}
 </main>
@@ -252,40 +270,44 @@ ${body}
     <div class="foot-brand">
       <a class="logo logo-light" href="/${lang}/" aria-label="${esc(store)}">${brandLogo(true)}</a>
       <p>${esc(t.tagline)}</p>
-      ${socialLinks(settings)}
     </div>
-    <div>
-      <h3>${esc(t.shop)}</h3>
-      <ul><li><a href="/${lang}/shop">${esc(t.allProducts)}</a></li>${categories.map((c) => `<li><a href="/${lang}/c/${esc(c.slug)}">${esc(catName(c, lang))}</a></li>`).join('')}</ul>
-    </div>
-    <div>
-      <h3>${esc(t.help)}</h3>
+    <details class="foot-acc" data-foot-acc>
+      <summary>${esc(t.shop)}</summary>
+      <ul><li><a href="/${lang}/shop">${esc(t.allProducts)}</a></li>${categories.map((c) => `<li><a href="/${lang}/c/${esc(c.slug)}">${esc(catName(c, lang))}</a></li>`).join('')}<li><a href="/${lang}/blog">${esc(t.blog)}</a></li></ul>
+    </details>
+    <details class="foot-acc" data-foot-acc>
+      <summary>${esc(t.customerService)}</summary>
       <ul>
         <li><a href="/${lang}/about">${esc(t.aboutUs)}</a></li>
-        <li><a href="/${lang}/blog">${esc(t.blog)}</a></li>
         <li>${esc(t.deliveryLong)}</li>
         <li>${esc(t.confirm)}</li>
-        ${wa ? `<li><a href="${esc(wa)}" rel="noopener">${esc(t.whatsappUs)}</a></li>` : ''}
-        ${settings.contact_email ? `<li><a href="mailto:${esc(settings.contact_email)}">${esc(settings.contact_email)}</a></li>` : ''}
+        <li>${esc(t.returns)}</li>
         <li><a href="/${lang}/terms">${esc(t.terms)}</a></li>
         <li><a href="/${lang}/privacy">${esc(t.privacy)}</a></li>
         <li><a href="/${lang}/credits">${esc(t.credits)}</a></li>
       </ul>
+    </details>
+    <details class="foot-acc" data-foot-acc>
+      <summary>${esc(t.contactUs)}</summary>
+      <ul>
+        ${wa ? `<li><a href="${esc(wa)}" rel="noopener">${esc(t.whatsappUs)}</a></li>` : ''}
+        ${settings.contact_email ? `<li><a href="mailto:${esc(settings.contact_email)}">${esc(settings.contact_email)}</a></li>` : ''}
+        <li>${esc(t.confirmText)}</li>
+      </ul>
+    </details>
+    <div class="foot-pay-wrap">
+      <h3>${esc(t.paymentOptions)}</h3>
+      <div class="foot-pay" aria-label="${esc(t.weAccept)}"><span class="pay-badge">${icon('cash', 18)} ${esc(t.cod)}</span><span class="pay-badge">${icon('truck', 18)} ${esc(t.delivery)}</span><span class="pay-badge">${icon('undo', 18)} ${esc(t.returns)}</span><span class="pay-badge">${icon('lock', 18)} ${esc(t.secure)}</span></div>
+      ${socialLinks(settings) ? `<h3>${esc(t.followUs)}</h3>${socialLinks(settings)}` : ''}
     </div>
   </div>`}
-  <div class="wrap foot-pay" aria-label="${esc(t.weAccept)}">
-    <span class="pay-badge">${icon('cash', 18)} ${esc(t.cod)}</span>
-    <span class="pay-badge">${icon('truck', 18)} ${esc(t.delivery)}</span>
-    <span class="pay-badge">${icon('undo', 18)} ${esc(t.returns)}</span>
-    <span class="pay-badge">${icon('lock', 18)} ${esc(t.secure)}</span>
-  </div>
   <div class="wrap foot-bottom"><span>© ${new Date().getUTCFullYear()} ${esc(store)}. ${esc(t.rights)}</span>${pixels ? `<button type="button" class="link-btn" data-consent-open>${esc(t.cookieSettings)}</button>` : ''}${bare ? `<span class="foot-links"><a href="/${lang}/terms">${esc(t.terms)}</a> · <a href="/${lang}/privacy">${esc(t.privacy)}</a></span>` : `${currencyPicker(ctx, path)}<span class="langs">${langLinks}</span>`}</div>
 </footer>
 ${bare ? '' : `<nav class="tabbar" aria-label="${esc(t.shop)}">
   <a href="/${lang}/"${page === 'home' ? ' aria-current="page"' : ''}>${icon('home')}<span>${esc(t.home)}</span></a>
   <a href="/${lang}/shop"${page === 'shop' ? ' aria-current="page"' : ''}>${icon('grid')}<span>${esc(t.shop)}</span></a>
   <a href="/${lang}/cart"${page === 'cart' ? ' aria-current="page"' : ''} class="tab-cart">${icon('cart')}<span>${esc(t.cart)}</span><span class="cart-count" hidden>0</span></a>
-  <a href="/${lang}/shop#q"${page === 'search' ? ' aria-current="page"' : ''} data-search-tab>${icon('search')}<span>${esc(t.searchTab)}</span></a>
+  <a href="/${lang}/shop#q"${page === 'search' ? ' aria-current="page"' : ''} data-search-tab data-drawer="search">${icon('search')}<span>${esc(t.searchTab)}</span></a>
 </nav>`}
 ${waWidget(ctx, product)}
 <div class="toast" role="status" aria-live="polite" hidden></div>
@@ -309,12 +331,12 @@ export function productCard(p, ctx, i = 0) {
   <a href="/${lang}/p/${esc(p.slug)}" class="card-img">
     <img src="${esc(small(img))}"${srcset(img)} sizes="(min-width: 900px) 25vw, 50vw" alt="${esc(name)}" loading="lazy" width="480" height="600">
     ${imgs[1] ? `<img class="alt" src="${esc(small(imgs[1]))}" alt="" loading="lazy" width="480" height="600">` : ''}
-    ${soldOut ? `<span class="badge muted">${esc(t.outOfStock)}</span>` : onSale ? `<span class="badge">−${off}%</span>` : ''}
+    ${soldOut ? `<span class="badge muted">${esc(t.outOfStock)}</span>` : onSale ? `<span class="badge">${esc(t.sale)} ${off}%</span>` : ''}
   </a>
-  ${quickAdd ? `<button class="quick-add" type="button" data-add="${p.id}" data-name="${esc(name)}" data-price="${p.price}" data-image="${esc(img)}" data-slug="${esc(p.slug)}" aria-label="${esc(t.addToCart)}: ${esc(name)}">${icon('plus', 20)}</button>` : ''}
+  ${soldOut ? '' : quickAdd ? `<button class="quick-add" type="button" data-add="${p.id}" data-name="${esc(name)}" data-price="${p.price}" data-image="${esc(img)}" data-slug="${esc(p.slug)}" aria-label="${esc(t.addToCart)}: ${esc(name)}">${esc(t.quickAdd)}</button>` : `<a class="quick-add" href="/${lang}/p/${esc(p.slug)}">${esc(t.chooseOptions)}</a>`}
   <div class="card-body">
     <h3><a href="/${lang}/p/${esc(p.slug)}">${esc(name)}</a></h3>
-    <p class="price">${esc(price(ctx, p.price))}${onSale ? ` <s>${esc(price(ctx, p.compare_price))}</s>` : ''}</p>
+    <p class="price">${onSale ? `<s>${esc(price(ctx, p.compare_price))}</s> <span class="now">${esc(price(ctx, p.price))}</span>` : esc(price(ctx, p.price))}</p>
   </div>
 </article>`;
 }
@@ -342,6 +364,16 @@ function descMedia(p) {
   } catch {
     return [];
   }
+}
+
+// Orange promo band under the home hero: "Up to -X%" with the biggest real discount among the products
+// shown on the page, or the free-delivery promise when nothing is on sale.
+function promoBand(ctx, products) {
+  const { lang } = ctx;
+  const t = T[lang];
+  const best = Math.max(0, ...products.filter((p) => p.compare_price > p.price && !(p.stock != null && p.stock <= 0)).map((p) => Math.round((1 - p.price / p.compare_price) * 100)));
+  const [title, sub] = best >= 5 ? [t.upTo(best), t.promoSub] : [t.promoFree, t.promoFreeSub];
+  return `<section class="promo-band"><div class="wrap promo-band-in"><div><p class="promo-big">${esc(title)}</p><p class="promo-sub">${esc(sub)}</p></div><a class="btn promo-btn" href="/${lang}/shop">${esc(t.shopNow)}</a></div></section>`;
 }
 
 function sectionHead(title, kicker = '', link = '', linkText = '') {
@@ -388,6 +420,7 @@ export function homePage(ctx, featured, latest) {
   ${slides}
   <div class="hero-dots wrap" role="tablist">${t.slides.map((_, i) => `<button type="button" role="tab" aria-label="${i + 1}"${i === 0 ? ' aria-selected="true"' : ''}><span></span></button>`).join('')}</div>
 </section>
+${promoBand(ctx, [...featured, ...latest])}
 <div class="wrap trust-wrap">${trust(lang, 'trust-float')}</div>
 ${cats}
 ${featured.length ? `<section class="section wrap">${sectionHead(t.featured, t.shop, `/${lang}/shop`, t.viewAll)}${grid(featured, ctx, t.noProducts)}</section>` : ''}
@@ -596,6 +629,7 @@ export function productPage(ctx, p, category, related) {
 <section class="wrap product">
   <div class="gallery" aria-label="${esc(name)}">
     <div class="gallery-track">${images.map((u, i) => `<img src="${esc(u)}" alt="${esc(name)}${i ? ` ${i + 1}` : ''}" width="1000" height="1250"${i ? ' loading="lazy"' : ' fetchpriority="high"'}>`).join('')}</div>
+    ${images.length > 1 ? `<span class="gal-count" aria-hidden="true"><b data-gal-i>1</b> / ${images.length}</span><button type="button" class="gal-arrow gal-prev" data-gal="-1" aria-label="‹">${icon('chevronL', 22)}</button><button type="button" class="gal-arrow gal-next" data-gal="1" aria-label="›">${icon('chevronR', 22)}</button>` : ''}
     ${images.length > 1 ? `<div class="thumbs">${images.map((u, i) => `<button type="button" data-go="${i}"${i === 0 ? ' class="on"' : ''} aria-label="${i + 1}"><img src="${esc(small(u))}" alt="" width="96" height="120" loading="lazy"></button>`).join('')}</div>` : ''}
   </div>
   <div class="product-info">
