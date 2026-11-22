@@ -26,6 +26,7 @@ test('home page: keyword title, canonical on the store domain, store and FAQ dat
   assert.deepEqual(types(html), ['OnlineStore', 'WebSite', 'FAQPage']);
   assert.ok(ld(html)[0].sameAs.includes('https://www.instagram.com/abolux.store'));
   assert.match(html, /class="section wrap seo-block"/);
+  assert.doesNotMatch(html, /class="cities"/);
 });
 
 test('category page: keyword title and description built from the category name', () => {

@@ -690,6 +690,7 @@ textarea { resize: vertical; }
 
 /* Home: about the store, cities and FAQ (text for visitors and search engines) */
 .seo-block { border-top: 1px solid var(--line); }
+.seo-faq-only { max-width: 760px; margin-inline: auto; display: block; }
 .seo-grid { display: grid; gap: 32px; }
 .seo-text h2, .seo-faq h2 { font-size: clamp(1.3rem, 3vw, 1.6rem); }
 .seo-text p { color: var(--ink-2); margin: 0 0 12px; }

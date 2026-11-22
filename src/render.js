@@ -7,7 +7,7 @@ import { legalDoc } from './legal.js';
 import { richHtml, richText } from './rich.js';
 import { CURRENCIES, formatPrice } from './currency.js';
 import { pixelConfig } from './pixels.js';
-import { CITIES, CITY_SUGGEST, LANGS, HREFLANG, adsenseId, turnstileKey, esc, money, productName, productDesc, productImages, productOptions, productLeft, storeLeft, liveBundles, bundleTitle, optionGroupName } from './lib.js';
+import { CITY_SUGGEST, LANGS, HREFLANG, adsenseId, turnstileKey, esc, money, productName, productDesc, productImages, productOptions, productLeft, storeLeft, liveBundles, bundleTitle, optionGroupName } from './lib.js';
 
 const PLACEHOLDER = '/assets/placeholder.svg';
 const OG_LOCALE = { fr: 'fr_MA', en: 'en_US', ar: 'ar_MA' };
@@ -450,10 +450,10 @@ ${latest.length ? `<section class="section wrap">${sectionHead(t.newArrivals, t.
   <ol class="steps">${t.steps.map((s, i) => `<li class="reveal" style="--d:${i * 110}ms"><span class="step-n">${i + 1}</span><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></li>`).join('')}</ol>
 </section>`;
   const seo = t.homeSeo;
+  // Home page footer section: the frequently asked questions only (the store presentation text and the
+  // list of cities were removed at the owner's request).
   const seoBlock = `<section class="section wrap seo-block">
-  <div class="seo-grid">
-    <div class="seo-text reveal"><h2>${esc(seo.title)}</h2>${seo.paras.map((x) => `<p>${x}</p>`).join('')}
-      <h3>${esc(seo.citiesTitle)}</h3><p class="cities">${CITIES.map(esc).join(' · ')}</p></div>
+  <div class="seo-grid seo-faq-only">
     <div class="seo-faq reveal"><h2>${esc(seo.faqTitle)}</h2><div class="accordion">${seo.faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><div>${esc(a)}</div></details>`).join('')}</div></div>
   </div>
 </section>`;
