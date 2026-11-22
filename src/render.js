@@ -49,6 +49,8 @@ function brandLogo(stacked = false) {
 // Line icons (24×24, stroke = currentColor).
 const ICONS = {
   menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+  history: '<path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4.5v4h4"/><path d="M12 7.5V12l3 2"/>',
+  up: '<path d="M12 20V5M6 11l6-6 6 6"/>',
   close: '<path d="M6 6l12 12M18 6 6 18"/>',
   chevronL: '<path d="m15 5-7 7 7 7"/>',
   chevronR: '<path d="m9 5 7 7-7 7"/>',
@@ -225,11 +227,11 @@ ${preload ? `<link rel="preload" as="image" href="${esc(preload)}" fetchpriority
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?${fonts}&display=swap">
-<link rel="stylesheet" href="/assets/style.css?v=30">
+<link rel="stylesheet" href="/assets/style.css?v=31">
 <script src="/assets/js-on.js"></script>
 ${pixels ? `<script type="application/json" id="pixels">${JSON.stringify({ ...px, page: track }).replace(/</g, '\\u003c')}</script>
 <script src="/assets/pixels.js?v=1" defer></script>` : ''}
-<script src="/assets/store.js?v=18" defer></script>
+<script src="/assets/store.js?v=19" defer></script>
 ${adsense && page === 'blog' ? `<script type="application/json" id="adsense">${JSON.stringify({ client: adsense })}</script><script src="/assets/ads.js?v=1" defer></script>` : ''}
 </head>
 <body data-lang="${lang}"${turnstileKey(settings) ? ` data-ts="${esc(turnstileKey(settings))}"` : ''} class="page-${page || 'default'}${bare ? ' bare' : ''}">
@@ -260,7 +262,16 @@ ${bare ? '' : `<div class="drawer-back" data-drawer-close hidden></div>
   ${categories.length ? `<div class="drawer-chips">${categories.map((c) => `<a href="/${lang}/c/${esc(c.slug)}">${icon('search', 16)}${esc(catName(c, lang))}</a>`).join('')}</div>` : ''}
   <p class="drawer-title">${esc(t.popular)}</p>
   <div class="drawer-popular" data-popular></div>
-</aside>`}
+</aside>
+<aside class="drawer" id="recent-panel" aria-label="${esc(t.recent)}" hidden>
+  <div class="drawer-head"><strong>${esc(t.recent)}</strong><button type="button" class="icon-btn" data-drawer-close aria-label="${esc(t.close)}">${icon('close', 24)}</button></div>
+  <div class="drawer-popular drawer-recent" data-recent></div>
+</aside>
+<div class="side-rail" aria-label="${esc(t.recent)}">
+  <button type="button" data-drawer="recent" aria-label="${esc(t.recent)}" title="${esc(t.recent)}">${icon('history', 24)}</button>
+  <button type="button" data-share-page aria-label="${esc(t.shareTip)}" title="${esc(t.shareTip)}">${icon('share', 24)}</button>
+  <button type="button" data-top aria-label="${esc(t.backTop)}" title="${esc(t.backTop)}">${icon('up', 24)}</button>
+</div>`}
 <main id="main">
 ${body}
 </main>

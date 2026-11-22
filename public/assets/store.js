@@ -521,6 +521,54 @@
     if (e.target.closest('[data-drawer-close]')) closeDrawers();
   });
   document.addEventListener('keydown', (e) => e.key === 'Escape' && closeDrawers());
+
+  // Side rail: recently viewed products, share this page, back to top.
+  const RECENT = 'recent.v1';
+  const readRecent = () => {
+    try {
+      const list = JSON.parse(localStorage.getItem(RECENT) || '[]');
+      return Array.isArray(list) ? list : [];
+    } catch {
+      return [];
+    }
+  };
+  // On a product page, remember it (newest first, 12 at most, one entry per product and language).
+  const buy = $('form.buy[data-slug]');
+  if (buy && document.body.classList.contains('page-product')) {
+    const item = { url: location.pathname, name: buy.dataset.name, image: buy.dataset.image, price: Number(buy.dataset.price) || 0 };
+    const list = [item, ...readRecent().filter((x) => x && x.url !== item.url)].slice(0, 12);
+    try {
+      localStorage.setItem(RECENT, JSON.stringify(list));
+    } catch {}
+  }
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('[data-drawer="recent"]')) return;
+    const box = $('[data-recent]');
+    if (!box) return;
+    const list = readRecent().filter((x) => x && typeof x.url === 'string' && x.url.startsWith(`/${lang}/p/`));
+    box.innerHTML = list.length
+      ? list.map((p) => `<a class="pop" href="${esc(p.url)}"><span class="pop-img"><img src="${esc(p.image)}" alt="" loading="lazy" width="240" height="300"></span><span class="pop-name">${esc(p.name)}</span><span class="pop-price"><em>${esc(money(p.price))}</em></span></a>`).join('')
+      : `<p class="muted recent-empty">${esc(i18n.recentEmpty || '')}</p>`;
+  });
+  $('[data-share-page]')?.addEventListener('click', async () => {
+    const url = location.origin + location.pathname;
+    try {
+      if (navigator.share) return await navigator.share({ title: document.title, url });
+    } catch {
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      toast(i18n.copied);
+    } catch {}
+  });
+  const topBtn = $('[data-top]');
+  if (topBtn) {
+    topBtn.addEventListener('click', () => scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' }));
+    const showTop = () => topBtn.classList.toggle('show', scrollY > 500);
+    addEventListener('scroll', showTop, { passive: true });
+    showTop();
+  }
   // Footer sections: folded on phones, open on computers.
   if (matchMedia('(min-width: 900px)').matches) $$('[data-foot-acc]').forEach((d) => (d.open = true));
 

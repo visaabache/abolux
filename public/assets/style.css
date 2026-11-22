@@ -1068,3 +1068,14 @@ html.drawer-open { overflow: hidden; }
 .buy-bar strong { white-space: nowrap; }
 .buy-bar .btn { letter-spacing: 0.02em; padding-inline: 16px; font-size: 0.85rem; }
 .page-product .quick-go { letter-spacing: 0.03em; }
+
+/* Side rail: recently viewed, share, back to top (fixed on the end edge, like a fashion store) */
+.side-rail { position: fixed; z-index: 24; inset-inline-end: 0; top: 46%; display: grid; background: #fff; border: 1px solid var(--line); border-inline-end: 0; box-shadow: 0 6px 24px -10px rgb(0 0 0 / 0.25); }
+.side-rail button { width: 46px; height: 46px; display: grid; place-items: center; border: 0; background: #fff; color: #111; cursor: pointer; }
+.side-rail button + button { border-top: 1px solid var(--line); }
+.side-rail button:hover { background: var(--yellow); }
+.side-rail [data-top] { display: none; }
+.side-rail [data-top].show { display: grid; }
+[dir='rtl'] .side-rail [data-drawer='recent'] svg { transform: scaleX(-1); }
+.drawer-recent { margin-top: 20px; }
+.recent-empty { grid-column: 1 / -1; padding: 24px 0; text-align: center; }
